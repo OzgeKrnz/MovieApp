@@ -1,0 +1,14 @@
+# Pods klasörü dahil değil
+Pods/** linguist-vendored
+
+# Makefile ve benzeri dosyaları hariç tut
+Makefile linguist-detectable=false
+*.c linguist-detectable=false
+*.h linguist-detectable=false
+*.nasl linguist-detectable=false
+*.sh linguist-detectable=false
+*.rb linguist-detectable=false
+
+# Swift dosyalarını özellikle belirt
+*.swift linguist-language=Swift
+

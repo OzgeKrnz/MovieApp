@@ -1,0 +1,16 @@
+
+Secrets.plist
+
+# Xcode gereksiz dosyalar
+DerivedData/
+build/
+*.xcuserdata
+*.xcworkspace
+*.xcuserdata
+
+
+# CocoaPods (kullanıyorsan)
+Pods/
+
+# Diğer
+.DS_Store
