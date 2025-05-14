@@ -13,6 +13,7 @@ struct Movie: Codable{
     var title: String
     var overview: String
     var release_date:String
+    var genre_ids:[Int]
     var poster_path: String?
     
     
