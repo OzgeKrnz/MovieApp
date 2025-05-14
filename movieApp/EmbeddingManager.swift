@@ -26,6 +26,7 @@ class EmbeddingManager{
     }
     
     
+    // api key yükleme
     private var apiKey:String{
         get{
             guard let filePath = Bundle.main.path(forResource: "Secrets", ofType: "plist")else{
@@ -41,6 +42,7 @@ class EmbeddingManager{
         }
     }
     
+    // verilen metn, embedding model ile vektöre dönüştürme
     func getEmbedding(for text:String) async throws ->[Double]{
         
         // get url
@@ -62,14 +64,17 @@ class EmbeddingManager{
             "input":text,
             "model":embeddingModel
         ]
+        print(body)
         
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
         
         
-        print("📤 Gönderilen istek:")
-        print("URL: \(url)")
-        print("Headers: \(request.allHTTPHeaderFields ?? [:])")
-        print("Body: \(String(data: request.httpBody ?? Data(), encoding: .utf8) ?? "")")
+        
+        
+        //print("📤 Gönderilen istek:")
+        //print("URL: \(url)")
+        //print("Headers: \(request.allHTTPHeaderFields ?? [:])")
+        //print("Body: \(String(data: request.httpBody ?? Data(), encoding: .utf8) ?? "")")
 
         
         let (data, response) = try await URLSession.shared.data(for: request)

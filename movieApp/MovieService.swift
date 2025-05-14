@@ -37,7 +37,7 @@ class MovieService{
     }
     
     func fetchMovie(title:String) async throws->Movie{
-        //
+        //özel karakterler icin
         let encodedTitle = title.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? title
         
         let urlString =  "https://api.themoviedb.org/3/search/movie?api_key=\(apiKey)&query=\(encodedTitle)"
