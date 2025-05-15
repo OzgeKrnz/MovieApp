@@ -36,6 +36,8 @@ class MovieService{
         }
     }
     
+    
+    // aranılan filme erişme
     func fetchMovie(title:String) async throws->Movie{
         //özel karakterler icin
         let encodedTitle = title.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? title
@@ -56,13 +58,40 @@ class MovieService{
             throw URLError(.badServerResponse)
         }
         
-        // json decode
+        //JSON DECODE
         let decoded = try JSONDecoder().decode(MovieSearchResponse.self, from: data)
         
         guard let firstMovie = decoded.results.first else{
           fatalError("decode edilmedi")
         }
         return firstMovie
+        
+    }
+    
+    //Popüler filmlere erişme
+    func fetchPopulerMovies() async throws->[Movie]{
+        let urlString = "https://api.themoviedb.org/3/movie/popular?api_key=\(apiKey)&page=1"
+        
+        guard let url = URL(string: urlString) else{
+            throw URLError(.badURL)
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else{
+            throw URLError(.badServerResponse)
+        }
+        
+        //JSON DECODE
+        
+        let decoded = try JSONDecoder().decode(MovieSearchResponse.self, from: data)
+        
+        return decoded.results
+        
         
     }
     

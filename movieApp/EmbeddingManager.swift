@@ -12,7 +12,7 @@ class EmbeddingManager{
     static let shared = EmbeddingManager()
     
     private let endpoint = "https://api.openai.com/v1/embeddings"
-    private let embeddingModel = "text-embedding-3-small"
+    private let embeddingModel = "text-embedding-ada-002"
     
     
     
