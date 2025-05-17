@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITextFieldDelegate{
+class ViewController: UIViewController, UITextFieldDelegate, UICollectionViewDelegate,UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     
     //text field
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -19,14 +19,49 @@ class ViewController: UIViewController, UITextFieldDelegate{
     }
     
     
-   
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        popularMovies.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as? MovieCell else{
+            return UICollectionViewCell()
+        }
+
+        
+        let movie = popularMovies[indexPath.row]
+        if let url = movie.posterUrl{
+            URLSession.shared.dataTask(with: url){data, _,_ in
+                if let data = data{
+                    DispatchQueue.main.async{
+                        cell.posterImageView.image = UIImage(data: data)
+                        //print("Cell size:", cell.frame.size)
+
+                    }
+                }
+            }.resume()
+        }else{
+            cell.posterImageView.image = nil
+        }
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let padding: CGFloat = 10
+        let itemsPerRow: CGFloat = 3
+        let totalPadding = padding * (itemsPerRow + 1)
+        let itemWidth = (collectionView.frame.width - totalPadding) / itemsPerRow
+        return CGSize(width: itemWidth, height: itemWidth * 1.5)
+    }
 
     @IBOutlet weak var searchBar: UITextField!
     
-    @IBOutlet weak var tableView: UITableView!
-    
     @IBOutlet weak var textLabel: UILabel!
     
+    @IBOutlet weak var collectionView: UICollectionView!
     var popularMovies : [Movie] = []
     let movieService = MovieService()
     
@@ -34,8 +69,7 @@ class ViewController: UIViewController, UITextFieldDelegate{
         let searchedText = searchBar.text ?? ""
         do {
             let movie = try await MovieService.shared.fetchMovie(title: searchedText)
-            //textLabel.text = movie.overview
-            //collapseLabelWithBlur(textLabel)
+        
             print(movie)
         } catch {
             print("Hata: \(error)")
@@ -61,14 +95,30 @@ class ViewController: UIViewController, UITextFieldDelegate{
             }
         }
     }*/
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 39/255, green: 63/255, blue: 79/255, alpha: 1)
+        collectionView.backgroundColor = .clear
         textLabel.text = "Popular Movies"
-        tableView.backgroundColor = .clear
         
+        textLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        textLabel.topAnchor.constraint(equalTo: searchBar.topAnchor, constant: 60).isActive = true
+        textLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: textLabel.bottomAnchor, constant: 10),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10)
+        ])
+
+
         searchBar.delegate = self
         searchBar.placeholder = "What do you want to watch?"
         searchBar.backgroundColor = UIColor(red: 79/255, green: 112/255, blue: 148/255, alpha: 1) // #4F7087
@@ -87,28 +137,30 @@ class ViewController: UIViewController, UITextFieldDelegate{
    
         
         Task{
-           // popularMovies = try await MovieService.shared.fetchPopulerMovies()
+            popularMovies = try await MovieService.shared.fetchPopulerMovies()
             
    
-            let movie1 = try await MovieService.shared.fetchMovie(title: "Inception")
-            let overview1 = movie1.overview
+            //let movie1 = try await MovieService.shared.fetchMovie(title: "Inception")
+            //let overview1 = movie1.overview
             
-            let movie2 = try await MovieService.shared.fetchMovie(title: "Elemental")
-            let overview2 = movie2.overview
+            //let movie2 = try await MovieService.shared.fetchMovie(title: "Elemental")
+            //let overview2 = movie2.overview
 
            
             
             do{
+                self.popularMovies = try await MovieService.shared.fetchPopulerMovies()
+                DispatchQueue.main.async {
+                           self.collectionView.reloadData()
+                }
                 
-                let vector1 = try await EmbeddingManager.shared.getEmbedding(for: overview1)
-                let vector2 = try await EmbeddingManager.shared.getEmbedding(for: overview2)
-
-                let cosineSimilarity = CosineSimilarity().cosineSimilarity(a: vector1, b: vector2)
-                
-                print("BEnzerlik oranı: \(cosineSimilarity)")
+                //let vector1 = try await EmbeddingManager.shared.getEmbedding(for: overview1)
+                //let vector2 = try await EmbeddingManager.shared.getEmbedding(for: overview2)
+                //let cosineSimilarity = CosineSimilarity().cosineSimilarity(a: vector1, b: vector2)
+                //print("BEnzerlik oranı: \(cosineSimilarity)")
                 
             }catch{
-                print("Hata: \(error)")
+                print("Hata Popüler filmler alınamadı: \(error)")
             }
             
             
