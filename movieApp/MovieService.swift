@@ -14,7 +14,7 @@ import Foundation
 class MovieService{
     
     static let shared = MovieService()
-    
+
 
     private var apiKey:String{
         get{

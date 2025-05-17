@@ -23,18 +23,20 @@ class ViewController: UIViewController, UITextFieldDelegate{
 
     @IBOutlet weak var searchBar: UITextField!
     
+    @IBOutlet weak var tableView: UITableView!
+    
     @IBOutlet weak var textLabel: UILabel!
     
-    
-    var movies : [Movie] = []
+    var popularMovies : [Movie] = []
     let movieService = MovieService()
     
     func searchMovie() async {
         let searchedText = searchBar.text ?? ""
         do {
             let movie = try await MovieService.shared.fetchMovie(title: searchedText)
-            textLabel.text = movie.overview
-            collapseLabelWithBlur(textLabel)
+            //textLabel.text = movie.overview
+            //collapseLabelWithBlur(textLabel)
+            print(movie)
         } catch {
             print("Hata: \(error)")
         }
@@ -45,7 +47,7 @@ class ViewController: UIViewController, UITextFieldDelegate{
             await self.searchMovie()
         }
     }
-    
+    /*
     @objc func expandLabel() {
         textLabel.numberOfLines = 0
         UIView.animate(withDuration: 0.3) {
@@ -58,13 +60,14 @@ class ViewController: UIViewController, UITextFieldDelegate{
                 $0.removeFromSuperview()
             }
         }
-    }
+    }*/
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 39/255, green: 63/255, blue: 79/255, alpha: 1)
-        
+        textLabel.text = "Popular Movies"
+        tableView.backgroundColor = .clear
         
         searchBar.delegate = self
         searchBar.placeholder = "What do you want to watch?"
@@ -76,16 +79,17 @@ class ViewController: UIViewController, UITextFieldDelegate{
             attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1.0, alpha: 0.6)]
         )
    
-        
+        /*
         let tap = UITapGestureRecognizer(target: self, action: #selector(expandLabel))
         textLabel.isUserInteractionEnabled = true
         textLabel.addGestureRecognizer(tap)
-        print("view yüklendi")
+        print("view yüklendi")*/
    
         
-        
         Task{
+           // popularMovies = try await MovieService.shared.fetchPopulerMovies()
             
+   
             let movie1 = try await MovieService.shared.fetchMovie(title: "Inception")
             let overview1 = movie1.overview
             
@@ -114,7 +118,7 @@ class ViewController: UIViewController, UITextFieldDelegate{
     }
     
     
-    func collapseLabelWithBlur(_ label: UILabel) {
+    /*func collapseLabelWithBlur(_ label: UILabel) {
         // 1. Satır sınırı
         label.numberOfLines = 3
         label.lineBreakMode = .byTruncatingTail
@@ -137,6 +141,6 @@ class ViewController: UIViewController, UITextFieldDelegate{
         fadeMask.locations = [0.0, 0.85, 1.0] // en altta yumuşak geçiş
         label.layer.mask = fadeMask
         
-    }
+    }*/
 
 }
