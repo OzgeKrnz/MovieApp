@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITextFieldDelegate, UICollectionViewDelegate,UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewDelegate,UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     
     //text field
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -27,7 +27,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UICollectionViewDel
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as? MovieCell else{
             return UICollectionViewCell()
         }
-
+        // Hücreyi tıklanır yapma
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(clicked))
+        cell.posterImageView.isUserInteractionEnabled = true
+        cell.posterImageView.tag = indexPath.row
+        cell.posterImageView.addGestureRecognizer(tapGestureRecognizer)
         
         let movie = popularMovies[indexPath.row]
         if let url = movie.posterUrl{
@@ -47,6 +51,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UICollectionViewDel
         return cell
     }
     
+    @objc func clicked(){
+        print("Clicked")
+    }
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -60,6 +68,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UICollectionViewDel
     @IBOutlet weak var searchBar: UITextField!
     
     @IBOutlet weak var textLabel: UILabel!
+    @IBOutlet weak var tabBar: UITabBar!
     
     @IBOutlet weak var collectionView: UICollectionView!
     var popularMovies : [Movie] = []
@@ -98,27 +107,35 @@ class ViewController: UIViewController, UITextFieldDelegate, UICollectionViewDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 39/255, green: 63/255, blue: 79/255, alpha: 1)
         collectionView.backgroundColor = .clear
         textLabel.text = "Popular Movies"
         
-        textLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        textLabel.topAnchor.constraint(equalTo: searchBar.topAnchor, constant: 60).isActive = true
-        textLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+ 
         
         collectionView.delegate = self
         collectionView.dataSource = self
         
+        textLabel.translatesAutoresizingMaskIntoConstraints = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        tabBar.translatesAutoresizingMaskIntoConstraints = false
+
         NSLayoutConstraint.activate([
+            textLabel.topAnchor.constraint(equalTo: searchBar.topAnchor, constant: 60),
+            textLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15),
+            
             collectionView.topAnchor.constraint(equalTo: textLabel.bottomAnchor, constant: 10),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10)
+            collectionView.bottomAnchor.constraint(equalTo: tabBar.topAnchor, constant: -10),
+    
+            tabBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tabBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tabBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 10),
+            tabBar.heightAnchor.constraint(equalToConstant: 60),
         ])
 
-
+        tabBar.isTranslucent = false
+        tabBar.backgroundColor =  UIColor(red: 79/255, green: 112/255, blue: 148/255, alpha: 1)
         searchBar.delegate = self
         searchBar.placeholder = "What do you want to watch?"
         searchBar.backgroundColor = UIColor(red: 79/255, green: 112/255, blue: 148/255, alpha: 1) // #4F7087
@@ -129,13 +146,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UICollectionViewDel
             attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1.0, alpha: 0.6)]
         )
    
-        /*
-        let tap = UITapGestureRecognizer(target: self, action: #selector(expandLabel))
-        textLabel.isUserInteractionEnabled = true
-        textLabel.addGestureRecognizer(tap)
-        print("view yüklendi")*/
-   
-        
         Task{
             popularMovies = try await MovieService.shared.fetchPopulerMovies()
             
