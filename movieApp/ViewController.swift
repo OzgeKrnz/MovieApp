@@ -27,12 +27,8 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as? MovieCell else{
             return UICollectionViewCell()
         }
-        // Hücreyi tıklanır yapma
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(clicked))
-        cell.posterImageView.isUserInteractionEnabled = true
-        cell.posterImageView.tag = indexPath.row
-        cell.posterImageView.addGestureRecognizer(tapGestureRecognizer)
-        
+  
+    
         let movie = popularMovies[indexPath.row]
         if let url = movie.posterUrl{
             URLSession.shared.dataTask(with: url){data, _,_ in
@@ -50,11 +46,10 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
         
         return cell
     }
-    
-    @objc func clicked(){
-        print("Clicked")
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "movieDetail", sender: indexPath)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -90,20 +85,18 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
             await self.searchMovie()
         }
     }
-    /*
-    @objc func expandLabel() {
-        textLabel.numberOfLines = 0
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
-        }
+    
+    //SEGUE
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print("prepare cagrıldı")
 
-        // Blur'ları temizle
-        textLabel.subviews.forEach {
-            if $0 is UIVisualEffectView {
-                $0.removeFromSuperview()
-            }
+        if segue.identifier == "movieDetail",
+           let indexPath = sender as? IndexPath,
+           let destinationVC = segue.destination as? MovieDetailViewController{
+            let selectedMovie = popularMovies[indexPath.row]
+            destinationVC.movieDetail = selectedMovie
         }
-    }*/
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -180,29 +173,6 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
     }
     
     
-    /*func collapseLabelWithBlur(_ label: UILabel) {
-        // 1. Satır sınırı
-        label.numberOfLines = 3
-        label.lineBreakMode = .byTruncatingTail
-        label.clipsToBounds = true
-        
-        // 2. Önceki fade'leri temizle (eğer varsa)
-        label.layer.sublayers?
-            .filter { $0.name == "fadeMask" }
-            .forEach { $0.removeFromSuperlayer() }
-        
-        // 3. Gradient mask oluştur
-        let fadeMask = CAGradientLayer()
-        fadeMask.name = "fadeMask"
-        fadeMask.frame = label.bounds
-        fadeMask.colors = [
-            UIColor.white.cgColor,
-            UIColor.white.cgColor,
-            UIColor.clear.cgColor
-        ]
-        fadeMask.locations = [0.0, 0.85, 1.0] // en altta yumuşak geçiş
-        label.layer.mask = fadeMask
-        
-    }*/
+
 
 }

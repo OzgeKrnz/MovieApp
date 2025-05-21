@@ -31,7 +31,8 @@ class MovieCell: UICollectionViewCell {
             posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             posterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            posterImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+            posterImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            
         ])
 
         contentView.backgroundColor = UIColor.systemBackground

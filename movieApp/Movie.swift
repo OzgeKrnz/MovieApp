@@ -15,9 +15,17 @@ struct Movie: Codable{
     var release_date:String
     var genre_ids:[Int]
     var poster_path: String?
+    var backdrop_path: String?
     
     var posterUrl: URL? {
         guard let path = poster_path else {
+            return nil
+        }
+        return URL(string: "https://image.tmdb.org/t/p/w500/\(path)")
+    }
+    
+    var backdropURL: URL?{
+        guard let path = backdrop_path else{
             return nil
         }
         return URL(string: "https://image.tmdb.org/t/p/w500/\(path)")
