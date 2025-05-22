@@ -70,7 +70,14 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
                 }.resume()
                 //print("backdrop url: \(movieDetails?.backdropURL)")
             }
+            cell.backgroundColor = .clear
 
+            return cell
+
+            
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "OverViewCell") as! OverViewCell
+            cell.backgroundColor = .clear
             // title and overview load
             let movieDetailsOverview = movieDetail
             if let url = movieDetailsOverview?.backdropURL {
@@ -84,32 +91,20 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
                 }.resume()
                 //print("backdrop url: \(movieDetails?.backdropURL)")
             }
+            
+            if let titleUrl = movieDetailsOverview?.backdropURL {
+                URLSession.shared.dataTask(with: titleUrl) { data, _, _ in
+                    DispatchQueue.main.async {
+                        cell.titleLable.text =
+                        movieDetailsOverview?.title
 
-            cell.backgroundColor = .clear
-
-            return cell
-
-        /*case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "OverviewCell") as! OverviewCell
-
-            let movieDetailsOverview = movieDetail
-            if let url = movieDetailsOverview?.backdropURL{
-                URLSession.shared.dataTask(with: url){data, _,_ in
-                    if let data = data{
-                        DispatchQueue.main.async{
-                            cell.overviewTextLabel.text = movieDetailsOverview?.overview
-                        }
                     }
                 }.resume()
-                //print("backdrop url: \(movieDetails?.backdropURL)")
             }
-
-            cell.backgroundColor = .clear
-
             return cell
-            */
+    
 
-        case 1:
+        case 2:
             let cell =
                 tableView.dequeueReusableCell(withIdentifier: "RatingCell")
                 as! RatingCell
@@ -139,99 +134,90 @@ class BackdropCell: UITableViewCell {
 
     @IBOutlet var backgroundImageView: UIImageView!
     @IBOutlet var posterImageView: UIImageView!
-    @IBOutlet var overviewTextLabel: UILabel!
-    @IBOutlet var titleLable: UILabel!
+ 
 
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        backgroundImageView.contentMode = .scaleAspectFill
         
+        backgroundImageView.contentMode = .scaleAspectFill
+        backgroundImageView.clipsToBounds = true
         
         
         contentView.addSubview(posterImageView)
         
-        titleLable.textColor = .white
-        contentView.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
-
-
-        //POSTER
-        posterImageView.contentMode = .scaleAspectFill
-        posterImageView.clipsToBounds = true
-        posterImageView.layer.shadowColor = UIColor.lightGray.cgColor
-        posterImageView.layer.shadowOpacity = 0.5
-        posterImageView.layer.cornerRadius = 8
-        posterImageView.layer.shadowOffset = CGSize(width: 0, height: 4)
-        posterImageView.layer.shadowRadius = 8
-        
-        
-        backgroundImageView.clipsToBounds = true
-        backgroundImageView.layer.shadowColor = UIColor.black.cgColor
-        backgroundImageView.layer.shadowOpacity = 0.7
-        backgroundImageView.layer.shadowOffset = CGSize(width:4, height: 0)
-
         backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
-        titleLable.translatesAutoresizingMaskIntoConstraints = false
-        overviewTextLabel.translatesAutoresizingMaskIntoConstraints = false
         posterImageView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            // Title sağda üstte
-            titleLable.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 130),
-            titleLable.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor, constant: 110),
-            titleLable.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -24),
-            
-            // Overview altında
-            overviewTextLabel.topAnchor.constraint(equalTo: titleLable.bottomAnchor, constant: 8),
-            overviewTextLabel.leadingAnchor.constraint(equalTo: titleLable.leadingAnchor),
-            overviewTextLabel.trailingAnchor.constraint(equalTo: titleLable.trailingAnchor),
-            overviewTextLabel.bottomAnchor.constraint(lessThanOrEqualTo: backgroundImageView.bottomAnchor, constant: -16),
-           
+            backgroundImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            backgroundImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            backgroundImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            backgroundImageView.heightAnchor.constraint(equalTo: backgroundImageView.widthAnchor, multiplier: 9.0/16.0),  // aspect ratio
 
-            backgroundImageView.topAnchor.constraint(
-                equalTo: contentView.topAnchor),
-            backgroundImageView.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor),
-            backgroundImageView.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor),
-            backgroundImageView.heightAnchor.constraint(
-                equalTo: backgroundImageView.widthAnchor, multiplier: 9.0 / 16.0
-            ),  // aspect ratio
-
-            posterImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 124),
+            posterImageView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: 124),
             posterImageView.leadingAnchor.constraint(equalTo: backgroundImageView.leadingAnchor, constant: 16),
-            posterImageView.widthAnchor.constraint(equalToConstant: 100), // ✅ Bu satır çok önemli
+            posterImageView.widthAnchor.constraint(equalToConstant: 100),
             posterImageView.heightAnchor.constraint(equalTo: posterImageView.widthAnchor, multiplier: 3.0/2.0), // 2:3 oran
-            posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5)
-
-
-        ])
+//            posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
+            
+     ])
         contentView.backgroundColor = .clear
-        addDarkOverlay()
+        applyPosterShadowAndBorder()
     }
 
-    private func addDarkOverlay() {
-        let darkOverlay = UIView()
-        darkOverlay.backgroundColor = UIColor.black.withAlphaComponent(0.4)  // 👈 opaklık oranı
-        darkOverlay.translatesAutoresizingMaskIntoConstraints = false
-        darkOverlay.isUserInteractionEnabled = false
+    
+    private func applyPosterShadowAndBorder() {
+        posterImageView.layer.cornerRadius = 4
+        posterImageView.layer.masksToBounds = false
 
-        backgroundImageView.addSubview(darkOverlay)
+        posterImageView.layer.shadowColor = UIColor.black.cgColor
+        posterImageView.layer.shadowOpacity = 0.4
+        posterImageView.layer.shouldRasterize = true
+        posterImageView.layer.rasterizationScale = UIScreen.main.scale
 
-        NSLayoutConstraint.activate([
-            darkOverlay.topAnchor.constraint(
-                equalTo: backgroundImageView.topAnchor),
-            darkOverlay.bottomAnchor.constraint(
-                equalTo: backgroundImageView.bottomAnchor),
-            darkOverlay.leadingAnchor.constraint(
-                equalTo: backgroundImageView.leadingAnchor),
-            darkOverlay.trailingAnchor.constraint(
-                equalTo: backgroundImageView.trailingAnchor),
-        ])
+        posterImageView.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
+        posterImageView.layer.borderWidth = 1.0
     }
+
 
 }
 
+class OverViewCell: UITableViewCell{
+    @IBOutlet var overviewTextLabel: UILabel!
+    @IBOutlet var titleLable: UILabel!
+    
+    
+    override func awakeFromNib() {
+        
+        titleLable.textColor = .white
+        overviewTextLabel.textColor = .white
+        overviewTextLabel.numberOfLines = 0
+        overviewTextLabel.lineBreakMode = .byWordWrapping
+        
+        titleLable.translatesAutoresizingMaskIntoConstraints = false
+        overviewTextLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            // Title sağda üstte
+            titleLable.topAnchor.constraint(equalTo: contentView.topAnchor),
+            titleLable.leadingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 90),
+
+            titleLable.trailingAnchor.constraint(equalTo:contentView.trailingAnchor, constant: -16),
+            // Overview altında
+            overviewTextLabel.topAnchor.constraint(equalTo: titleLable.bottomAnchor, constant: 69),
+            overviewTextLabel.leadingAnchor.constraint(equalTo: titleLable.leadingAnchor),
+            overviewTextLabel.trailingAnchor.constraint(equalTo: titleLable.trailingAnchor),
+            overviewTextLabel.bottomAnchor.constraint(equalTo:  contentView.bottomAnchor, constant: -16),
+            
+         
+        ])
+
+    }
+    
+
+
+}
 
 class RatingCell: UITableViewCell {
     @IBOutlet var ratingLabel: UILabel!
