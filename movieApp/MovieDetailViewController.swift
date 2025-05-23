@@ -106,6 +106,10 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
     {
         return 1
     }
+    
+    
+    
+
 
 }
 
@@ -113,14 +117,37 @@ class BackdropCell: UITableViewCell {
 
     @IBOutlet var backgroundImageView: UIImageView!
     @IBOutlet var posterImageView: UIImageView!
- 
+    
+    
+    func applyFadeMask(to imageView: UIImageView) {
+        let gradient = CAGradientLayer()
+        gradient.frame = imageView.bounds
+        
+        gradient.colors = [
+            UIColor.black.cgColor,
+            UIColor.black.cgColor,
+            UIColor.clear.cgColor        // Alt: şeffaf
+        ]
+        gradient.locations = [0.0, 0.7
+                              , 1.0]
+        
+        imageView.layer.mask = gradient
+    }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        applyFadeMask(to: backgroundImageView)
+
+    }
+
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
 
         
         backgroundImageView.contentMode = .scaleAspectFill
-        backgroundImageView.clipsToBounds = true
+        backgroundImageView.clipsToBounds = false
         
         posterImageView.contentMode = .scaleAspectFill
         posterImageView.clipsToBounds = true
@@ -129,7 +156,10 @@ class BackdropCell: UITableViewCell {
         
         backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
         posterImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        
 
+        
         NSLayoutConstraint.activate([
             backgroundImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -142,6 +172,11 @@ class BackdropCell: UITableViewCell {
             posterImageView.heightAnchor.constraint(equalTo: posterImageView.widthAnchor, multiplier: 3.0/2.0), // 2:3 oran
             posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -1),
             
+
+            
+            
+            
+            
      ])
         contentView.backgroundColor = .clear
         applyPosterShadowAndBorder()
@@ -152,8 +187,6 @@ class BackdropCell: UITableViewCell {
         posterImageView.layer.cornerRadius = 4
         posterImageView.layer.masksToBounds = true
 
-        posterImageView.layer.shadowColor = UIColor.black.cgColor
-        posterImageView.layer.shadowOpacity = 0.4
         posterImageView.layer.shouldRasterize = true
         posterImageView.layer.rasterizationScale = UIScreen.main.scale
 
@@ -168,6 +201,13 @@ class OverViewCell: UITableViewCell{
     @IBOutlet var overviewTextLabel: UILabel!
     @IBOutlet var titleLable: UILabel!
     
+    
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
