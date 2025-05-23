@@ -63,7 +63,6 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
                     if let data = data {
                         DispatchQueue.main.async {
                             cell.posterImageView.image = UIImage(data: data)
-
                             print("image frame:", cell.posterImageView.frame)
                         }
                     }
@@ -78,29 +77,9 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "OverViewCell") as! OverViewCell
             cell.backgroundColor = .clear
-            // title and overview load
-            let movieDetailsOverview = movieDetail
-            if let url = movieDetailsOverview?.backdropURL {
-                URLSession.shared.dataTask(with: url) { data, _, _ in
-
-                    DispatchQueue.main.async {
-                        cell.overviewTextLabel.text =
-                            movieDetailsOverview?.overview
-
-                    }
-                }.resume()
-                //print("backdrop url: \(movieDetails?.backdropURL)")
-            }
             
-            if let titleUrl = movieDetailsOverview?.backdropURL {
-                URLSession.shared.dataTask(with: titleUrl) { data, _, _ in
-                    DispatchQueue.main.async {
-                        cell.titleLable.text =
-                        movieDetailsOverview?.title
-
-                    }
-                }.resume()
-            }
+            cell.titleLable.text = movieDetail.title
+            cell.overviewTextLabel.text = movieDetail.overview
             return cell
     
 
@@ -119,7 +98,7 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int)
@@ -143,6 +122,8 @@ class BackdropCell: UITableViewCell {
         backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.clipsToBounds = true
         
+        posterImageView.contentMode = .scaleAspectFill
+        posterImageView.clipsToBounds = true
         
         contentView.addSubview(posterImageView)
         
@@ -155,11 +136,11 @@ class BackdropCell: UITableViewCell {
             backgroundImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             backgroundImageView.heightAnchor.constraint(equalTo: backgroundImageView.widthAnchor, multiplier: 9.0/16.0),  // aspect ratio
 
-            posterImageView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: 124),
-            posterImageView.leadingAnchor.constraint(equalTo: backgroundImageView.leadingAnchor, constant: 16),
+            posterImageView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -80),
+            posterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
             posterImageView.widthAnchor.constraint(equalToConstant: 100),
             posterImageView.heightAnchor.constraint(equalTo: posterImageView.widthAnchor, multiplier: 3.0/2.0), // 2:3 oran
-//            posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
+            posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -1),
             
      ])
         contentView.backgroundColor = .clear
@@ -169,7 +150,7 @@ class BackdropCell: UITableViewCell {
     
     private func applyPosterShadowAndBorder() {
         posterImageView.layer.cornerRadius = 4
-        posterImageView.layer.masksToBounds = false
+        posterImageView.layer.masksToBounds = true
 
         posterImageView.layer.shadowColor = UIColor.black.cgColor
         posterImageView.layer.shadowOpacity = 0.4
@@ -177,7 +158,7 @@ class BackdropCell: UITableViewCell {
         posterImageView.layer.rasterizationScale = UIScreen.main.scale
 
         posterImageView.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
-        posterImageView.layer.borderWidth = 1.0
+        posterImageView.layer.borderWidth = 0
     }
 
 
@@ -189,7 +170,10 @@ class OverViewCell: UITableViewCell{
     
     
     override func awakeFromNib() {
+        super.awakeFromNib()
         
+        titleLable.font = UIFont.boldSystemFont(ofSize: 25)
+        overviewTextLabel.font = UIFont.systemFont(ofSize: 17)
         titleLable.textColor = .white
         overviewTextLabel.textColor = .white
         overviewTextLabel.numberOfLines = 0
@@ -200,18 +184,20 @@ class OverViewCell: UITableViewCell{
         
         NSLayoutConstraint.activate([
             // Title sağda üstte
-            titleLable.topAnchor.constraint(equalTo: contentView.topAnchor),
-            titleLable.leadingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 90),
+            titleLable.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+            titleLable.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
 
-            titleLable.trailingAnchor.constraint(equalTo:contentView.trailingAnchor, constant: -16),
+            titleLable.trailingAnchor.constraint(equalTo:contentView.trailingAnchor, constant: -8),
             // Overview altında
-            overviewTextLabel.topAnchor.constraint(equalTo: titleLable.bottomAnchor, constant: 69),
+            overviewTextLabel.topAnchor.constraint(equalTo: titleLable.bottomAnchor, constant: 8),
             overviewTextLabel.leadingAnchor.constraint(equalTo: titleLable.leadingAnchor),
             overviewTextLabel.trailingAnchor.constraint(equalTo: titleLable.trailingAnchor),
             overviewTextLabel.bottomAnchor.constraint(equalTo:  contentView.bottomAnchor, constant: -16),
             
          
         ])
+        
+        contentView.backgroundColor = .clear
 
     }
     
