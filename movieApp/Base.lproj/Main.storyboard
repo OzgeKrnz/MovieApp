@@ -3,7 +3,6 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
-        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -18,18 +17,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="fbJ-Rd-VSX">
-                                <rect key="frame" x="11" y="84" width="366" height="52"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="52" id="V3N-uM-UgY"/>
-                                </constraints>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wc2-t9-9mL">
+                                <rect key="frame" x="0.0" y="103" width="393" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <textInputTraits key="textInputTraits"/>
-                                <imageReference key="background" image="magnifyingglass" catalog="system" symbolScale="small"/>
-                            </textField>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="bEz-pa-PvW"/>
+                                </connections>
+                            </searchBar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Weekly Popular" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="99u-FQ-hXN">
+                                <rect key="frame" x="175" y="416" width="127" height="20.333333333333314"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="evW-F0-W4q">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="698"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gOE-hG-YKN">
@@ -47,15 +51,14 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ArG-T4-e4z">
-                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                    <rect key="frame" x="0.0" y="10" width="128" height="118"/>
                                                 </imageView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="ArG-T4-e4z" firstAttribute="leading" secondItem="PP7-WW-eMj" secondAttribute="leading" id="7wy-9N-ntJ"/>
-                                                <constraint firstAttribute="bottom" secondItem="ArG-T4-e4z" secondAttribute="bottom" id="GAO-eb-QYS"/>
-                                                <constraint firstItem="ArG-T4-e4z" firstAttribute="centerX" secondItem="PP7-WW-eMj" secondAttribute="centerX" id="TLS-Af-QHd"/>
-                                                <constraint firstItem="ArG-T4-e4z" firstAttribute="top" secondItem="PP7-WW-eMj" secondAttribute="top" id="hoB-Ru-xu9"/>
-                                                <constraint firstAttribute="trailing" secondItem="ArG-T4-e4z" secondAttribute="trailing" id="p8U-2n-cfD"/>
+                                                <constraint firstItem="ArG-T4-e4z" firstAttribute="centerX" secondItem="PP7-WW-eMj" secondAttribute="centerX" id="27a-Pg-EEy"/>
+                                                <constraint firstItem="ArG-T4-e4z" firstAttribute="leading" secondItem="PP7-WW-eMj" secondAttribute="leading" id="BWi-bR-LD5"/>
+                                                <constraint firstItem="ArG-T4-e4z" firstAttribute="top" secondItem="PP7-WW-eMj" secondAttribute="top" constant="10" id="WAu-PB-bIj"/>
+                                                <constraint firstAttribute="bottom" secondItem="ArG-T4-e4z" secondAttribute="bottom" id="sig-tH-qRP"/>
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <connections>
@@ -64,67 +67,15 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <tabBar contentMode="center" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hoa-Gk-ZC8">
-                                <rect key="frame" x="-14" y="769" width="407" height="49"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <color key="backgroundColor" red="0.33725491169999999" green="0.4352940917" blue="0.56862747670000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <items>
-                                    <tabBarItem title="" id="BbQ-It-1s8">
-                                        <imageReference key="image" image="house.fill" catalog="system" renderingMode="hierarchical">
-                                            <hierarchicalColors>
-                                                <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <color systemColor="secondaryLabelColor"/>
-                                                <color systemColor="tertiaryLabelColor"/>
-                                            </hierarchicalColors>
-                                        </imageReference>
-                                    </tabBarItem>
-                                    <tabBarItem title="" id="0m5-gD-viz">
-                                        <imageReference key="image" image="star.fill" catalog="system" renderingMode="hierarchical">
-                                            <hierarchicalColors>
-                                                <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <color systemColor="secondaryLabelColor"/>
-                                                <color systemColor="tertiaryLabelColor"/>
-                                            </hierarchicalColors>
-                                        </imageReference>
-                                    </tabBarItem>
-                                    <tabBarItem title="" id="Qog-4N-hyA">
-                                        <imageReference key="image" image="person.fill" catalog="system" renderingMode="hierarchical">
-                                            <hierarchicalColors>
-                                                <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <color systemColor="secondaryLabelColor"/>
-                                                <color systemColor="tertiaryLabelColor"/>
-                                            </hierarchicalColors>
-                                        </imageReference>
-                                    </tabBarItem>
-                                </items>
-                                <color key="tintColor" red="0.33725491169999999" green="0.4352940917" blue="0.56862747670000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <tabBarAppearance key="standardAppearance" stackedItemPositioning="centered">
-                                    <color key="backgroundColor" red="0.33725491169999999" green="0.4352940917" blue="0.56862747670000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                </tabBarAppearance>
-                            </tabBar>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="u7b-y6-Tun">
-                                <rect key="frame" x="11" y="0.0" width="393" height="852"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="fbJ-Rd-VSX" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="11" id="8WN-vV-SVl"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="fbJ-Rd-VSX" secondAttribute="trailing" constant="16" id="A6G-DT-fB4"/>
-                            <constraint firstItem="fbJ-Rd-VSX" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="-19" id="KRV-Qr-suv"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Dh0-wy-A0V"/>
                     <connections>
                         <outlet property="collectionView" destination="evW-F0-W4q" id="so0-E2-R8b"/>
-                        <outlet property="searchBar" destination="fbJ-Rd-VSX" id="Yds-Yz-KEM"/>
-                        <outlet property="tabBar" destination="hoa-Gk-ZC8" id="8ty-vt-evl"/>
-                        <outlet property="textLabel" destination="u7b-y6-Tun" id="Kdh-Xo-dQt"/>
+                        <outlet property="searchBar" destination="wc2-t9-9mL" id="65i-gy-kki"/>
+                        <outlet property="textLabel" destination="99u-FQ-hXN" id="IbS-al-TF8"/>
                         <segue destination="tw6-FP-4M8" kind="show" identifier="movieDetail" id="RGn-Yy-Og6"/>
                     </connections>
                 </viewController>
@@ -254,18 +205,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="house.fill" catalog="system" width="128" height="104"/>
-        <image name="magnifyingglass" catalog="system" width="128" height="117"/>
-        <image name="person.fill" catalog="system" width="128" height="120"/>
-        <image name="star.fill" catalog="system" width="128" height="116"/>
-        <systemColor name="secondaryLabelColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="tertiaryLabelColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29803921568627451" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

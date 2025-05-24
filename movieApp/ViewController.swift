@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewDelegate,UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewDelegate,UICollectionViewDataSource,UISearchBarDelegate, UICollectionViewDelegateFlowLayout{
     
     //text field
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -60,23 +60,32 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
         return CGSize(width: itemWidth, height: itemWidth * 1.5)
     }
 
-    @IBOutlet weak var searchBar: UITextField!
-    
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var textLabel: UILabel!
-    @IBOutlet weak var tabBar: UITabBar!
+    
+    
     
     @IBOutlet weak var collectionView: UICollectionView!
     var popularMovies : [Movie] = []
+    var searchedMovie: [Movie] = []
     let movieService = MovieService()
     
     func searchMovie() async {
-        let searchedText = searchBar.text ?? ""
+        let searchedText = searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         do {
-            let movie = try await MovieService.shared.fetchMovie(title: searchedText)
-        
-            print(movie)
+            // arama yapılmıyosa popüler filmler listelensin
+            if searchedText.isEmpty{
+                
+                popularMovies = try await MovieService.shared.fetchPopulerMovies()
+            }else{
+                searchedMovie = try await MovieService.shared.fetchMovie(title: searchedText)
+                print(searchedMovie)
+
+            }
+            self.collectionView.reloadData()
+            
         } catch {
-            print("Hata: \(error)")
+            print("Hata: \(error.localizedDescription)")
         }
     }
     
@@ -101,46 +110,45 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = .clear
-        textLabel.text = "Popular Movies"
+        //textLabel.text = "Popular Movies"
         
- 
         
         collectionView.delegate = self
         collectionView.dataSource = self
         
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
         textLabel.translatesAutoresizingMaskIntoConstraints = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        tabBar.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            textLabel.topAnchor.constraint(equalTo: searchBar.topAnchor, constant: 60),
-            textLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15),
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 4),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -4),
+            searchBar.heightAnchor.constraint(equalToConstant: 50),
+            
+            textLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 10),
+            textLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             
             collectionView.topAnchor.constraint(equalTo: textLabel.bottomAnchor, constant: 10),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            collectionView.bottomAnchor.constraint(equalTo: tabBar.topAnchor, constant: -10),
-    
-            tabBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tabBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tabBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 10),
-            tabBar.heightAnchor.constraint(equalToConstant: 60),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 4),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -4),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            
+
         ])
 
-        tabBar.isTranslucent = false
-        tabBar.backgroundColor =  UIColor(red: 79/255, green: 112/255, blue: 148/255, alpha: 1)
         searchBar.delegate = self
         searchBar.placeholder = "What do you want to watch?"
-        searchBar.backgroundColor = UIColor(red: 79/255, green: 112/255, blue: 148/255, alpha: 1) // #4F7087
         searchBar.layer.cornerRadius = 10
         searchBar.clipsToBounds = true
-        searchBar.attributedPlaceholder = NSAttributedString(
-            string: "What do you want to watch?",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1.0, alpha: 0.6)]
-        )
+     
    
         Task{
+            //FOR POPULAR MOVIES
             popularMovies = try await MovieService.shared.fetchPopulerMovies()
+            
+            
+            //FOR SEARCH
             
    
             //let movie1 = try await MovieService.shared.fetchMovie(title: "Inception")
@@ -148,6 +156,7 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
             
             //let movie2 = try await MovieService.shared.fetchMovie(title: "Elemental")
             //let overview2 = movie2.overview
+            
 
            
             
@@ -165,10 +174,6 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
             }catch{
                 print("Hata Popüler filmler alınamadı: \(error)")
             }
-            
-            
-            
-            
         }
     }
     

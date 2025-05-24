@@ -38,7 +38,7 @@ class MovieService{
     
     
     // aranılan filme erişme
-    func fetchMovie(title:String) async throws->Movie{
+    func fetchMovie(title:String) async throws->[Movie]{
         //özel karakterler icin
         let encodedTitle = title.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? title
         
@@ -61,11 +61,29 @@ class MovieService{
         //JSON DECODE
         let decoded = try JSONDecoder().decode(MovieSearchResponse.self, from: data)
         
-        guard let firstMovie = decoded.results.first else{
-          fatalError("decode edilmedi")
+      
+        let sortedResults = decoded.results.sorted{movie1, movie2 in
+            let searched = title.lowercased()
+            let s1 = similarity(title: movie1.title.lowercased(), query:searched)
+            let s2 = similarity(title: movie1.title.lowercased(), query:searched)
+            
+            return s1>s2
+
         }
-        return firstMovie
-        
+        return sortedResults
+    }
+    
+    func similarity(title: String, query:String)->Int{
+        if title == query{
+            return 3
+            
+        }else if title.hasPrefix(query){
+            return 2
+        }else if title.contains(query){
+            return 1
+        }else{
+            return 0
+        }
     }
     
     //Popüler filmlere erişme

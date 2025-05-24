@@ -176,10 +176,9 @@ class BackdropCell: UITableViewCell {
             
             
             
-            
      ])
-        contentView.backgroundColor = .clear
         applyPosterShadowAndBorder()
+        contentView.backgroundColor = .clear
     }
 
     
