@@ -8,92 +8,74 @@
 import UIKit
 
 class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewDelegate,UICollectionViewDataSource,UISearchBarDelegate, UICollectionViewDelegateFlowLayout{
-    
-    //text field
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        Task {
-            await searchMovie()
-        }
-        return true
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        popularMovies.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as? MovieCell else{
-            return UICollectionViewCell()
-        }
-  
-    
-        let movie = popularMovies[indexPath.row]
-        if let url = movie.posterUrl{
-            URLSession.shared.dataTask(with: url){data, _,_ in
-                if let data = data{
-                    DispatchQueue.main.async{
-                        cell.posterImageView.image = UIImage(data: data)
-                        //print("Cell size:", cell.frame.size)
-
-                    }
-                }
-            }.resume()
-        }else{
-            cell.posterImageView.image = nil
-        }
-        
-        return cell
-    }
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "movieDetail", sender: indexPath)
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let padding: CGFloat = 10
-        let itemsPerRow: CGFloat = 3
-        let totalPadding = padding * (itemsPerRow + 1)
-        let itemWidth = (collectionView.frame.width - totalPadding) / itemsPerRow
-        return CGSize(width: itemWidth, height: itemWidth * 1.5)
-    }
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var textLabel: UILabel!
-    
-    
-    
     @IBOutlet weak var collectionView: UICollectionView!
+    
+    
     var popularMovies : [Movie] = []
     var searchedMovie: [Movie] = []
     let movieService = MovieService()
     
+
+    var isSearching:Bool{
+        guard let searchedText = searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return false}
+        return !searchedText.isEmpty
+    }
+    
     func searchMovie() async {
         let searchedText = searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         do {
-            // arama yapılmıyosa popüler filmler listelensin
-            if searchedText.isEmpty{
-                
-                popularMovies = try await MovieService.shared.fetchPopulerMovies()
-            }else{
+            if !searchedText.isEmpty{
                 searchedMovie = try await MovieService.shared.fetchMovie(title: searchedText)
                 print(searchedMovie)
+            }else{
+                popularMovies = try await MovieService.shared.fetchPopulerMovies()
+                print(popularMovies)
+            }
+            
+            DispatchQueue.main.async{
+                self.collectionView.reloadData()
 
             }
-            self.collectionView.reloadData()
+           
+            
             
         } catch {
             print("Hata: \(error.localizedDescription)")
         }
     }
     
-    @objc func searchMovieButtonTapped() {
-        Task {
-            await self.searchMovie()
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        let searchedText = searchBar.text!
+        
+        Task{
+            searchedMovie = try await MovieService.shared.fetchMovie(title: searchedText)
+        }
+        
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+      
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
+        
+        Task{
+            searchedMovie.removeAll()
+            popularMovies = try await MovieService.shared.fetchPopulerMovies()
+            DispatchQueue.main.async{
+                self.collectionView.reloadData()
+            }
         }
     }
+    
+
     
     //SEGUE
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -102,8 +84,8 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
         if segue.identifier == "movieDetail",
            let indexPath = sender as? IndexPath,
            let destinationVC = segue.destination as? MovieDetailViewController{
-            let selectedMovie = popularMovies[indexPath.row]
-            destinationVC.movieDetail = selectedMovie
+                let selectedMovie = isSearching ? searchedMovie[indexPath.row] : popularMovies[indexPath.row]
+                destinationVC.movieDetail = selectedMovie
         }
     }
     
@@ -156,10 +138,7 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
             
             //let movie2 = try await MovieService.shared.fetchMovie(title: "Elemental")
             //let overview2 = movie2.overview
-            
 
-           
-            
             do{
                 self.popularMovies = try await MovieService.shared.fetchPopulerMovies()
                 DispatchQueue.main.async {
@@ -175,6 +154,48 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
                 print("Hata Popüler filmler alınamadı: \(error)")
             }
         }
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return isSearching ? searchedMovie.count : popularMovies.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as? MovieCell else{
+            return UICollectionViewCell()
+        }
+  
+    
+        let movie = isSearching ? searchedMovie[indexPath.row] : popularMovies[indexPath.row]
+        if let url = movie.posterUrl{
+            URLSession.shared.dataTask(with: url){data, _,_ in
+                if let data = data{
+                    DispatchQueue.main.async{
+                        cell.posterImageView.image = UIImage(data: data)
+                        //print("Cell size:", cell.frame.size)
+
+                    }
+                }
+            }.resume()
+        }else{
+            cell.posterImageView.image = nil
+        }
+        
+        return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "movieDetail", sender: indexPath)
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let padding: CGFloat = 10
+        let itemsPerRow: CGFloat = 3
+        let totalPadding = padding * (itemsPerRow + 1)
+        let itemWidth = (collectionView.frame.width - totalPadding) / itemsPerRow
+        return CGSize(width: itemWidth, height: itemWidth * 1.5)
     }
     
     

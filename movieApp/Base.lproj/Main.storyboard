@@ -17,12 +17,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wc2-t9-9mL">
-                                <rect key="frame" x="0.0" y="103" width="393" height="50"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <searchBar contentMode="redraw" showsSearchResultsButton="YES" showsCancelButton="YES" id="Lof-nF-mX1">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <scopeButtonTitles>
+                                    <string>Title</string>
+                                    <string>Title</string>
+                                </scopeButtonTitles>
                                 <connections>
-                                    <outlet property="delegate" destination="BYZ-38-t0r" id="bEz-pa-PvW"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="pzi-9Z-ycy"/>
                                 </connections>
                             </searchBar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Weekly Popular" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="99u-FQ-hXN">
@@ -33,7 +37,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="evW-F0-W4q">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <rect key="frame" x="0.0" y="12" width="393" height="852"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gOE-hG-YKN">
@@ -74,7 +78,7 @@
                     <navigationItem key="navigationItem" id="Dh0-wy-A0V"/>
                     <connections>
                         <outlet property="collectionView" destination="evW-F0-W4q" id="so0-E2-R8b"/>
-                        <outlet property="searchBar" destination="wc2-t9-9mL" id="65i-gy-kki"/>
+                        <outlet property="searchBar" destination="Lof-nF-mX1" id="RVN-PQ-rer"/>
                         <outlet property="textLabel" destination="99u-FQ-hXN" id="IbS-al-TF8"/>
                         <segue destination="tw6-FP-4M8" kind="show" identifier="movieDetail" id="RGn-Yy-Og6"/>
                     </connections>

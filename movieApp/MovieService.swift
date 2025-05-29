@@ -65,7 +65,7 @@ class MovieService{
         let sortedResults = decoded.results.sorted{movie1, movie2 in
             let searched = title.lowercased()
             let s1 = similarity(title: movie1.title.lowercased(), query:searched)
-            let s2 = similarity(title: movie1.title.lowercased(), query:searched)
+            let s2 = similarity(title: movie2.title.lowercased(), query:searched)
             
             return s1>s2
 
