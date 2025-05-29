@@ -14,7 +14,7 @@ class MovieCell: UICollectionViewCell {
     //let movies = try await MovieService.shared.fetchPopulerMovies()
 
     
-    //Hücre ilk yüklendiğinde çalışacak
+    //Hücre ilk yüklendiğinde çalışacak (storyboaard üzerinden)
     override func awakeFromNib() {
         super.awakeFromNib()
     

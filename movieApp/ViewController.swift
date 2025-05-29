@@ -7,64 +7,69 @@
 
 import UIKit
 
-class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewDelegate,UICollectionViewDataSource,UISearchBarDelegate, UICollectionViewDelegateFlowLayout{
+class SearchResultsVC: BaseViewController, UITableViewDelegate, UITableViewDataSource {
+ 
+    @IBOutlet weak var tableView: UITableView!
+    
+    
+    var searchedMovie: [Movie] = []
 
-    @IBOutlet weak var searchBar: UISearchBar!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return searchedMovie.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchResultCell", for: indexPath) as? SearchResultCell else{return UITableViewCell()}
+        
+        
+        let searchedMovie = searchedMovie[indexPath.row]
+        if let url = searchedMovie.posterUrl{
+            URLSession.shared.dataTask(with: url){data, _,_ in
+                if let data = data{
+                    DispatchQueue.main.async{
+                        cell.posterImageView.image = UIImage(data: data)
+                        //print("Cell size:", cell.frame.size)
+
+                    }
+                }
+            }.resume()
+        }else{
+            cell.posterImageView.image = nil
+        }
+        
+        cell.titleLabel.text = searchedMovie.title
+        
+        
+        return cell
+    }
+  
+    
+}
+
+
+
+
+
+
+class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewDelegate,UICollectionViewDataSource, UISearchResultsUpdating, UISearchBarDelegate ,UICollectionViewDelegateFlowLayout{
+
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     
+    var searchController: UISearchController!
+    
     
     var popularMovies : [Movie] = []
-    var searchedMovie: [Movie] = []
     let movieService = MovieService()
-    
-
-    var isSearching:Bool{
-        guard let searchedText = searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return false}
-        return !searchedText.isEmpty
-    }
-    
-    func searchMovie() async {
-        let searchedText = searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        do {
-            if !searchedText.isEmpty{
-                searchedMovie = try await MovieService.shared.fetchMovie(title: searchedText)
-                print(searchedMovie)
-            }else{
-                popularMovies = try await MovieService.shared.fetchPopulerMovies()
-                print(popularMovies)
-            }
-            
-            DispatchQueue.main.async{
-                self.collectionView.reloadData()
-
-            }
-           
-            
-            
-        } catch {
-            print("Hata: \(error.localizedDescription)")
-        }
-    }
-    
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
-        let searchedText = searchBar.text!
-        
-        Task{
-            searchedMovie = try await MovieService.shared.fetchMovie(title: searchedText)
-        }
-        
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
-      
-    }
-    
-
-    
-
+     
+  
     
     //SEGUE
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -73,7 +78,7 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
         if segue.identifier == "movieDetail",
            let indexPath = sender as? IndexPath,
            let destinationVC = segue.destination as? MovieDetailViewController{
-                let selectedMovie = isSearching ? searchedMovie[indexPath.row] : popularMovies[indexPath.row]
+                let selectedMovie = popularMovies[indexPath.row]
                 destinationVC.movieDetail = selectedMovie
         }
     }
@@ -81,47 +86,44 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = .clear
-        //textLabel.text = "Popular Movies"
+        
+        
+        
+        
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        let searchResultVC = sb.instantiateViewController(withIdentifier: "SearchResultsVC") as? SearchResultsVC
+        
+        searchController = UISearchController(searchResultsController: searchResultVC)
+        navigationItem.searchController = searchController
+
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.searchBar.searchTextField.backgroundColor = UIColor.white
+        searchController.searchBar.placeholder = "Search Movie"
         
         
         collectionView.delegate = self
         collectionView.dataSource = self
         
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
         textLabel.translatesAutoresizingMaskIntoConstraints = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 4),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -4),
-            searchBar.heightAnchor.constraint(equalToConstant: 50),
-            
-            textLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 10),
+            textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             textLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             
             collectionView.topAnchor.constraint(equalTo: textLabel.bottomAnchor, constant: 10),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 4),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -4),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            
 
         ])
-
-        searchBar.delegate = self
-        searchBar.placeholder = "What do you want to watch?"
-        searchBar.layer.cornerRadius = 10
-        searchBar.clipsToBounds = true
      
-   
         Task{
             //FOR POPULAR MOVIES
             popularMovies = try await MovieService.shared.fetchPopulerMovies()
             
-            
             //FOR SEARCH
-            
-   
             //let movie1 = try await MovieService.shared.fetchMovie(title: "Inception")
             //let overview1 = movie1.overview
             
@@ -145,31 +147,40 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
         }
     }
     
-    
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty{
-            Task{
-                searchedMovie.removeAll()
-                popularMovies = try await MovieService.shared.fetchPopulerMovies()
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchedText = searchController.searchBar.text else {
+            return
+        }
+        Task{
+            do{
+                let searchedMovie = try await MovieService.shared.fetchMovie(title: searchedText)
+                if let vc = searchController.searchResultsController as? SearchResultsVC {
+                    vc.searchedMovie = searchedMovie
+                    
+                    DispatchQueue.main.async {
+                        vc.tableView.reloadData()
+                    }
                 }
+            
+            }catch{
+                print("searh error")
             }
         }
+        
+        print(searchedText)
+      
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return isSearching ? searchedMovie.count : popularMovies.count
+        return  popularMovies.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as? MovieCell else{
             return UICollectionViewCell()
         }
-  
-    
-        let movie = isSearching ? searchedMovie[indexPath.row] : popularMovies[indexPath.row]
+        let movie =  popularMovies[indexPath.row]
         if let url = movie.posterUrl{
             URLSession.shared.dataTask(with: url){data, _,_ in
                 if let data = data{
@@ -199,8 +210,4 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
         let itemWidth = (collectionView.frame.width - totalPadding) / itemsPerRow
         return CGSize(width: itemWidth, height: itemWidth * 1.5)
     }
-    
-    
-
-
 }
