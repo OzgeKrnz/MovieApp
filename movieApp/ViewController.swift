@@ -62,18 +62,7 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
       
     }
     
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.text = ""
-        searchBar.resignFirstResponder()
-        
-        Task{
-            searchedMovie.removeAll()
-            popularMovies = try await MovieService.shared.fetchPopulerMovies()
-            DispatchQueue.main.async{
-                self.collectionView.reloadData()
-            }
-        }
-    }
+
     
 
     
@@ -156,6 +145,19 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
         }
     }
     
+    
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty{
+            Task{
+                searchedMovie.removeAll()
+                popularMovies = try await MovieService.shared.fetchPopulerMovies()
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+        }
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return isSearching ? searchedMovie.count : popularMovies.count
