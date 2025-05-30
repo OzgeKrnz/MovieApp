@@ -12,12 +12,17 @@ class SearchResultsVC: BaseViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var tableView: UITableView!
     
     
+    
+    
     var searchedMovie: [Movie] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.backgroundColor = .clear
+        
+        tableView.rowHeight = 140
         
     }
     
