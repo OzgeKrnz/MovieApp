@@ -22,28 +22,32 @@ class SearchResultCell: UITableViewCell{
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         posterImageView.contentMode = .scaleAspectFill
-        titleLabel.contentMode = .scaleAspectFill
-        
         posterImageView.clipsToBounds = true
+        posterImageView.layer.cornerRadius = 4
+        posterImageView.layer.borderWidth = 2
+        posterImageView.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
+        posterImageView.layer.masksToBounds = true
+        
         titleLabel.numberOfLines = 0
         titleLabel.textAlignment = .left
-        
+        titleLabel.lineBreakMode = .byWordWrapping
         contentView.addSubview(posterImageView)
         contentView.addSubview(titleLabel)
         
         
         
         NSLayoutConstraint.activate([
-            posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
-            posterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 2),
-            posterImageView.widthAnchor.constraint(equalToConstant: 100),
+            posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            posterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            posterImageView.widthAnchor.constraint(equalToConstant: 75),
             posterImageView.heightAnchor.constraint(equalTo: posterImageView.widthAnchor, multiplier: 3.0/2.0), // 2:3 oran
-            posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
+            posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
             
-            //titleLabel.leadingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -50),
+            titleLabel.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor, constant: 90),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            titleLabel.topAnchor.constraint(equalTo: posterImageView.topAnchor, constant: 10),
+            
             titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             
 
             

@@ -10,10 +10,7 @@ import UIKit
 class SearchResultsVC: BaseViewController, UITableViewDelegate, UITableViewDataSource {
  
     @IBOutlet weak var tableView: UITableView!
-    
-    
-    
-    
+
     var searchedMovie: [Movie] = []
 
     override func viewDidLoad() {
@@ -22,7 +19,10 @@ class SearchResultsVC: BaseViewController, UITableViewDelegate, UITableViewDataS
         tableView.delegate = self
         tableView.backgroundColor = .clear
         
-        tableView.rowHeight = 140
+        
+        tableView.rowHeight = 130
+        tableView.separatorStyle = .singleLine
+        tableView.separatorColor = .lightGray
         
     }
     
@@ -32,6 +32,9 @@ class SearchResultsVC: BaseViewController, UITableViewDelegate, UITableViewDataS
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchResultCell", for: indexPath) as? SearchResultCell else{return UITableViewCell()}
+        
+        cell.backgroundColor = .clear
+        cell.contentView.backgroundColor = .clear
         
         
         let searchedMovie = searchedMovie[indexPath.row]
@@ -48,7 +51,7 @@ class SearchResultsVC: BaseViewController, UITableViewDelegate, UITableViewDataS
         }else{
             cell.posterImageView.image = nil
         }
-        
+    
         cell.titleLabel.text = searchedMovie.title
         
         
