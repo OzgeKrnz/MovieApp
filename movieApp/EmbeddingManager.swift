@@ -67,14 +67,6 @@ class EmbeddingManager{
         print(body)
         
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
-        
-        
-        
-        
-        //print("📤 Gönderilen istek:")
-        //print("URL: \(url)")
-        //print("Headers: \(request.allHTTPHeaderFields ?? [:])")
-        //print("Body: \(String(data: request.httpBody ?? Data(), encoding: .utf8) ?? "")")
 
         
         let (data, response) = try await URLSession.shared.data(for: request)

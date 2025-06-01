@@ -24,7 +24,7 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
         tableView.estimatedRowHeight = 300
         tableView.rowHeight = UITableView.automaticDimension
 
-        print(movieDetail.title)
+        // print(movieDetail.title)
 
     }
 

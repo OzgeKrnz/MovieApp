@@ -12,6 +12,9 @@ class SearchResultsVC: BaseViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var tableView: UITableView!
 
     var searchedMovie: [Movie] = []
+ 
+
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +26,8 @@ class SearchResultsVC: BaseViewController, UITableViewDelegate, UITableViewDataS
         tableView.rowHeight = 130
         tableView.separatorStyle = .singleLine
         tableView.separatorColor = .lightGray
+        
+
         
     }
     
@@ -57,13 +62,23 @@ class SearchResultsVC: BaseViewController, UITableViewDelegate, UITableViewDataS
         
         return cell
     }
-  
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedMovie = searchedMovie[indexPath.row]
+        
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        if let detailVC = sb.instantiateViewController(identifier: "movieDetailID") as? MovieDetailViewController{
+            detailVC.movieDetail = selectedMovie
+            
+            if let navController = self.navigationController{
+                navController.pushViewController(detailVC, animated: true)
+            }else{
+                self.present(detailVC, animated: true, completion: nil)
+
+            }
+        }
+    }
 }
-
-
-
-
 
 
 class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewDelegate,UICollectionViewDataSource, UISearchResultsUpdating, UISearchBarDelegate ,UICollectionViewDelegateFlowLayout{
@@ -76,6 +91,8 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
     
     var popularMovies : [Movie] = []
     let movieService = MovieService()
+   
+    var selectedMovieForDetail: Movie? // for prepare function
      
   
     
@@ -89,15 +106,14 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
                 let selectedMovie = popularMovies[indexPath.row]
                 destinationVC.movieDetail = selectedMovie
         }
+                  
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = .clear
         
-        
-        
-        
+    
         let sb = UIStoryboard(name: "Main", bundle: nil)
         let searchResultVC = sb.instantiateViewController(withIdentifier: "SearchResultsVC") as? SearchResultsVC
         
@@ -178,7 +194,6 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
         print(searchedText)
       
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return  popularMovies.count
