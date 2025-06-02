@@ -6,7 +6,17 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		8866A9C443445FDF8E86098F /* Pods_movieApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF7D8B379B283DC9B84B608A /* Pods_movieApp.framework */; };
+		B046304A2DEE32CD00EC0AEB /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = B04630492DEE32CD00EC0AEB /* FirebaseAuth */; };
+		B046304C2DEE32CD00EC0AEB /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = B046304B2DEE32CD00EC0AEB /* FirebaseCore */; };
+		B046304E2DEE32CD00EC0AEB /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B046304D2DEE32CD00EC0AEB /* FirebaseFirestore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		38C2826B550FD8782B7EF5A7 /* Pods-movieApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-movieApp.debug.xcconfig"; path = "Target Support Files/Pods-movieApp/Pods-movieApp.debug.xcconfig"; sourceTree = "<group>"; };
+		4A15F4AB3C556ED4CB4DC30E /* Pods-movieApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-movieApp.release.xcconfig"; path = "Target Support Files/Pods-movieApp/Pods-movieApp.release.xcconfig"; sourceTree = "<group>"; };
+		AF7D8B379B283DC9B84B608A /* Pods_movieApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_movieApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B04AE9942DCA5BDE004DAA87 /* movieApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = movieApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -36,17 +46,32 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B046304E2DEE32CD00EC0AEB /* FirebaseFirestore in Frameworks */,
+				B046304C2DEE32CD00EC0AEB /* FirebaseCore in Frameworks */,
+				B046304A2DEE32CD00EC0AEB /* FirebaseAuth in Frameworks */,
+				8866A9C443445FDF8E86098F /* Pods_movieApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4D291EAC65A3169A3AC6EFB1 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				38C2826B550FD8782B7EF5A7 /* Pods-movieApp.debug.xcconfig */,
+				4A15F4AB3C556ED4CB4DC30E /* Pods-movieApp.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		B04AE98B2DCA5BDE004DAA87 = {
 			isa = PBXGroup;
 			children = (
 				B04AE9962DCA5BDE004DAA87 /* movieApp */,
 				B04AE9952DCA5BDE004DAA87 /* Products */,
+				4D291EAC65A3169A3AC6EFB1 /* Pods */,
+				BADF55C321822F4822F1354C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,6 +83,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		BADF55C321822F4822F1354C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AF7D8B379B283DC9B84B608A /* Pods_movieApp.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -65,6 +98,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B04AE9AA2DCA5BE0004DAA87 /* Build configuration list for PBXNativeTarget "movieApp" */;
 			buildPhases = (
+				7B620317F873221808F3C358 /* [CP] Check Pods Manifest.lock */,
 				B04AE9902DCA5BDE004DAA87 /* Sources */,
 				B04AE9912DCA5BDE004DAA87 /* Frameworks */,
 				B04AE9922DCA5BDE004DAA87 /* Resources */,
@@ -77,8 +111,6 @@
 				B04AE9962DCA5BDE004DAA87 /* movieApp */,
 			);
 			name = movieApp;
-			packageProductDependencies = (
-			);
 			productName = movieApp;
 			productReference = B04AE9942DCA5BDE004DAA87 /* movieApp.app */;
 			productType = "com.apple.product-type.application";
@@ -107,6 +139,9 @@
 			);
 			mainGroup = B04AE98B2DCA5BDE004DAA87;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B04630482DEE32CD00EC0AEB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B04AE9952DCA5BDE004DAA87 /* Products */;
 			projectDirPath = "";
@@ -127,6 +162,31 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		7B620317F873221808F3C358 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-movieApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		B04AE9902DCA5BDE004DAA87 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -140,6 +200,7 @@
 /* Begin XCBuildConfiguration section */
 		B04AE9AB2DCA5BE0004DAA87 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 38C2826B550FD8782B7EF5A7 /* Pods-movieApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -168,6 +229,7 @@
 		};
 		B04AE9AC2DCA5BE0004DAA87 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4A15F4AB3C556ED4CB4DC30E /* Pods-movieApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -335,6 +397,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B04630482DEE32CD00EC0AEB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.13.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B04630492DEE32CD00EC0AEB /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B04630482DEE32CD00EC0AEB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		B046304B2DEE32CD00EC0AEB /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B04630482DEE32CD00EC0AEB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		B046304D2DEE32CD00EC0AEB /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B04630482DEE32CD00EC0AEB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B04AE98C2DCA5BDE004DAA87 /* Project object */;
 }
