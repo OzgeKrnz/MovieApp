@@ -8,11 +8,10 @@
 import UIKit
 
 class LoginViewController: UIViewController {
-    /*
+
     @IBOutlet var emailTextField: UITextField!
     @IBOutlet var passwordTextField: UITextField!
     
-    @IBOutlet var buttonItem: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +20,6 @@ class LoginViewController: UIViewController {
         
         emailTextField.translatesAutoresizingMaskIntoConstraints = false
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
-        buttonItem.translatesAutoresizingMaskIntoConstraints = false
         
         emailTextField.clipsToBounds = true
         
@@ -34,14 +32,12 @@ class LoginViewController: UIViewController {
             passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             
-            buttonItem.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 50),
-            buttonItem.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            buttonItem.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        
         
             
   
             
         ])
-    }*/
+    }
     
 }
