@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -13,20 +14,54 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        guard let windowScene = (scene as? UIWindowScene) else { return }
-        let window = UIWindow(windowScene: windowScene)
+        self.setupWindow(with: scene)
+        self.checkAuthentication()
         
-        let vc = LoginController()
-        let nav = UINavigationController(rootViewController: vc)
-        nav.modalPresentationStyle = .fullScreen
-        
-        window.rootViewController = nav
-        self.window = window
-        self.window?.makeKeyAndVisible()
+
         
         //let userRequest = RegisterUserRequest(username: <#T##String#>, email: <#T##String#>, password: <#T##String#>)
         
         //AuthService.shared.registerUser(with: <#T##RegisterUserRequest#>, completion: <#T##(Bool, (any Error)?) -> Void#>)
+    }
+    
+    private func setupWindow(with scene: UIScene){
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        let window = UIWindow(windowScene: windowScene)
+        self.window = window
+        self.window?.makeKeyAndVisible()
+    }
+    
+    public func checkAuthentication(){
+        if Auth.auth().currentUser == nil {
+            // go to sign in screen
+            let sb = UIStoryboard(name: "Main", bundle: nil)
+            let loginVC = sb.instantiateViewController(withIdentifier: "LoginVC") as! LoginViewController
+            self.goToController(with: loginVC)
+          
+        }else{
+            //go to home screen
+            let sb = UIStoryboard(name: "Main", bundle: nil)
+            let homeVC = sb.instantiateViewController(withIdentifier: "HomeVC") as! ViewController
+            self.goToController(with: homeVC)
+            
+        }
+    }
+    
+    private func goToController(with viewController: UIViewController){
+        DispatchQueue.main.async { [weak self] in
+            UIView.animate(withDuration: 0.25) {
+                self?.window?.layer.opacity = 0
+            } completion: { [weak self] _ in
+                
+                let nav = UINavigationController(rootViewController: viewController)
+                nav.modalPresentationStyle = .fullScreen
+                self?.window?.rootViewController = nav
+                
+                UIView.animate(withDuration: 0.25) {
+                    self?.window?.layer.opacity = 1
+                }
+            }
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

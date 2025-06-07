@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class RegisterController: ViewController{
+class RegisterController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()

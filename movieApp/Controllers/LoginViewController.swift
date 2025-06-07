@@ -7,7 +7,8 @@
 
 import UIKit
 
-class LoginController: ViewController {
+class LoginViewController: UIViewController {
+    /*
     @IBOutlet var emailTextField: UITextField!
     @IBOutlet var passwordTextField: UITextField!
     
@@ -24,8 +25,6 @@ class LoginController: ViewController {
         
         emailTextField.clipsToBounds = true
         
-        view.addSubview(emailTextField)
-        view.addSubview(passwordTextField)
         NSLayoutConstraint.activate([
             emailTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 250),
             emailTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
@@ -43,6 +42,6 @@ class LoginController: ViewController {
   
             
         ])
-    }
+    }*/
     
 }
