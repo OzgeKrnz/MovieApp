@@ -16,31 +16,11 @@
                     <view key="view" contentMode="scaleToFill" id="e6e-8s-juB">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="loginBackgroundImg" translatesAutoresizingMaskIntoConstraints="NO" id="99I-uE-2zU">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Mns-cV-oNB">
-                                <rect key="frame" x="148" y="219" width="97" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Trd-WQ-CjS">
-                                <rect key="frame" x="148" y="321" width="97" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="9Uy-xx-TMS"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="zOc-r4-kxQ"/>
                     <connections>
-                        <outlet property="emailTextField" destination="Mns-cV-oNB" id="7Ys-1H-EGx"/>
-                        <outlet property="passwordTextField" destination="Trd-WQ-CjS" id="4HI-8T-CiD"/>
                         <segue destination="2BC-D5-VF0" kind="show" id="emP-Po-cfa"/>
                         <segue destination="MA3-v4-AGb" kind="show" id="Sc4-j0-MGU"/>
                     </connections>
@@ -147,7 +127,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lvk-m7-ygk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1544" y="-4"/>
+            <point key="canvasLocation" x="1542.7480916030534" y="-4.2253521126760569"/>
         </scene>
         <!--Search ResultsVC-->
         <scene sceneID="d3x-94-3DO">
@@ -323,7 +303,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="loginBackgroundImg" width="1080" height="1920"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
