@@ -52,8 +52,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             UIView.animate(withDuration: 0.25) {
                 self?.window?.layer.opacity = 0
             } completion: { [weak self] _ in
-                
-                self?.window?.rootViewController = viewController
+                let nav = UINavigationController(rootViewController: viewController)
+                self?.window?.rootViewController = nav
+               
                 UIView.animate(withDuration: 0.25) {
                     self?.window?.layer.opacity = 1
                 }

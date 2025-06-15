@@ -21,29 +21,12 @@
                     </view>
                     <navigationItem key="navigationItem" id="zOc-r4-kxQ"/>
                     <connections>
-                        <segue destination="2BC-D5-VF0" kind="show" id="emP-Po-cfa"/>
-                        <segue destination="MA3-v4-AGb" kind="show" id="Sc4-j0-MGU"/>
+                        <segue destination="BYZ-38-t0r" kind="show" id="2Rm-7X-xBS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K3M-qE-43V" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="806.87022900763361" y="-4.2253521126760569"/>
-        </scene>
-        <!--Forgot Password Controller-->
-        <scene sceneID="sFU-sR-zmV">
-            <objects>
-                <viewController id="MA3-v4-AGb" customClass="ForgotPasswordController" customModule="movieApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="iyV-rB-cRj">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="Cb7-Jn-Eed"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="Buf-RX-1BP"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="6s9-cr-t8b" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="807" y="682"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -108,26 +91,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2263" y="-4"/>
-        </scene>
-        <!--Register Controller-->
-        <scene sceneID="n8V-tq-DIr">
-            <objects>
-                <viewController id="2BC-D5-VF0" customClass="RegisterController" customModule="movieApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="i3N-Q9-GGU">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="i5B-c9-qIC"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="rG4-89-vsF"/>
-                    <connections>
-                        <segue destination="BYZ-38-t0r" kind="show" id="RkS-eq-d75"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="lvk-m7-ygk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1542.7480916030534" y="-4.2253521126760569"/>
+            <point key="canvasLocation" x="1866" y="-4"/>
         </scene>
         <!--Search ResultsVC-->
         <scene sceneID="d3x-94-3DO">
