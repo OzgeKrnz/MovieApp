@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 
 class RegisterController: UIViewController{
-    
 
     private let usernameField = CustomTextField(fieldType: .username)
     private let emailAddressField = CustomTextField(fieldType: .email)
@@ -19,12 +18,25 @@ class RegisterController: UIViewController{
     private let signInButton = CustomButton(title: "Already have an account? Sign In.", hasBackground: false, fontSize: .med)
     
     private let termsTextView: UITextView = {
+ 
+        let attributedString = NSMutableAttributedString(string: "By creating an account, you agree to our Terms & Conditions and you acknowledge that you have read our Privacy Policy.")
+        
+        attributedString.addAttribute(.link, value: "terms://termsAndConditions", range: (attributedString.string as NSString).range(of: "Terms & Conditions"))
+        
+        attributedString.addAttribute(.link, value: "privacy://privacyPolicy", range: (attributedString.string as NSString).range(of: "Privacy Policy"))
+        
         let tv = UITextView()
-        tv.text = "By creating an account, you agree to our Terms& Conditions and you acknowledge that you have read our Privacy Policy."
+        tv.linkTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.systemBlue
+        ]
+        
         tv.backgroundColor = .clear
+        tv.attributedText = attributedString
         tv.textColor = .label
         tv.isSelectable = true
         tv.isEditable = false
+        tv.delaysContentTouches = false
+        tv.textColor = .white
         tv.isScrollEnabled = false
         return tv
     }()
@@ -40,6 +52,8 @@ class RegisterController: UIViewController{
         super.viewDidLoad()
         self.setupImageView()
         self.setupUI()
+        
+        self.termsTextView.delegate = self
         
         self.signUpButton.addTarget(self, action: #selector(didTapSignUp), for: .touchUpInside)
         self.signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
@@ -84,6 +98,9 @@ class RegisterController: UIViewController{
         emailAddressField.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(emailAddressField)
         
+        termsTextView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(termsTextView)
+        
         
         
         
@@ -110,8 +127,12 @@ class RegisterController: UIViewController{
             signUpButton.heightAnchor.constraint(equalToConstant: 45),
             signUpButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.85),
             
+            termsTextView.topAnchor.constraint(equalTo: signUpButton.bottomAnchor, constant: 8),
+            termsTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            termsTextView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.85),
             
-            signInButton.topAnchor.constraint(equalTo: signUpButton.bottomAnchor, constant: 8),
+            
+            signInButton.topAnchor.constraint(equalTo: termsTextView.bottomAnchor, constant: 8),
             signInButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             signInButton.heightAnchor.constraint(equalToConstant: 44),
             signInButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.85),
@@ -131,6 +152,10 @@ class RegisterController: UIViewController{
            let sceneDelegate = scene.delegate as? SceneDelegate {
             sceneDelegate.window?.rootViewController = navController
         }
+   
+        
+  
+        
     }
     
     @objc private func didTapSignIn(){
@@ -142,3 +167,23 @@ class RegisterController: UIViewController{
 
 }
 
+extension RegisterController: UITextViewDelegate{
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
+        
+        if URL.scheme == "terms"{
+            self.showWebViewerController(with: "https://policies.google.com/terms?h1=en")
+        }else if URL.scheme == "privacy"{
+            self.showWebViewerController(with: "https://policies.google.com/privacy?h1=en")
+
+        }
+        
+        return true
+    }
+    
+    private func showWebViewerController(with urlString: String){
+        let vc = WebViewerController(with: urlString)
+        let nav = UINavigationController(rootViewController: vc)
+        self.present(nav, animated: true, completion: nil)
+    }
+
+}
