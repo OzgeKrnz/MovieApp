@@ -9,7 +9,7 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
-    private let usernameField = CustomTextField(fieldType: .username)
+    private let emailField = CustomTextField(fieldType: .email)
     private let passwordField = CustomTextField(fieldType: .password)
     
     private let signInButton = CustomButton(title: "Sign In", hasBackground: true, fontSize: .big)
@@ -34,6 +34,12 @@ class LoginViewController: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        //AlertManager.showInvalidEmailAlert(on: self)
+    }
+    
 
     // MARK: - Setup UI
     private func setupImageView(){
@@ -52,9 +58,9 @@ class LoginViewController: UIViewController {
     }
     
     private func setupUI(){
-        usernameField.translatesAutoresizingMaskIntoConstraints = false
+        emailField.translatesAutoresizingMaskIntoConstraints = false
         
-        self.view.addSubview(usernameField)
+        self.view.addSubview(emailField)
         //self.view.bringSubviewToFront(usernameField)
         
         passwordField.translatesAutoresizingMaskIntoConstraints = false
@@ -76,13 +82,13 @@ class LoginViewController: UIViewController {
         
         
         NSLayoutConstraint.activate([
-            usernameField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 240),
-            usernameField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            usernameField.heightAnchor.constraint(equalToConstant: 45),
-            usernameField.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.85),
+            emailField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 240),
+            emailField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emailField.heightAnchor.constraint(equalToConstant: 45),
+            emailField.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.85),
             
             
-            passwordField.topAnchor.constraint(equalTo: usernameField.bottomAnchor, constant: 8),
+            passwordField.topAnchor.constraint(equalTo: emailField.bottomAnchor, constant: 8),
             passwordField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             passwordField.heightAnchor.constraint(equalToConstant: 45),
             passwordField.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.85),

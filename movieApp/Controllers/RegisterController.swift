@@ -100,12 +100,7 @@ class RegisterController: UIViewController{
         
         termsTextView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(termsTextView)
-        
-        
-        
-        
-        
-        
+           
         NSLayoutConstraint.activate([
             usernameField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 240),
             usernameField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
