@@ -131,6 +131,8 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
         
         textLabel.translatesAutoresizingMaskIntoConstraints = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Log out", style: .plain, target: self, action: #selector(didTapLogOutButton))
 
         NSLayoutConstraint.activate([
             textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
@@ -232,5 +234,23 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
         let totalPadding = padding * (itemsPerRow + 1)
         let itemWidth = (collectionView.frame.width - totalPadding) / itemsPerRow
         return CGSize(width: itemWidth, height: itemWidth * 1.5)
+    }
+    
+    
+    
+    //MARK: selectors
+    @objc func didTapLogOutButton(){
+        AuthService.shared.signOut{[weak self] error in
+            guard let self = self else {return}
+            if let error = error {
+                AlertManager.showLogoutErrorAlert(on: self, with: error)
+                return
+            }
+            
+            if let sceneDelegate = self.view.window?.windowScene?.delegate as?
+                SceneDelegate {
+                sceneDelegate.checkAuthentication()
+            }
+        }
     }
 }

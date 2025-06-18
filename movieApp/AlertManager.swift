@@ -61,9 +61,9 @@ extension AlertManager{
 extension AlertManager{
     
     public static func showLogInErrorAlert(on vc: UIViewController){
-        self.showBasicAlert(on: vc, title: "Signing In Error", message: nil )
+        self.showBasicAlert(on: vc, title: "Signing In Error", message: nil)
     }
-    
+  
     public static func showLogInErrorAlert(on vc: UIViewController, with error: Error){
         self.showBasicAlert(on: vc, title: "Signing In Error", message:
             "\(error.localizedDescription)" )

@@ -19,9 +19,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
 
         
-        //let userRequest = RegisterUserRequest(username: <#T##String#>, email: <#T##String#>, password: <#T##String#>)
+       /* let userRequest = RegisterUserRequest(
+            username: "ozg",
+            email: "ozg@gmail.com",
+            password: "sifre123"
+        )
         
-        //AuthService.shared.registerUser(with: <#T##RegisterUserRequest#>, completion: <#T##(Bool, (any Error)?) -> Void#>)
+        AuthService.shared.registerUser(with: userRequest){ wasRegistered, error
+            in
+            if let error = error{
+                print(error.localizedDescription)
+                return
+            }
+            print("wasRegistered", wasRegistered)
+        }*/
     }
     
     private func setupWindow(with scene: UIScene){
@@ -41,7 +52,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }else{
             //go to home screen
             let sb = UIStoryboard(name: "Main", bundle: nil)
-            let homeVC = sb.instantiateViewController(withIdentifier: "HomeVC") as! ViewController
+            let homeVC = sb.instantiateViewController(withIdentifier: "MainVC") as! ViewController
             self.goToController(with: homeVC)
             
         }

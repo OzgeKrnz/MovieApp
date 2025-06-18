@@ -139,7 +139,50 @@ class RegisterController: UIViewController{
     
     // MARK: - Selectors
     @objc private func didTapSignUp(){
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let registerUserRequest = RegisterUserRequest(
+            username: self.usernameField.text ?? "",
+            email: self.emailAddressField.text ?? "",
+            password: self.passwordField.text ?? ""
+        )
+        
+        // Username check
+        if !Validation.isValidUsername(for: registerUserRequest.username){
+            AlertManager.showInvalidUsernameAlert(on: self)
+            return
+        }
+        
+        //Email check
+        if !Validation.isValidEmail(for: registerUserRequest.email){
+            AlertManager.showInvalidEmailAlert(on: self)
+            return
+        }
+        
+        //Password check
+        if !Validation.isPasswordValid(for: registerUserRequest.password){
+            AlertManager.showInvalidPasswordAlert(on: self)
+            return
+        }
+        
+        AuthService.shared.registerUser(with: registerUserRequest){ [weak self] wasRegistered,error in
+            guard let self = self else {return }
+            if let error = error {
+                AlertManager.showRegistrationErrorAlert(on: self, with: error)
+                return
+            }
+            
+            if wasRegistered{
+                if let sceneDelegate = self.view.window?.windowScene?.delegate
+                    as? SceneDelegate{
+                    sceneDelegate.checkAuthentication()
+                }
+            }else{
+                AlertManager.showRegistrationErrorAlert(on: self)
+            }
+            
+        }
+        
+    /*    let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let VC = storyboard.instantiateViewController(withIdentifier: "MainVC") as! ViewController
         let navController = UINavigationController(rootViewController: VC)
         
@@ -149,7 +192,7 @@ class RegisterController: UIViewController{
         }
    
         
-  
+  */
         
     }
     

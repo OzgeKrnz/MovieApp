@@ -37,7 +37,6 @@ class LoginViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        //AlertManager.showInvalidEmailAlert(on: self)
     }
     
 
@@ -76,11 +75,7 @@ class LoginViewController: UIViewController {
         
         forgotPasswordButton.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(forgotPasswordButton)
-        
-        
-        
-        
-        
+
         NSLayoutConstraint.activate([
             emailField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 240),
             emailField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -114,14 +109,51 @@ class LoginViewController: UIViewController {
     
     // MARK: - Selectors
     @objc private func didTapSignIn(){
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let loginReq = LoginUserRequest(
+            email: self.emailField.text ?? "",
+            password: self.passwordField.text ?? ""
+        )
+          
+
+        //Email check
+        if !Validation.isValidEmail(for: loginReq.email){
+            AlertManager.showInvalidEmailAlert(on: self)
+            return
+        }
+    
+        //Password check
+        if !Validation.isPasswordValid(for: loginReq.password){
+            AlertManager.showInvalidPasswordAlert(on: self)
+            return
+        }
+        
+        AuthService.shared.signIn(with: loginReq){ [weak self] error in
+            guard let self = self else {return }
+            if let error = error {
+                AlertManager.showLogInErrorAlert(on: self, with: error)
+                return
+            }
+            
+            if let sceneDelegate = self.view.window?.windowScene?.delegate as?
+                SceneDelegate{
+                sceneDelegate.checkAuthentication()
+            } else{
+                AlertManager.showLogInErrorAlert(on: self)
+            }
+ 
+            
+        }
+      /*  let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let VC = storyboard.instantiateViewController(withIdentifier: "MainVC") as! ViewController
         let navController = UINavigationController(rootViewController: VC)
         
         if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
            let sceneDelegate = scene.delegate as? SceneDelegate {
             sceneDelegate.window?.rootViewController = navController
-        }
+        }*/
+        
+        
     }
     
     @objc private func didTapNewUser(){
