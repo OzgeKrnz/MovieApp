@@ -133,6 +133,18 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Log out", style: .plain, target: self, action: #selector(didTapLogOutButton))
+        
+        
+        //FETCH USER
+        AuthService.shared.fetchUser {  [weak self] user, error in
+            guard let self = self else {return}
+            if let error = error {
+                AlertManager.showFetchingUserError(on: self, with: error)
+            }
+            if let user = user{
+                self.textLabel.text = "\(user.username)\n\(user.email)"
+            }
+        }
 
         NSLayoutConstraint.activate([
             textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
