@@ -106,7 +106,10 @@ class AuthService{
                     completion(user, nil)
                 }
             }
+        print(userUID)
     }
+    
+
     
     
 }

@@ -13,4 +13,14 @@ class BaseViewController: UIViewController{
         view.backgroundColor = UIColor(red: 39/255, green: 63/255, blue: 79/255, alpha: 1)
 
     }
+    
+    func hiddenKeyboardWhenTappedAround(){
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard(){
+        view.endEditing(true)
+    }
 }

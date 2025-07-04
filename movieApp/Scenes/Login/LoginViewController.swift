@@ -32,6 +32,7 @@ class LoginViewController: UIViewController {
         self.forgotPasswordButton.addTarget(self, action: #selector(didTapForgotPassword), for: .touchUpInside)
 
         
+       
     }
     
     override func viewWillAppear(_ animated: Bool) {

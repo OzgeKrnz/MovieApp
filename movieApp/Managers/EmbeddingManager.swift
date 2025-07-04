@@ -85,3 +85,6 @@ class EmbeddingManager{
         return decoded.data.first?.embedding ?? []
     }
 }
+
+
+

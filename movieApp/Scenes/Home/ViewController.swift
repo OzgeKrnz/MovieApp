@@ -7,94 +7,20 @@
 
 import UIKit
 
-class SearchResultsVC: BaseViewController, UITableViewDelegate, UITableViewDataSource {
- 
-    @IBOutlet weak var tableView: UITableView!
-
-    var searchedMovie: [Movie] = []
- 
-
-    
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.backgroundColor = .clear
-        
-        
-        tableView.rowHeight = 130
-        tableView.separatorStyle = .singleLine
-        tableView.separatorColor = .lightGray
-        
-
-        
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchedMovie.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchResultCell", for: indexPath) as? SearchResultCell else{return UITableViewCell()}
-        
-        cell.backgroundColor = .clear
-        cell.contentView.backgroundColor = .clear
-        
-        
-        let searchedMovie = searchedMovie[indexPath.row]
-        if let url = searchedMovie.posterUrl{
-            URLSession.shared.dataTask(with: url){data, _,_ in
-                if let data = data{
-                    DispatchQueue.main.async{
-                        cell.posterImageView.image = UIImage(data: data)
-                        //print("Cell size:", cell.frame.size)
-
-                    }
-                }
-            }.resume()
-        }else{
-            cell.posterImageView.image = nil
-        }
-    
-        cell.titleLabel.text = searchedMovie.title
-        
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedMovie = searchedMovie[indexPath.row]
-        
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        if let detailVC = sb.instantiateViewController(identifier: "movieDetailID") as? MovieDetailViewController{
-            detailVC.movieDetail = selectedMovie
-            
-            if let navController = self.navigationController{
-                navController.pushViewController(detailVC, animated: true)
-            }else{
-                self.present(detailVC, animated: true, completion: nil)
-
-            }
-        }
-    }
-}
-
-
 class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewDelegate,UICollectionViewDataSource, UISearchResultsUpdating, UISearchBarDelegate ,UICollectionViewDelegateFlowLayout{
 
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     
+    let mainViewModel = MainViewModel()
+
+    
     var searchController: UISearchController!
-    
-    
-    var popularMovies : [Movie] = []
+
     let movieService = MovieService()
    
     var selectedMovieForDetail: Movie? // for prepare function
      
-  
     
     //SEGUE
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -103,8 +29,10 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
         if segue.identifier == "movieDetail",
            let indexPath = sender as? IndexPath,
            let destinationVC = segue.destination as? MovieDetailViewController{
-                let selectedMovie = popularMovies[indexPath.row]
-                destinationVC.movieDetail = selectedMovie
+            
+            let selectedMovie = mainViewModel.movie(at: indexPath.row)
+            let viewModel = MovieDetailViewModel(movie: selectedMovie)
+            destinationVC.viewModel = viewModel
         }
                   
     }
@@ -141,9 +69,7 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
             if let error = error {
                 AlertManager.showFetchingUserError(on: self, with: error)
             }
-            if let user = user{
-                self.textLabel.text = "\(user.username)\n\(user.email)"
-            }
+          
         }
 
         NSLayoutConstraint.activate([
@@ -159,7 +85,8 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
      
         Task{
             //FOR POPULAR MOVIES
-            popularMovies = try await MovieService.shared.fetchPopulerMovies()
+            await mainViewModel.fetchPopularMoies()
+            self.collectionView.reloadData()
             
             //FOR SEARCH
             //let movie1 = try await MovieService.shared.fetchMovie(title: "Inception")
@@ -168,20 +95,12 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
             //let movie2 = try await MovieService.shared.fetchMovie(title: "Elemental")
             //let overview2 = movie2.overview
 
-            do{
-                self.popularMovies = try await MovieService.shared.fetchPopulerMovies()
-                DispatchQueue.main.async {
-                           self.collectionView.reloadData()
-                }
+       
                 
                 //let vector1 = try await EmbeddingManager.shared.getEmbedding(for: overview1)
                 //let vector2 = try await EmbeddingManager.shared.getEmbedding(for: overview2)
                 //let cosineSimilarity = CosineSimilarity().cosineSimilarity(a: vector1, b: vector2)
                 //print("BEnzerlik oranı: \(cosineSimilarity)")
-                
-            }catch{
-                print("Hata Popüler filmler alınamadı: \(error)")
-            }
         }
     }
     
@@ -193,8 +112,7 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
             do{
                 let searchedMovie = try await MovieService.shared.fetchMovie(title: searchedText)
                 if let vc = searchController.searchResultsController as? SearchResultsVC {
-                    vc.searchedMovie = searchedMovie
-                    
+                    vc.searchedMovie.setMovies(searchedMovie)
                     DispatchQueue.main.async {
                         vc.tableView.reloadData()
                     }
@@ -204,30 +122,19 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
                 print("searh error")
             }
         }
-        
-        print(searchedText)
-      
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return  popularMovies.count
+        return  mainViewModel.numberOfMovies()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as? MovieCell else{
             return UICollectionViewCell()
         }
-        let movie =  popularMovies[indexPath.row]
+        let movie =  mainViewModel.movie(at: indexPath.row)
         if let url = movie.posterUrl{
-            URLSession.shared.dataTask(with: url){data, _,_ in
-                if let data = data{
-                    DispatchQueue.main.async{
-                        cell.posterImageView.image = UIImage(data: data)
-                        //print("Cell size:", cell.frame.size)
-
-                    }
-                }
-            }.resume()
+            ImageLoader.load(from: url, into: cell.posterImageView)
         }else{
             cell.posterImageView.image = nil
         }
@@ -247,9 +154,6 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
         let itemWidth = (collectionView.frame.width - totalPadding) / itemsPerRow
         return CGSize(width: itemWidth, height: itemWidth * 1.5)
     }
-    
-    
-    
     //MARK: selectors
     @objc func didTapLogOutButton(){
         AuthService.shared.signOut{[weak self] error in

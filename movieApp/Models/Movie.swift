@@ -14,8 +14,10 @@ struct Movie: Codable{
     var overview: String
     var release_date:String
     var genre_ids:[Int]
+    var id: Int
     var poster_path: String?
     var backdrop_path: String?
+    
     
     var posterUrl: URL? {
         guard let path = poster_path else {

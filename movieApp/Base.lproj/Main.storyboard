@@ -157,6 +157,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <stackView key="tableFooterView" opaque="NO" contentMode="scaleToFill" id="p6m-HD-7IL">
+                                    <rect key="frame" x="0.0" y="478" width="393" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                </stackView>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="BackdropCell" rowHeight="326" id="wX7-h4-M0e" customClass="BackdropCell" customModule="movieApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="393" height="326"/>
@@ -176,8 +180,8 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="backgroundImageView" destination="f7W-Yz-XTI" id="dTR-1F-wHi"/>
-                                            <outlet property="posterImageView" destination="kr8-Yf-zfC" id="FrP-NN-0Jb"/>
+                                            <outlet property="backgroundImageView" destination="f7W-Yz-XTI" id="jgH-3g-J8Q"/>
+                                            <outlet property="posterImageView" destination="kr8-Yf-zfC" id="QTN-lR-qo8"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="OverViewCell" rowHeight="74" id="j7F-n9-yzJ" customClass="OverViewCell" customModule="movieApp" customModuleProvider="target">
@@ -208,30 +212,6 @@
                                             <outlet property="titleLable" destination="Jts-IS-pLJ" id="jXk-yR-kc5"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="RatingCell" rowHeight="48" id="xvg-bO-WvE" customClass="RatingCell" customModule="movieApp" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="450" width="393" height="48"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xvg-bO-WvE" id="qvZ-e7-pUF">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="48"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ShW-oK-ukm">
-                                                    <rect key="frame" x="163" y="7.0000000000000018" width="42" height="21.666666666666671"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="bottomMargin" secondItem="ShW-oK-ukm" secondAttribute="bottom" constant="5.0000012715657505" id="94T-96-fRu"/>
-                                                <constraint firstItem="ShW-oK-ukm" firstAttribute="leading" secondItem="qvZ-e7-pUF" secondAttribute="leading" constant="163" id="E3B-CR-Uka"/>
-                                                <constraint firstItem="ShW-oK-ukm" firstAttribute="top" secondItem="qvZ-e7-pUF" secondAttribute="topMargin" constant="-4" id="tKP-XY-GdW"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="ratingLabel" destination="ShW-oK-ukm" id="OaM-ZD-HcU"/>
-                                        </connections>
-                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>
@@ -240,6 +220,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="6x9-hV-zvM"/>
                     <connections>
+                        <outlet property="buttonStackView" destination="p6m-HD-7IL" id="OgR-rd-E8V"/>
                         <outlet property="tableView" destination="kSy-Wg-lOl" id="WVB-TJ-RKP"/>
                     </connections>
                 </viewController>
