@@ -33,8 +33,6 @@ class BackdropCell: UITableViewCell {
         applyFadeMask(to: backgroundImageView)
 
     }
-
-    
     
     override func awakeFromNib() {
         super.awakeFromNib()

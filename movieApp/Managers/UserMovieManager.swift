@@ -13,8 +13,21 @@ import UIKit
 class UserMovieManager{
     static let shared = UserMovieManager()
     
-    
-    let context = PersistenceController.shared.context
+    enum MovieStatus: String, CaseIterable{
+        case planned = "Planned"
+        case watched = "Watched"
+        case liked = "Liked"
+        
+        
+        var iconName: String {
+            switch self {
+            case .planned: return "calendar.badge.clock"
+            case .watched: return "eye.fill"
+            case .liked: return "heart.fill"
+                
+            }
+        }
+    }
     
     func saveUserMovie(
         userUID: String,
@@ -24,6 +37,8 @@ class UserMovieManager{
         overview:String,
         title: String,
         posterPath: String){
+            let context = PersistenceController.shared.context
+
             
             guard let uid = Auth.auth().currentUser?.uid else {
                 print("Kullanıcı giriş yapmamış")
@@ -51,6 +66,8 @@ class UserMovieManager{
     }
     
     func getStatus(for movieId: Int64, userId: String)->String? {
+        let context = PersistenceController.shared.context
+
         let fetchRequest : NSFetchRequest<CDMovieEntity> = CDMovieEntity.fetchRequest()
         
         fetchRequest.predicate = NSPredicate(format: "movieId ==  %lld AND userId == %@", "\(movieId)", userId)
@@ -65,6 +82,8 @@ class UserMovieManager{
     }
     
     static func setStatus(for movieId: Int64, userId: String, status: String){
+        let context = PersistenceController.shared.context
+
         let fetchRequest : NSFetchRequest<CDMovieEntity> = CDMovieEntity.fetchRequest()
         fetchRequest.predicate = NSPredicate(format:"movieId ==  %lld AND userId == %@", "\(movieId)", userId)
         

@@ -28,6 +28,10 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
         // print(movieDetail.title)
 
     }
+    
+    private func setStatusButtons(){
+        
+    }
 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
@@ -63,6 +67,9 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
             cell.overviewTextLabel.text = viewModel.overview
             return cell
 
+        case 2:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "StatusSelectorCell") as! StatusSelectorCell
+            return cell
 
         default:
             return UITableViewCell()
@@ -71,7 +78,7 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int)

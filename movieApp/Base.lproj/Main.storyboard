@@ -157,10 +157,6 @@
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <stackView key="tableFooterView" opaque="NO" contentMode="scaleToFill" id="p6m-HD-7IL">
-                                    <rect key="frame" x="0.0" y="478" width="393" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                </stackView>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="BackdropCell" rowHeight="326" id="wX7-h4-M0e" customClass="BackdropCell" customModule="movieApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="393" height="326"/>
@@ -212,6 +208,23 @@
                                             <outlet property="titleLable" destination="Jts-IS-pLJ" id="jXk-yR-kc5"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="StatusSelectorCell" id="Iyv-26-er5" customClass="StatusSelectorCell" customModule="movieApp">
+                                        <rect key="frame" x="0.0" y="450" width="393" height="43.666667938232422"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Iyv-26-er5" id="i44-8v-CzA">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="43.666667938232422"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zqA-ug-fBT">
+                                                    <rect key="frame" x="96" y="-34" width="200" height="110"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </stackView>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="stackView" destination="zqA-ug-fBT" id="vsL-bs-I6n"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>
@@ -220,7 +233,6 @@
                     </view>
                     <navigationItem key="navigationItem" id="6x9-hV-zvM"/>
                     <connections>
-                        <outlet property="buttonStackView" destination="p6m-HD-7IL" id="OgR-rd-E8V"/>
                         <outlet property="tableView" destination="kSy-Wg-lOl" id="WVB-TJ-RKP"/>
                     </connections>
                 </viewController>
