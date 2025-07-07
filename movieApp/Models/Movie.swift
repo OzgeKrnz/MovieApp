@@ -17,7 +17,7 @@ struct Movie: Codable{
     var id: Int
     var poster_path: String?
     var backdrop_path: String?
-    
+    var vote_average: Double
     
     var posterUrl: URL? {
         guard let path = poster_path else {
@@ -32,10 +32,7 @@ struct Movie: Codable{
         }
         return URL(string: "https://image.tmdb.org/t/p/w500/\(path)")
     }
-    
-    
 }
-
 
 struct MovieSearchResponse:Codable{
     let results: [Movie]

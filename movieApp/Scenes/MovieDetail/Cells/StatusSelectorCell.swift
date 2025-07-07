@@ -7,32 +7,29 @@
 
 import UIKit
 
+protocol StatusSelectorCellDelegate: AnyObject{
+    func statusSelectorCell(_ cell: StatusSelectorCell, didSelectStatus status: UserMovieManager.MovieStatus)
+}
+
 class StatusSelectorCell: UITableViewCell {
+ 
+    
     
     @IBOutlet var stackView: UIStackView!
+    var delegate: StatusSelectorCellDelegate?
     
     private let statuses = UserMovieManager.MovieStatus.allCases
     
-    private let plannedButton = UIButton()
-    private let watchedButton = UIButton()
-    private let likedButton = UIButton()
+    private var buttons: [UIButton] = []
+    
+
     
     
     override func awakeFromNib() {
         super.awakeFromNib()
-
-        configureButton(plannedButton, systemImageName: "calendar.badge.clock")
-        configureButton(watchedButton, systemImageName: "eye.fill")
-        configureButton(likedButton, systemImageName: "heart.fill")
-        
-        stackView.addArrangedSubview(plannedButton)
-        stackView.addArrangedSubview(watchedButton)
-        stackView.addArrangedSubview(likedButton)
-        
-        stackView.alignment = .center
-        stackView.distribution = .fillEqually
-
-        
+        stackView.backgroundColor = .clear
+        contentView.backgroundColor = UIColor(red: 39/255, green: 63/255, blue: 79/255, alpha: 1)
+     
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -42,29 +39,55 @@ class StatusSelectorCell: UITableViewCell {
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
         
-        stackView.backgroundColor = .clear
-        contentView.backgroundColor = .clear
+
     }
     
-   
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+    private func setupButtons(){
+        stackView.arrangedSubviews.forEach { $0.removeFromSuperview()}
+        buttons = []
         
+        for(index, status) in statuses.enumerated(){
+            let button = UIButton()
+            let image = UIImage(systemName: status.iconName)
+            button.setImage(image, for: .normal)
+            button.backgroundColor = UIColor(red: 39/255, green: 63/255, blue: 79/255, alpha: 1)
+
+            button.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                button.widthAnchor.constraint(equalToConstant: 45),
+                button.heightAnchor.constraint(equalToConstant: 45)
+            ])
+            button.tag = index
+                       button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+
+                       stackView.addArrangedSubview(button)
+                       buttons.append(button)
+        }
+        
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .fillEqually
+        stackView.spacing = 16
     }
     
-    private func configureButton(_ button: UIButton, systemImageName: String) {
-        let image = UIImage(systemName: systemImageName)
-        button.setImage(image, for: .normal)
-        button.tintColor = .systemGray
-        button.backgroundColor = UIColor(red: 39/255, green: 63/255, blue: 79/255, alpha: 1)
-
-        button.layer.cornerRadius = 0
-
-        button.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            button.widthAnchor.constraint(equalToConstant: 45),
-            button.heightAnchor.constraint(equalToConstant: 45)
-        ])
+    
+    @objc func buttonTapped(_ sender: UIButton){
+        let selectedStatus = statuses[sender.tag]
+        delegate?.statusSelectorCell(self, didSelectStatus: selectedStatus)
+        updateButtonColors(selectedStatus:selectedStatus.rawValue)
     }
+    
+    func configure(selectedStatus: String?) {
+        updateButtonColors(selectedStatus: selectedStatus)
+    }
+    
+    private func updateButtonColors(selectedStatus: String?) {
+        for (index, button) in buttons.enumerated() {
+            let status = statuses[index].rawValue
+            button.tintColor = (status == selectedStatus) ? .systemBlue : .systemGray
+        }
+    }
+    
+
+  
 }

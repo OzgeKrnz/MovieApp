@@ -29,41 +29,39 @@ class UserMovieManager{
         }
     }
     
-    func saveUserMovie(
-        userUID: String,
-        movieID:Int64,
-        status:String,
-        userRating:Float,
-        overview:String,
-        title: String,
-        posterPath: String){
-            let context = PersistenceController.shared.context
+    func saveUserMovie(movie: Movie, status: String) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            print("Kullanıcı giriş yapmamış")
+            return
+        }
 
-            
-            guard let uid = Auth.auth().currentUser?.uid else {
-                print("Kullanıcı giriş yapmamış")
-                return
-            }
+        let context = PersistenceController.shared.context
+
+        // Varsa güncelle
+        let fetchRequest: NSFetchRequest<CDMovieEntity> = CDMovieEntity.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "movieID == %lld AND userUID == %@", Int64(movie.id), uid)
+
+        if let existing = try? context.fetch(fetchRequest).first {
+            existing.status = status
+        } else {
             let userMovie = CDMovieEntity(context: context)
-        
             userMovie.userUID = uid
-            userMovie.movieID = movieID
+            userMovie.movieID = Int64(movie.id)
             userMovie.status = status
-            userMovie.userRating = userRating
-            userMovie.overview = overview
-            userMovie.title = title
-            userMovie.posterPath = posterPath
-            
-            
-            do {
-                try context.save()
-                print("Kullanıcı filmi kaydedildi ")
-            }catch{
-                print("core data hatası")
-            }
-            
-        
+            userMovie.userRating = 0.0
+            userMovie.overview = movie.overview
+            userMovie.title = movie.title
+            userMovie.posterPath = movie.poster_path
+        }
+
+        do {
+            try context.save()
+            print("Film kaydedildi/güncellendi.")
+        } catch {
+            print("Core Data hatası:", error)
+        }
     }
+
     
     func getStatus(for movieId: Int64, userId: String)->String? {
         let context = PersistenceController.shared.context
@@ -81,26 +79,6 @@ class UserMovieManager{
         }
     }
     
-    static func setStatus(for movieId: Int64, userId: String, status: String){
-        let context = PersistenceController.shared.context
-
-        let fetchRequest : NSFetchRequest<CDMovieEntity> = CDMovieEntity.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format:"movieId ==  %lld AND userId == %@", "\(movieId)", userId)
-        
-        do {
-            let results = try context.fetch(fetchRequest)
-            if let existing = results.first {
-                existing.status = status
-            }else {
-                let newEntry = CDMovieEntity(context: context)
-                newEntry.movieID = movieId
-                newEntry.userUID = userId
-                newEntry.status = status
-            }
-            try context.save()
-        } catch {
-            print("status update failed.")
-        }
-        
-    }
+    
+    
 }

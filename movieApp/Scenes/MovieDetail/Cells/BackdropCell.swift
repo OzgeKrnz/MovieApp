@@ -6,11 +6,17 @@
 //
 
 import UIKit
+import SwiftUI
+
 
 class BackdropCell: UITableViewCell {
 
     @IBOutlet var backgroundImageView: UIImageView!
     @IBOutlet var posterImageView: UIImageView!
+    
+    
+    // rating
+    private let ratingView = CircularProgressView()
     
     
     func applyFadeMask(to imageView: UIImageView) {
@@ -36,7 +42,9 @@ class BackdropCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-
+        
+        
+    
         
         backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.clipsToBounds = false
@@ -45,15 +53,22 @@ class BackdropCell: UITableViewCell {
         posterImageView.clipsToBounds = true
         
         contentView.addSubview(posterImageView)
+        contentView.addSubview(ratingView)
         
         backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
         posterImageView.translatesAutoresizingMaskIntoConstraints = false
+        ratingView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             backgroundImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             backgroundImageView.heightAnchor.constraint(equalTo: backgroundImageView.widthAnchor, multiplier: 9.0/16.0),  // aspect ratio
+            
+            ratingView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -35),
+            ratingView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            ratingView.widthAnchor.constraint(equalToConstant: 70),
+            ratingView.heightAnchor.constraint(equalToConstant: 70),
 
             posterImageView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -80),
             posterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
@@ -61,12 +76,14 @@ class BackdropCell: UITableViewCell {
             posterImageView.heightAnchor.constraint(equalTo: posterImageView.widthAnchor, multiplier: 3.0/2.0), // 2:3 oran
             posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -1),
         
-            
      ])
         applyPosterShadowAndBorder()
         contentView.backgroundColor = .clear
     }
 
+    func setVotePercentage(_ percentage: Int){
+        ratingView.percentage = percentage
+    }
     
     private func applyPosterShadowAndBorder() {
         posterImageView.layer.cornerRadius = 4

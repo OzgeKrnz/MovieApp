@@ -19,17 +19,16 @@ struct MovieDetailViewModel{
     var overview: String {movie.overview}
     var posterURL: URL? {movie.posterUrl}
     var backdropURL: URL? {movie.backdropURL}
+    var voteAverage: Double {movie.vote_average}
     
     func getUserStatus(for uid: String) -> String?{
         return UserMovieManager.shared.getStatus(for: Int64(movie.id), userId: uid)
     }
     
     func updateStatus(to newStatus: String){
-        guard let uid = Auth.auth().currentUser?.uid else {
-            return
-        }
-        
-        UserMovieManager.setStatus(for: Int64(movie.id), userId: uid, status: newStatus)
+        UserMovieManager.shared.saveUserMovie(movie: movie, status: newStatus)
 
+        
+        
     }
 }

@@ -64,13 +64,13 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
         
         
         //FETCH USER
-        AuthService.shared.fetchUser {  [weak self] user, error in
+       /* AuthService.shared.fetchUser {  [weak self] user, error in
             guard let self = self else {return}
             if let error = error {
                 AlertManager.showFetchingUserError(on: self, with: error)
             }
           
-        }
+        }*/
 
         NSLayoutConstraint.activate([
             textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),

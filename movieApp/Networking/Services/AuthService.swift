@@ -106,7 +106,7 @@ class AuthService{
                     completion(user, nil)
                 }
             }
-        print(userUID)
+        print("Kullanıcı uid:",userUID)
     }
     
 

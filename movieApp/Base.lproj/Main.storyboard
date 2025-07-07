@@ -222,7 +222,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="stackView" destination="zqA-ug-fBT" id="vsL-bs-I6n"/>
+                                            <outlet property="stackView" destination="zqA-ug-fBT" id="HQG-Vh-fg8"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

@@ -54,6 +54,16 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
             if let posterUrl = viewModel.posterURL {
                 ImageLoader.load(from: posterUrl, into: cell.posterImageView)
             }
+            
+            //rating
+            let vote = Int(ceil(viewModel.voteAverage * 10))
+            print("Movie vote: ", viewModel.voteAverage)
+            print("Yüzdelik:", Int(ceil(viewModel.voteAverage * 10)))
+
+            cell.setVotePercentage(vote)
+            print("VOTE:", vote)
+            
+            
             cell.backgroundColor = .clear
 
             return cell
@@ -65,6 +75,7 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
             
             cell.titleLable.text = viewModel.title
             cell.overviewTextLabel.text = viewModel.overview
+            
             return cell
 
         case 2:
