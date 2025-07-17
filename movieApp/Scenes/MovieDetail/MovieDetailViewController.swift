@@ -48,7 +48,14 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
     
     func showRateViewController(){
         let sb = UIStoryboard(name: "Main", bundle: nil)
-        let rateVC = sb.instantiateViewController(withIdentifier: "RateViewController")
+        let rateVC = sb.instantiateViewController(withIdentifier: "RateViewController") as! RateViewController
+        rateVC.delegate = self
+        
+        if let sheet = rateVC.sheetPresentationController{
+            sheet.detents = [.medium()]
+            sheet.prefersGrabberVisible = true
+        }
+        
         rateVC.modalPresentationStyle = .pageSheet
         present(rateVC, animated: true)
     }
@@ -101,8 +108,13 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "StatusSelectorCell") as! StatusSelectorCell
             cell.delegate = self
-            let status = viewModel.getUserStatus(for: Auth.auth().currentUser?.uid ?? "")
-            cell.configure(selectedStatus: status)
+            let uid = Auth.auth().currentUser?.uid ?? ""
+            let isWatched = viewModel.getIsWatched(for: uid)
+            let isLiked = viewModel.getIsLiked(for: uid)
+            let isRated = viewModel.getIsRated(for: uid)
+            
+            cell.configure(isWatched: isWatched, isLiked: isLiked, isRated: isRated)
+
             return cell
 
         default:

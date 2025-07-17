@@ -40,7 +40,8 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = .clear
-        
+        UserMovieManager.shared.printAllUserMovies()
+
     
         let sb = UIStoryboard(name: "Main", bundle: nil)
         let searchResultVC = sb.instantiateViewController(withIdentifier: "SearchResultsVC") as? SearchResultsVC

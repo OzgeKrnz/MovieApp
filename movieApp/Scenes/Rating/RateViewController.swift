@@ -24,10 +24,19 @@ class RateViewController: UIViewController {
         cosmosView.settings.fillMode = .half
         cosmosView.rating = 0
         
+        view.backgroundColor = UIColor(red: 39/255, green: 63/255, blue: 79/255, alpha: 1)
+        
+        cosmosView.settings.starSize = 40
+        cosmosView.settings.starMargin = 8
+        cosmosView.backgroundColor = .clear
+        
         cosmosView.didTouchCosmos = { [weak self] rating in
             guard let self = self else {return}
             self.delegate?.rateViewController(self, didRate: rating)
-            self.dismiss(animated: true)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1){
+                self.dismiss(animated: true)
+            }
         }
     }
     

@@ -12,8 +12,6 @@ import FirebaseCore
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {  
 
-
-
     var window: UIWindow?
 
     func application(_ application: UIApplication,
@@ -22,7 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       FirebaseApp.configure()
       return true
     }
-
 
     // MARK: UISceneSession Lifecycle
 
@@ -60,4 +57,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
-

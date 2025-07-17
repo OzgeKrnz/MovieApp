@@ -21,21 +21,32 @@ struct MovieDetailViewModel{
     var backdropURL: URL? {movie.backdropURL}
     var voteAverage: Double {movie.vote_average}
     
-    func getUserStatus(for uid: String) -> String?{
-        return UserMovieManager.shared.getStatus(for: Int64(movie.id), userId: uid)
-    }
-    
     
     func updateStatus(to newStatus: String){
         UserMovieManager.shared.saveUserMovie(movie: movie, status: newStatus)
         
     }
-    
-    func getRating(for uid: String) -> Float?{
-        return UserMovieManager.shared.getRating(for: Int64(movie.id), userId: uid)
+  
+    func updateRating(to newRating: Double) {
+        print("Rating güncelleniyor: \(newRating)")
+        UserMovieManager.shared.saveUserMovie(movie: movie, rating: newRating)
     }
     
-    func updateRating(to newRating: Double){
-        UserMovieManager.shared.saveUserMovie(movie: movie, rating: newRating)
+    // MARK: - Core Data'dan Durum Bilgileri (booleans)
+
+    func getIsWatched(for uid: String) -> Bool {
+        return UserMovieManager.shared.getIsWatched(for: Int64(movie.id), userId: uid)
+    }
+
+    func getIsLiked(for uid: String) -> Bool {
+        return UserMovieManager.shared.getIsLiked(for: Int64(movie.id), userId: uid)
+    }
+
+    func getIsRated(for uid: String) -> Bool {
+        return UserMovieManager.shared.getIsRated(for: Int64(movie.id), userId: uid)
+    }
+
+    func getRating(for uid: String) -> Float? {
+        return UserMovieManager.shared.getRating(for: Int64(movie.id), userId: uid)
     }
 }
