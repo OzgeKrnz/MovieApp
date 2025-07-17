@@ -6,10 +6,21 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class MovieDetailViewController: BaseViewController, UITableViewDelegate,
-    UITableViewDataSource
-{
+                                 UITableViewDataSource , RateViewControllerDelegate, StatusSelectorCellDelegate{
+    
+    func statusSelectorCell(_ cell: StatusSelectorCell, didSelectStatus status: UserMovieManager.MovieStatus) {
+        switch status {
+        case .rated:
+            showRateViewController()
+        default:
+            viewModel.updateStatus(to: status.rawValue)
+            tableView.reloadData()
+        }
+    }
+    
 
     @IBOutlet var tableView: UITableView!
     @IBOutlet var buttonStackView: UIStackView!
@@ -29,10 +40,19 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
 
     }
     
-    private func setStatusButtons(){
-        
+    
+    func rateViewController(_ controller: RateViewController, didRate rating: Double) {
+        viewModel.updateRating(to: rating)
+        tableView.reloadData()
     }
-
+    
+    func showRateViewController(){
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        let rateVC = sb.instantiateViewController(withIdentifier: "RateViewController")
+        rateVC.modalPresentationStyle = .pageSheet
+        present(rateVC, animated: true)
+    }
+    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
         -> UITableViewCell
@@ -80,6 +100,9 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
 
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "StatusSelectorCell") as! StatusSelectorCell
+            cell.delegate = self
+            let status = viewModel.getUserStatus(for: Auth.auth().currentUser?.uid ?? "")
+            cell.configure(selectedStatus: status)
             return cell
 
         default:

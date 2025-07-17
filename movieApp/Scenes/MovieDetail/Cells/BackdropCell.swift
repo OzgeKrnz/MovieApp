@@ -43,9 +43,6 @@ class BackdropCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        
-    
-        
         backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.clipsToBounds = false
         

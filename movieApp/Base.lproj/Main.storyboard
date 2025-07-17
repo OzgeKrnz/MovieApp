@@ -143,7 +143,32 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hHE-yO-R7x" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2389" y="816"/>
+            <point key="canvasLocation" x="1967" y="809"/>
+        </scene>
+        <!--Rate View Controller-->
+        <scene sceneID="8cD-P8-QGe">
+            <objects>
+                <viewController storyboardIdentifier="RateViewController" id="vDf-6S-Umi" customClass="RateViewController" customModule="movieApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="n91-AW-dF8">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h9h-7o-a5i" customClass="CosmosView" customModule="Cosmos">
+                                <rect key="frame" x="76" y="163" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Re2-KM-eZl"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <connections>
+                        <outlet property="cosmosView" destination="h9h-7o-a5i" id="TzZ-w5-Kwq"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Y94-ZW-oeu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2911" y="808"/>
         </scene>
         <!--Movie Detail View Controller-->
         <scene sceneID="kyO-eR-ibN">

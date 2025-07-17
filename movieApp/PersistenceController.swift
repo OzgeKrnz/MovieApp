@@ -18,7 +18,7 @@ class PersistenceController {
     }
 
     private init() {
-        container = NSPersistentContainer(name: "movieApp")
+        container = NSPersistentContainer(name: "CDMovie")
         container.loadPersistentStores { _, error in
             if let error = error {
                 fatalError("CoreData yüklenemedi: \(error)")

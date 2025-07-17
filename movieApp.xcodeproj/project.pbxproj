@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8866A9C443445FDF8E86098F /* Pods_movieApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF7D8B379B283DC9B84B608A /* Pods_movieApp.framework */; };
+		B0354F092E241C21006A82F7 /* Cosmos in Frameworks */ = {isa = PBXBuildFile; productRef = B0354F082E241C21006A82F7 /* Cosmos */; };
 		B046304A2DEE32CD00EC0AEB /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = B04630492DEE32CD00EC0AEB /* FirebaseAuth */; };
 		B046304C2DEE32CD00EC0AEB /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = B046304B2DEE32CD00EC0AEB /* FirebaseCore */; };
 		B046304E2DEE32CD00EC0AEB /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B046304D2DEE32CD00EC0AEB /* FirebaseFirestore */; };
@@ -46,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0354F092E241C21006A82F7 /* Cosmos in Frameworks */,
 				B046304E2DEE32CD00EC0AEB /* FirebaseFirestore in Frameworks */,
 				B046304C2DEE32CD00EC0AEB /* FirebaseCore in Frameworks */,
 				B046304A2DEE32CD00EC0AEB /* FirebaseAuth in Frameworks */,
@@ -141,6 +143,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				B04630482DEE32CD00EC0AEB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				B0354F072E241C21006A82F7 /* XCRemoteSwiftPackageReference "Cosmos" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B04AE9952DCA5BDE004DAA87 /* Products */;
@@ -399,6 +402,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		B0354F072E241C21006A82F7 /* XCRemoteSwiftPackageReference "Cosmos" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/Cosmos.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 25.0.1;
+			};
+		};
 		B04630482DEE32CD00EC0AEB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -410,6 +421,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		B0354F082E241C21006A82F7 /* Cosmos */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B0354F072E241C21006A82F7 /* XCRemoteSwiftPackageReference "Cosmos" */;
+			productName = Cosmos;
+		};
 		B04630492DEE32CD00EC0AEB /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B04630482DEE32CD00EC0AEB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

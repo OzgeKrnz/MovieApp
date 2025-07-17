@@ -25,10 +25,17 @@ struct MovieDetailViewModel{
         return UserMovieManager.shared.getStatus(for: Int64(movie.id), userId: uid)
     }
     
+    
     func updateStatus(to newStatus: String){
         UserMovieManager.shared.saveUserMovie(movie: movie, status: newStatus)
-
         
-        
+    }
+    
+    func getRating(for uid: String) -> Float?{
+        return UserMovieManager.shared.getRating(for: Int64(movie.id), userId: uid)
+    }
+    
+    func updateRating(to newRating: Double){
+        UserMovieManager.shared.saveUserMovie(movie: movie, rating: newRating)
     }
 }

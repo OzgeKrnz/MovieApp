@@ -14,22 +14,22 @@ class UserMovieManager{
     static let shared = UserMovieManager()
     
     enum MovieStatus: String, CaseIterable{
-        case planned = "Planned"
         case watched = "Watched"
         case liked = "Liked"
+        case rated = "Rated"
         
         
         var iconName: String {
             switch self {
-            case .planned: return "calendar.badge.clock"
             case .watched: return "eye.fill"
             case .liked: return "heart.fill"
+            case .rated: return "star.fill"
                 
             }
         }
     }
     
-    func saveUserMovie(movie: Movie, status: String) {
+    func saveUserMovie(movie: Movie, status: String? = nil, rating: Double? = nil) {
         guard let uid = Auth.auth().currentUser?.uid else {
             print("Kullanıcı giriş yapmamış")
             return
@@ -42,13 +42,22 @@ class UserMovieManager{
         fetchRequest.predicate = NSPredicate(format: "movieID == %lld AND userUID == %@", Int64(movie.id), uid)
 
         if let existing = try? context.fetch(fetchRequest).first {
-            existing.status = status
+            if let status = status {
+                existing.status = status
+            }
+            
+            if let rating = rating {
+                existing.userRating = Float(rating)
+            }
+            
         } else {
             let userMovie = CDMovieEntity(context: context)
             userMovie.userUID = uid
             userMovie.movieID = Int64(movie.id)
             userMovie.status = status
-            userMovie.userRating = 0.0
+            if let rating = rating{
+                userMovie.userRating = Float(rating)
+            }
             userMovie.overview = movie.overview
             userMovie.title = movie.title
             userMovie.posterPath = movie.poster_path
@@ -68,7 +77,7 @@ class UserMovieManager{
 
         let fetchRequest : NSFetchRequest<CDMovieEntity> = CDMovieEntity.fetchRequest()
         
-        fetchRequest.predicate = NSPredicate(format: "movieId ==  %lld AND userId == %@", "\(movieId)", userId)
+        fetchRequest.predicate = NSPredicate(format: "movieID ==  %lld AND userUID == %@", movieId, userId)
         
         do {
             let results = try context.fetch(fetchRequest)
@@ -78,6 +87,24 @@ class UserMovieManager{
             return nil
         }
     }
+    
+    func getRating(for movieId: Int64, userId: String)->Float? {
+        let context = PersistenceController.shared.context
+
+        let fetchRequest : NSFetchRequest<CDMovieEntity> = CDMovieEntity.fetchRequest()
+        
+        fetchRequest.predicate = NSPredicate(format: "movieID ==  %lld AND userUID == %@", movieId, userId)
+        
+        do {
+            let results = try context.fetch(fetchRequest)
+            return results.first?.userRating
+        }catch{
+            print("status fetch failed", error)
+            return nil
+        }
+    }
+    
+    
     
     
     

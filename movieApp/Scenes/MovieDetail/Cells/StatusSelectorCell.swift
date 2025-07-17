@@ -13,8 +13,6 @@ protocol StatusSelectorCellDelegate: AnyObject{
 
 class StatusSelectorCell: UITableViewCell {
  
-    
-    
     @IBOutlet var stackView: UIStackView!
     var delegate: StatusSelectorCellDelegate?
     
@@ -22,11 +20,9 @@ class StatusSelectorCell: UITableViewCell {
     
     private var buttons: [UIButton] = []
     
-
-    
-    
     override func awakeFromNib() {
         super.awakeFromNib()
+        setupButtons()
         stackView.backgroundColor = .clear
         contentView.backgroundColor = UIColor(red: 39/255, green: 63/255, blue: 79/255, alpha: 1)
      
@@ -38,8 +34,6 @@ class StatusSelectorCell: UITableViewCell {
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
-        
-
     }
     
     private func setupButtons(){
