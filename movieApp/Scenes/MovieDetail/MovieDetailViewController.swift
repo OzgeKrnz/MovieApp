@@ -27,7 +27,7 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
 
     var viewModel: MovieDetailViewModel!
 
-    override func viewDidLoad() {
+    override func viewDidLoad()  {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
@@ -37,6 +37,25 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
         tableView.rowHeight = UITableView.automaticDimension
 
         // print(movieDetail.title)
+        
+ 
+        
+        Task {
+            do {
+                try EmbeddingCacheManager.shared.loadEmbeddings()
+                print("Embeddings başarıyla yüklendi.")
+                
+                let userId = Auth.auth().currentUser?.uid ?? ""
+                let recommended = try await RecommendationManager.shared.getRecommendations(for: userId)
+
+                for movie in recommended {
+                    print("Önerilen film: \(movie.title)")
+                }
+            } catch {
+                print("Embeddings yüklenemedi: \(error)")
+            }
+
+        }
 
     }
     

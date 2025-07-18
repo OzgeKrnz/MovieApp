@@ -110,11 +110,30 @@ class UserMovieManager{
 
            do {
                let movies = try context.fetch(fetchRequest)
-               for movie in movies {
+               /*for movie in movies {
                    print("\(movie.title ?? "") | Rating: \(movie.userRating) | Watched: \(movie.isWatched) | Liked: \(movie.isLiked) | Rated: \(movie.isRated) | UID: \(movie.userUID ?? "")")
-               }
+               }*/
            } catch {
                print("Veriler alınamadı: \(error)")
            }
        }
+    
+    
+    // MARK: - Get rated movies for a user
+    func getRatedMovies(for userId: String) -> [CDMovieEntity]{
+        let context = PersistenceController.shared.context
+        let fetchRequest: NSFetchRequest<CDMovieEntity> = CDMovieEntity.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "userUID == %@ AND isRated == YES", userId)
+        fetchRequest.returnsObjectsAsFaults = false  // 👈 BU ÇOK ÖNEMLİ
+
+
+        do {
+            let results = try context.fetch(fetchRequest)
+            print("RECOMMENDATIONMANAGER RATED MOVIES: \(results)")
+            return results
+        } catch {
+            print("CoreData fetch hatası: \(error)")
+            return []
+        }
+    }
 }

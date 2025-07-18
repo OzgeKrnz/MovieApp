@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewDelegate,UICollectionViewDataSource, UISearchResultsUpdating, UISearchBarDelegate ,UICollectionViewDelegateFlowLayout{
 
@@ -20,6 +21,7 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
     let movieService = MovieService()
    
     var selectedMovieForDetail: Movie? // for prepare function
+
      
     
     //SEGUE
@@ -64,14 +66,7 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Log out", style: .plain, target: self, action: #selector(didTapLogOutButton))
         
         
-        //FETCH USER
-       /* AuthService.shared.fetchUser {  [weak self] user, error in
-            guard let self = self else {return}
-            if let error = error {
-                AlertManager.showFetchingUserError(on: self, with: error)
-            }
-          
-        }*/
+        //testSimilarityBetweenMovies()
 
         NSLayoutConstraint.activate([
             textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
@@ -88,20 +83,6 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
             //FOR POPULAR MOVIES
             await mainViewModel.fetchPopularMoies()
             self.collectionView.reloadData()
-            
-            //FOR SEARCH
-            //let movie1 = try await MovieService.shared.fetchMovie(title: "Inception")
-            //let overview1 = movie1.overview
-            
-            //let movie2 = try await MovieService.shared.fetchMovie(title: "Elemental")
-            //let overview2 = movie2.overview
-
-       
-                
-                //let vector1 = try await EmbeddingManager.shared.getEmbedding(for: overview1)
-                //let vector2 = try await EmbeddingManager.shared.getEmbedding(for: overview2)
-                //let cosineSimilarity = CosineSimilarity().cosineSimilarity(a: vector1, b: vector2)
-                //print("BEnzerlik oranı: \(cosineSimilarity)")
         }
     }
     
@@ -170,4 +151,48 @@ class ViewController: BaseViewController, UITextFieldDelegate, UICollectionViewD
             }
         }
     }
+    
+    
+    // similarity test
+    func testSimilarityBetweenMovies(){
+        /* Task {
+         do {
+         let movie1 = try await MovieService.shared.fetchMovie(title: "Moana 2")
+         let movie2 = try await MovieService.shared.fetchMovie(title: "Frozen")
+         let movie3 = try await MovieService.shared.fetchMovie(title: "Avengers: Endgame")
+         let movie4 = try await MovieService.shared.fetchMovie(title: "Iron Man")
+         
+         guard
+         let m1 = movie1.first,
+         let m2 = movie2.first,
+         let m3 = movie3.first,
+         let m4 = movie4.first
+         
+         else {
+         print("No movie")
+         return
+         }
+         
+         let base = m1.title + " " + m1.overview
+         let baseVector = try await EmbeddingManager.shared.getEmbedding(for: base)
+         
+         let movieList = [m2,m3,m4]
+         
+         for movie in movieList {
+         let text = movie.title + " " + movie.overview
+         let vector = try await EmbeddingManager.shared.getEmbedding(for: text)
+         let similarity = CosineSimilarity().cosineSimilarity(a: baseVector, b: vector)
+         print("Moana vs \(movie.title): \(similarity)")
+         }
+         
+         } catch {
+         print("Hata oluştu: \(error.localizedDescription)")
+         }
+         
+         }*/
+        
+    }
+    
+    
 }
+

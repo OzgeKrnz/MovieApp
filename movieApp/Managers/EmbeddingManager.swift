@@ -12,7 +12,7 @@ class EmbeddingManager{
     static let shared = EmbeddingManager()
     
     private let endpoint = "https://api.openai.com/v1/embeddings"
-    private let embeddingModel = "text-embedding-ada-002"
+    private let embeddingModel = "text-embedding-3-large"
     
     
     
@@ -37,7 +37,7 @@ class EmbeddingManager{
             guard let value = plist?.object(forKey: "OPENAI_API_KEY") as? String else{
                 fatalError("API KEY bulunamadı.")
             }
-            print("API Key yüklendi.... \(value.prefix(10))")
+            //print("API Key yüklendi.... \(value.prefix(10))")
             return value
         }
     }

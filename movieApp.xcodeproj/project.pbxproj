@@ -12,6 +12,7 @@
 		B046304A2DEE32CD00EC0AEB /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = B04630492DEE32CD00EC0AEB /* FirebaseAuth */; };
 		B046304C2DEE32CD00EC0AEB /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = B046304B2DEE32CD00EC0AEB /* FirebaseCore */; };
 		B046304E2DEE32CD00EC0AEB /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B046304D2DEE32CD00EC0AEB /* FirebaseFirestore */; };
+		B0DCF9582E29CC2000AFB9EC /* movieEmbeddings.json in Resources */ = {isa = PBXBuildFile; fileRef = B0DCF9572E29CC2000AFB9EC /* movieEmbeddings.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,7 @@
 		4A15F4AB3C556ED4CB4DC30E /* Pods-movieApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-movieApp.release.xcconfig"; path = "Target Support Files/Pods-movieApp/Pods-movieApp.release.xcconfig"; sourceTree = "<group>"; };
 		AF7D8B379B283DC9B84B608A /* Pods_movieApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_movieApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B04AE9942DCA5BDE004DAA87 /* movieApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = movieApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0DCF9572E29CC2000AFB9EC /* movieEmbeddings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = movieEmbeddings.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -74,6 +76,7 @@
 				B04AE9952DCA5BDE004DAA87 /* Products */,
 				4D291EAC65A3169A3AC6EFB1 /* Pods */,
 				BADF55C321822F4822F1354C /* Frameworks */,
+				B0DCF9572E29CC2000AFB9EC /* movieEmbeddings.json */,
 			);
 			sourceTree = "<group>";
 		};
@@ -160,6 +163,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0DCF9582E29CC2000AFB9EC /* movieEmbeddings.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

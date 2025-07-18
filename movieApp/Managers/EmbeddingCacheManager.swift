@@ -13,7 +13,7 @@ class EmbeddingCacheManager {
 
     private init() {}
 
-    private var cache: [String: [Double]] = [:]
+     private(set) var cache: [String: [Double]] = [:]
 
     private var fileURL: URL {
         let manager = FileManager.default
@@ -116,6 +116,17 @@ class EmbeddingCacheManager {
         }
 
         print(" Tüm popüler filmler işlendi!")
+    }
+    
+    func loadEmbeddings() throws {
+        guard let url = Bundle.main.url(forResource: "movieEmbeddings", withExtension: "json") else {
+            throw NSError(domain: "EmbeddingCacheManager", code: 1, userInfo: [NSLocalizedDescriptionKey: "movieEmbeddings.json not found"])
+        }
+
+        let data = try Data(contentsOf: url)
+        let decoded = try JSONDecoder().decode([String: [Double]].self, from: data)
+        self.cache = decoded
+        print("Embedding verileri başarıyla yüklendi: \(cache.count) adet film.")
     }
 
 }
