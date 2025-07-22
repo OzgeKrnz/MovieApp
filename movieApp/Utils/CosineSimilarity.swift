@@ -17,23 +17,21 @@ class CosineSimilarity{
             return -1.0
         }
         
-        let magA = magnitude(a: a)
-        let magB = magnitude(a: b)
+        // düzeltme: text-embedding-3-large modeline gecildigi icin vektörleri normalize ediyorz
+        let normA = normalize(a)
+        let normB = normalize(b)
         
-        if magA == 0 || magB == 0{
-            // eger embedding vektörleri her zaman normalize yani uzunlugu 1 ise
-            print("Vektörlerden biri veya her ikisi de sıfır vektörü")
-            
-            if magA == 0 && magB == 0 {
-                return 1.0 // vektörler aynı yönde
-            }
-            
-            return 0.0
-            
-        }
         
-        return dot(a: a, b: b) / (magA * magB)
+        return dot(a: normA, b:normB)
      
+    }
+    
+    // normalize fonksiyonu
+    private func normalize(_ vector: [Double]) -> [Double] {
+        let mag = magnitude(a: vector)
+        guard mag != 0 else {return vector}
+        
+        return vector.map { $0 / mag }
     }
     
     // iki vektörün karşılık gelen elemanlarının çarpımlarının toplamı
@@ -55,5 +53,19 @@ class CosineSimilarity{
         return sqrt(x)
     }
                 
+    static func textFunc() {
+        let cos = CosineSimilarity()
+
+        let a = [1.0, 2.0, 3.0]
+        let b = [1.0, 2.0, 3.0]
+        let c = [-1.0, -2.0, -3.0]
+        let d = [0.0, 0.0, 0.0]
+
+        print(cos.cosineSimilarity(a: a, b: b)) // → 1.0 (aynı yön)
+        print(cos.cosineSimilarity(a: a, b: c)) // → -1.0 (zıt yön)
+        print(cos.cosineSimilarity(a: a, b: d))
+    }
+    
+
                 
 }

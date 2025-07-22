@@ -47,7 +47,7 @@ class UserMovieManager{
         entity.userUID = uid
         entity.movieID = Int64(movie.id)
         entity.title = movie.title
-        entity.posterPath = movie.poster_path
+        entity.posterPath = movie.posterPath
         entity.overview = movie.overview
 
         if let status = status {
@@ -110,9 +110,9 @@ class UserMovieManager{
 
            do {
                let movies = try context.fetch(fetchRequest)
-               /*for movie in movies {
+               for movie in movies {
                    print("\(movie.title ?? "") | Rating: \(movie.userRating) | Watched: \(movie.isWatched) | Liked: \(movie.isLiked) | Rated: \(movie.isRated) | UID: \(movie.userUID ?? "")")
-               }*/
+               }
            } catch {
                print("Veriler alınamadı: \(error)")
            }
@@ -123,8 +123,8 @@ class UserMovieManager{
     func getRatedMovies(for userId: String) -> [CDMovieEntity]{
         let context = PersistenceController.shared.context
         let fetchRequest: NSFetchRequest<CDMovieEntity> = CDMovieEntity.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "userUID == %@ AND isRated == YES", userId)
-        fetchRequest.returnsObjectsAsFaults = false  // 👈 BU ÇOK ÖNEMLİ
+        fetchRequest.predicate = NSPredicate(format: "userUID == %@ AND isRated == YES AND isLiked == YES AND userRating > 3", userId)
+        fetchRequest.returnsObjectsAsFaults = false
 
 
         do {

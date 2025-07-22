@@ -14,9 +14,7 @@ class EmbeddingManager{
     private let endpoint = "https://api.openai.com/v1/embeddings"
     private let embeddingModel = "text-embedding-3-large"
     
-    
-    
-    
+
     struct EmbeddingResponse:Decodable{
         let data: [EmbeddingData]
     }

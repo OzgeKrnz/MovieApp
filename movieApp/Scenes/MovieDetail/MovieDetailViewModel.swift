@@ -19,7 +19,7 @@ struct MovieDetailViewModel{
     var overview: String {movie.overview}
     var posterURL: URL? {movie.posterUrl}
     var backdropURL: URL? {movie.backdropURL}
-    var voteAverage: Double {movie.vote_average}
+    var voteAverage: Double? {movie.voteAverage}
     
     
     func updateStatus(to newStatus: String){

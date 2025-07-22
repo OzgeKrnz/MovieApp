@@ -38,26 +38,26 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
 
         // print(movieDetail.title)
         
- 
-        
         Task {
-            do {
-                try EmbeddingCacheManager.shared.loadEmbeddings()
-                print("Embeddings başarıyla yüklendi.")
-                
-                let userId = Auth.auth().currentUser?.uid ?? ""
-                let recommended = try await RecommendationManager.shared.getRecommendations(for: userId)
+             do {
+                 try EmbeddingCacheManager.shared.loadEmbeddings()
+                 print("Embeddings başarıyla yüklendi.")
+                 
+                 let userId = Auth.auth().currentUser?.uid ?? ""
+                 let recommended = try await RecommendationManager.shared.getRecommendations(for: userId)
 
-                for movie in recommended {
-                    print("Önerilen film: \(movie.title)")
-                }
-            } catch {
-                print("Embeddings yüklenemedi: \(error)")
-            }
+                 for movie in recommended {
+                     print("Önerilen film ID: \(movie.id)")
+                 }
+             } catch {
+                 print("Embeddings yüklenemedi: \(error)")
+             }
 
-        }
+         }
 
-    }
+     }
+        
+
     
     
     func rateViewController(_ controller: RateViewController, didRate rating: Double) {
@@ -102,9 +102,9 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
             }
             
             //rating
-            let vote = Int(ceil(viewModel.voteAverage * 10))
-            print("Movie vote: ", viewModel.voteAverage)
-            print("Yüzdelik:", Int(ceil(viewModel.voteAverage * 10)))
+            let vote = Int(ceil(viewModel.voteAverage! * 10))
+            print("Movie vote: ", viewModel.voteAverage ?? 0.0)
+            print("Yüzdelik:", Int(ceil((viewModel.voteAverage ?? 0.0) * 10)))
 
             cell.setVotePercentage(vote)
             print("VOTE:", vote)

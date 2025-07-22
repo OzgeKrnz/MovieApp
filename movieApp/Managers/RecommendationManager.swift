@@ -18,23 +18,17 @@ class RecommendationManager {
     func getRecommendations( for userId: String, top count: Int = 5
     ) async throws -> [Movie] {
         
-        let ratedMovies = UserMovieManager.shared.getRatedMovies(for: userId)
-        print("RECOMMENDATİONMANAGER RATED MOVİES: \(ratedMovies)")
+        guard let baseVector = try await getUserEmbedding(userId: userId) else {
+             print("Kullanıcının geçerli embedding verisi yok.")
+             return []
+         }
         
-        guard let ratedMovie = ratedMovies.first else {
-            print("kullanıcı film oylamamış")
-            return []
-        }
+        // movieEmbedding.json'dan similarity hesabı
+        var results: [(id: Int, similarity: Double)] = []
 
-        let text = (ratedMovie.title ?? "") + " " + (ratedMovie.overview ?? "")
-        let baseVector = try await EmbeddingManager.shared.getEmbedding(for: text)
-
-
-        // eöbeddingvectorcache'den similarity hesabı
-        var results: [(id:Int, similarity: Double)] = []
         
         for (movieIdStr, vector) in EmbeddingCacheManager.shared.cache {
-            guard let movieId = Int(movieIdStr), movieId != Int(ratedMovie.movieID) else { continue }
+            guard let movieId = Int(movieIdStr) else {continue}
             let similarity = CosineSimilarity().cosineSimilarity(a: baseVector, b: vector)
             results.append((id: movieId, similarity: similarity))
         }
@@ -45,7 +39,7 @@ class RecommendationManager {
             .prefix(count)
             .map { $0.id }
         
-        print("EN YAKIN İDLER: \(topMovieIDs)")
+        //print("EN YAKIN İDLER: \(topMovieIDs)")
 
         // Bu ID'lere göre Movie objelerini async olarak API’den çek
         var recommendedMovies: [Movie] = []
@@ -54,21 +48,21 @@ class RecommendationManager {
             print("Deniyorum: \(id)")
             if let movie = try? await MovieService.shared.fetchMovieDetails(movieId: id) {
                 recommendedMovies.append(movie)
-                print("Film var: \(movie.title)")
+
+                print("-------------------------")
+                print(movie.posterUrl)
+                print("-------------------------")
+                
+
                 
             } else {
-                let movie = try? await MovieService.shared.fetchMovieDetails(movieId: id)
-                
-                print("movie fetch başarısız: \(movie?.title)")
-                
+                print("movie fetch başarısız: \(id)")
             }
         }
-
-        print("EmbeddingCache'teki film ID'leri: \(EmbeddingCacheManager.shared.cache.keys)")
+        //print("EmbeddingCache'teki film ID'leri: \(EmbeddingCacheManager.shared.cache.keys)")
 
         return recommendedMovies
     
-
     }
 
     // ort embedding
@@ -77,16 +71,23 @@ class RecommendationManager {
         if ratedMovies.isEmpty { return nil }
 
         if ratedMovies.count == 1 {
-                let movie = ratedMovies[0]
-                let text = (movie.title ?? "") + " " + (movie.overview ?? "")
-                return try await EmbeddingManager.shared.getEmbedding(for: text)
+            let movie = ratedMovies[0]
+            let title = movie.title ?? ""
+            let overview = movie.overview ?? ""
+            let text = overview.isEmpty ? title : "Title: \(title)\nPlot: \(overview)"
+            return try await EmbeddingManager.shared.getEmbedding(for: text)
             }
 
             // 1'den fazla film varsa ortalama embedding
             var embeddings: [[Double]] = []
             
             for movie in ratedMovies {
-                let text = (movie.title ?? "") + " " + (movie.overview ?? "")
+                let title = movie.title ?? ""
+                let overview = movie.overview ?? ""
+                
+                let text = overview.isEmpty ? title : "Title: \(title)\nPlot: \(overview)"
+                print("Embeddiing icin alınan film: \(title)")
+
                 if let vector = try? await EmbeddingManager.shared.getEmbedding(for: text) {
                     embeddings.append(vector)
                 }

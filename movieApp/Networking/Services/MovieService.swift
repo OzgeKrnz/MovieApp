@@ -106,7 +106,7 @@ class MovieService{
     
     
     func fetchMovieDetails(movieId: Int) async throws -> Movie {
-        let urlString = "https://api.themoviedb.org/3/movie/\(movieId)?api_key=\(apiKey)&language=en-US"
+        let urlString = "https://api.themoviedb.org/3/movie/\(movieId)?api_key=\(apiKey)&language=en"
         
         guard let url = URL(string: urlString) else {
             throw URLError(.badURL)
@@ -114,12 +114,32 @@ class MovieService{
 
         let (data, response) = try await URLSession.shared.data(from: url)
         
+        if let raw = String(data: data, encoding: .utf8) {
+            print("✅ Gelen JSON:\n", raw)
+        }
+        
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
             throw URLError(.badServerResponse)
         }
+//        print("📡 GET: https://api.themoviedb.org/3/movie/\(movieId)?api_key=...") // Gerçek URL
+//        print("Status code: \((response as? HTTPURLResponse)?.statusCode ?? 0)")
+//        print("Data: \(String(data: data, encoding: .utf8) ?? "")")
+        
+        
 
         let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        do {
+            let movie = try decoder.decode(Movie.self, from: data)
+            print("🎬 Film: \(movie.title)")
+            print("🖼️ PosterPath: \(movie.posterPath ?? "nil")")
+            print("🌐 PosterURL: \(movie.posterUrl?.absoluteString ?? "nil")")
+            return movie
+        } catch {
+            print("Decoding hatası: \(error)")
+            print("JSON içeriği: \(String(data: data, encoding: .utf8) ?? "")")
+            throw error
+        }
 
         let movie = try decoder.decode(Movie.self, from: data)
         return movie
