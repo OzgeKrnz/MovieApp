@@ -67,6 +67,17 @@ class ViewController: BaseViewController, UITextFieldDelegate,
         
         collectionView.delegate = self
         collectionView.dataSource = self
+        
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.estimatedItemSize = .zero
+        }
+        
+        
+        // Notification dinleme
+         NotificationCenter.default.addObserver(self,
+                                                selector: #selector(handleMovieRated),
+                                                name: .didRateMovie,
+                                                object: nil)
 
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -76,6 +87,10 @@ class ViewController: BaseViewController, UITextFieldDelegate,
             action: #selector(didTapLogOutButton))
         
         //testSimilarityBetweenMovies()
+        
+        
+        // for titles
+        collectionView.register(MovieSectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: MovieSectionHeader.identifier)
         
         NSLayoutConstraint.activate([
         
@@ -202,7 +217,7 @@ class ViewController: BaseViewController, UITextFieldDelegate,
 
         // horizontal scroll görünüm RECOMMENDATİONS
         if indexPath.section == 0 {
-               return CGSize(width: 100, height: 180)
+            return CGSize(width: collectionView.frame.width, height: 180)
         } else {
             // Grid görünüm POPÜLER FİLMLER
             let padding: CGFloat = 10
@@ -214,6 +229,35 @@ class ViewController: BaseViewController, UITextFieldDelegate,
         }
   
         
+    }
+    
+    // MARK: - section for labels
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: 40)
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionHeader else {
+            return UICollectionReusableView()
+        }
+        
+        let header = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: MovieSectionHeader.identifier,
+            for: indexPath
+        ) as! MovieSectionHeader
+        
+        if indexPath.section == 0 {
+            header.titleLabel.text = "Recommended for You"
+        } else {
+            header.titleLabel.text = "Weekly Popular"
+        }
+        
+        return header
     }
 
     //MARK: - selectors
@@ -233,6 +277,18 @@ class ViewController: BaseViewController, UITextFieldDelegate,
         }
     }
 
+    
+    
+    
+    @objc private func handleMovieRated() {
+        Task {
+            if let userId = Auth.auth().currentUser?.uid {
+                await recommendedViewModel.fetchRecommendedMovies(for: userId)
+                collectionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
+            }
+        }
+    }
+    
     // similarity test
     func testSimilarityBetweenMovies() {
         /* Task {

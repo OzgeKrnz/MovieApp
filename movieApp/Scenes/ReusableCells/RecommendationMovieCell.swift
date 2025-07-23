@@ -10,6 +10,7 @@ import UIKit
 class RecommendationMovieCell: UICollectionViewCell{
     
     @IBOutlet weak var posterImageView: UIImageView!
+
     
     
     override func awakeFromNib() {
@@ -29,6 +30,7 @@ class RecommendationMovieCell: UICollectionViewCell{
         
         
         posterImageView.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),

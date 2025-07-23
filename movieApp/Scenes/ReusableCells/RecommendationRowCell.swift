@@ -28,10 +28,9 @@ class RecommendationRowCell: UICollectionViewCell,UICollectionViewDelegateFlowLa
         collectionView.backgroundColor = .clear
  
     }
-    
     func configure(with movies: [Movie]) {
         self.recommendedMovies = movies
-        collectionView.reloadData()
+        self.collectionView.reloadData()
     }
     
     override func layoutSubviews() {

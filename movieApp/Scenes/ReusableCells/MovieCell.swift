@@ -9,7 +9,6 @@ import UIKit
 
 class MovieCell: UICollectionViewCell {
     @IBOutlet weak var posterImageView: UIImageView!
-    
    
     //let movies = try await MovieService.shared.fetchPopulerMovies()
 
@@ -22,6 +21,8 @@ class MovieCell: UICollectionViewCell {
         posterImageView.layer.cornerRadius = 4
 
         NSLayoutConstraint.activate([
+            
+            
             posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             posterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),

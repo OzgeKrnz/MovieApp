@@ -8,6 +8,11 @@
 import UIKit
 import FirebaseAuth
 
+
+extension Notification.Name {
+    static let didRateMovie = Notification.Name("didRateMovie")
+}
+
 class MovieDetailViewController: BaseViewController, UITableViewDelegate,
                                  UITableViewDataSource , RateViewControllerDelegate, StatusSelectorCellDelegate{
     
@@ -37,23 +42,7 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
         tableView.rowHeight = UITableView.automaticDimension
 
         // print(movieDetail.title)
-        
-        Task {
-             do {
-                 try EmbeddingCacheManager.shared.loadEmbeddings()
-                 print("Embeddings başarıyla yüklendi.")
-                 
-                 let userId = Auth.auth().currentUser?.uid ?? ""
-                 let recommended = try await RecommendationManager.shared.getRecommendations(for: userId)
 
-                 for movie in recommended {
-                     print("Önerilen film ID: \(movie.id)")
-                 }
-             } catch {
-                 print("Embeddings yüklenemedi: \(error)")
-             }
-
-         }
 
      }
         
@@ -62,6 +51,8 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
     
     func rateViewController(_ controller: RateViewController, didRate rating: Double) {
         viewModel.updateRating(to: rating)
+        NotificationCenter.default.post(name: .didRateMovie, object: nil)
+
         tableView.reloadData()
     }
     
