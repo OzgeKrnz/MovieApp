@@ -15,6 +15,7 @@ class ViewController: BaseViewController, UITextFieldDelegate,
 {
 
     @IBOutlet weak var collectionView: UICollectionView!
+    
 
     let mainViewModel = MainViewModel()
     let recommendedViewModel = RecommendedViewModel()
@@ -43,6 +44,7 @@ class ViewController: BaseViewController, UITextFieldDelegate,
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         
         collectionView.backgroundColor = .clear
         
@@ -95,14 +97,25 @@ class ViewController: BaseViewController, UITextFieldDelegate,
         NSLayoutConstraint.activate([
         
             collectionView.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+                equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(
                 equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             
         ])
+        
+        // Buton Aksiyonları
+        customToolbar.onHomeTapped = {
+            print("Home tapped")
+        }
+        customToolbar.onFavoritesTapped = {
+            print("Home tapped")
+        }
+        customToolbar.onProfileTapped = {
+            print("Home tapped")
+        }
         
         Task {
             do {
@@ -113,14 +126,14 @@ class ViewController: BaseViewController, UITextFieldDelegate,
                     print(recommended)
                 }
             } catch {
-                print("❌ Embedding yüklenemedi veya öneri oluşturulamadı")
+                print(" Embedding yüklenemedi veya öneri oluşturulamadı")
             }
             
             await mainViewModel.fetchPopularMoies()
             
             if let userId = Auth.auth().currentUser?.uid {
                 await recommendedViewModel.fetchRecommendedMovies(for: userId)
-                print("✅ Ana sayfa recommended count:", recommendedViewModel.numberOfRecommendations())
+                print(" Ana sayfa recommended count:", recommendedViewModel.numberOfRecommendations())
                 
             }
             

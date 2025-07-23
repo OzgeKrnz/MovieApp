@@ -297,7 +297,9 @@
                         <viewLayoutGuide key="safeArea" id="PsV-6e-cc3"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" id="6x9-hV-zvM"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="tableView" destination="kSy-Wg-lOl" id="WVB-TJ-RKP"/>
                     </connections>

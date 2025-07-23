@@ -31,7 +31,7 @@ class MovieSectionHeader: UICollectionReusableView{
         addSubview(titleLabel)
         
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant:4),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4),
             
         ])
