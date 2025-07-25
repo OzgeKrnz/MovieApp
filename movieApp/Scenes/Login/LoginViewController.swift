@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import CoreData
+import FirebaseAuth
 
 class LoginViewController: UIViewController {
 
@@ -136,6 +138,10 @@ class LoginViewController: UIViewController {
                 return
             }
             
+            if let user = Auth.auth().currentUser{
+                self.fetchUserFromCoreData(uid: user.uid)
+            }
+            
             if let sceneDelegate = self.view.window?.windowScene?.delegate as?
                 SceneDelegate{
                 sceneDelegate.checkAuthentication()
@@ -169,5 +175,22 @@ class LoginViewController: UIViewController {
         self.navigationController?.pushViewController(vc, animated: true)
         
 
-    }   
+    }
+    
+    private func fetchUserFromCoreData(uid: String) {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<UserEntity> = UserEntity.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "userUID == %@", uid)
+        
+        do {
+            if let user = try context.fetch(fetchRequest).first {
+                print("Kullanıcı bulundu: \(user.username ?? "") - \(user.email ?? "")")
+            } else {
+                print("Core Data’da kullanıcı bulunamadı → yeni cihaz olabilir")
+            }
+        } catch {
+            print("Core Data fetch hatası: \(error)")
+        }
+    }
+
 }

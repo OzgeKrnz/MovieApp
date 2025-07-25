@@ -84,9 +84,9 @@ class ViewController: BaseViewController, UITextFieldDelegate,
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "Log out", style: .plain, target: self,
-            action: #selector(didTapLogOutButton))
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(
+//            title: "Log out", style: .plain, target: self,
+//            action: #selector(didTapLogOutButton))
         
         //testSimilarityBetweenMovies()
         
@@ -106,16 +106,7 @@ class ViewController: BaseViewController, UITextFieldDelegate,
             
         ])
         
-        // Buton Aksiyonları
-        customToolbar.onHomeTapped = {
-            print("Home tapped")
-        }
-        customToolbar.onFavoritesTapped = {
-            print("Home tapped")
-        }
-        customToolbar.onProfileTapped = {
-            print("Home tapped")
-        }
+  
         
         Task {
             do {
@@ -274,21 +265,21 @@ class ViewController: BaseViewController, UITextFieldDelegate,
     }
 
     //MARK: - selectors
-    @objc func didTapLogOutButton() {
-        AuthService.shared.signOut { [weak self] error in
-            guard let self = self else { return }
-            if let error = error {
-                AlertManager.showLogoutErrorAlert(on: self, with: error)
-                return
-            }
-
-            if let sceneDelegate = self.view.window?.windowScene?.delegate
-                as? SceneDelegate
-            {
-                sceneDelegate.checkAuthentication()
-            }
-        }
-    }
+//    @objc func didTapLogOutButton() {
+//        AuthService.shared.signOut { [weak self] error in
+//            guard let self = self else { return }
+//            if let error = error {
+//                AlertManager.showLogoutErrorAlert(on: self, with: error)
+//                return
+//            }
+//
+//            if let sceneDelegate = self.view.window?.windowScene?.delegate
+//                as? SceneDelegate
+//            {
+//                sceneDelegate.checkAuthentication()
+//            }
+//        }
+//    }
 
     
     

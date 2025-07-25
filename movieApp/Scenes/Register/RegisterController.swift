@@ -5,8 +5,10 @@
 //  Created by özge kurnaz on 6.06.2025.
 //
 
-import Foundation
+
 import UIKit
+import FirebaseAuth
+import CoreData
 
 class RegisterController: UIViewController{
 
@@ -170,29 +172,24 @@ class RegisterController: UIViewController{
                 AlertManager.showRegistrationErrorAlert(on: self, with: error)
                 return
             }
-            
-            if wasRegistered{
-                if let sceneDelegate = self.view.window?.windowScene?.delegate
-                    as? SceneDelegate{
+            if wasRegistered {
+                if let user = Auth.auth().currentUser {
+                    // Core Data kaydetme
+                    self.saveUserToCoreData(uid: user.uid,
+                                            username: self.usernameField.text ?? "",
+                                            email: user.email ?? "")
+                }
+                if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
                     sceneDelegate.checkAuthentication()
                 }
-            }else{
+            } else {
                 AlertManager.showRegistrationErrorAlert(on: self)
             }
             
         }
         
-    /*    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let VC = storyboard.instantiateViewController(withIdentifier: "MainVC") as! ViewController
-        let navController = UINavigationController(rootViewController: VC)
-        
-        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let sceneDelegate = scene.delegate as? SceneDelegate {
-            sceneDelegate.window?.rootViewController = navController
-        }
-   
-        
-  */
+
+
         
     }
     
@@ -200,6 +197,34 @@ class RegisterController: UIViewController{
         let vc = LoginViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    
+    private func saveUserToCoreData(uid: String, username: String, email: String) {
+        // Core Data context al
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
+        // Daha önce kayıt edilmiş mi kontrol et
+        let fetchRequest: NSFetchRequest<UserEntity> = UserEntity.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "userUID == %@", uid)
+        
+        if let existing = try? context.fetch(fetchRequest), !existing.isEmpty {
+            print("Kullanıcı zaten Core Data'da var")
+            return
+        }
+        
+        // Yeni kullanıcı oluştur
+        let userEntity = UserEntity(context: context)
+        userEntity.userUID = uid
+        userEntity.username = username
+        userEntity.email = email
+        
+        do {
+            try context.save()
+            print("Kullanıcı Core Data'ya kaydedildi")
+        } catch {
+            print("Core Data kaydetme hatası: \(error.localizedDescription)")
+        }
+    }
+
     
  
 
@@ -217,6 +242,7 @@ extension RegisterController: UITextViewDelegate{
         
         return true
     }
+    
     
     private func showWebViewerController(with urlString: String){
         let vc = WebViewerController(with: urlString)
