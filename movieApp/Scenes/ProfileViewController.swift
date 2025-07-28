@@ -10,17 +10,41 @@ import Firebase
 import FirebaseAuth
 import CoreData
 
-class ProfileViewController: BaseViewController {
+class ProfileViewController: BaseViewController, UITableViewDataSource, UITableViewDelegate {
+
+    
     
     @IBOutlet weak var profileIcon: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
-
+    @IBOutlet weak var tableView: UITableView!
+    
+    var menuItems : [[ProfileMenuItem]] = []
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupUI()
         fetchUserInfo()
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        
+    }
+    
+    
+    private func setupData(){
+        let section = [
+            ProfileMenuItem(title: "Edit Profile", iconName: "pen"),
+            ProfileMenuItem(title: "Favorites", iconName: "heart"),
+            ProfileMenuItem(title: "Languages", iconName: "globe"),
+            ProfileMenuItem(title: "Sign Out", iconName: "arrow.left.square" )
+            
+            ]
+        
+        menuItems = [section]
+       
     }
     
     
@@ -28,9 +52,13 @@ class ProfileViewController: BaseViewController {
         profileIcon.translatesAutoresizingMaskIntoConstraints = false
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
         emailLabel.translatesAutoresizingMaskIntoConstraints = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         
         usernameLabel.textColor = .white
         emailLabel.textColor = .white
+        
+        tableView.backgroundColor = .clear
+        tableView.separatorColor = .gray
         
         
         NSLayoutConstraint.activate([
@@ -44,6 +72,11 @@ class ProfileViewController: BaseViewController {
             
             emailLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 4),
             emailLabel.leadingAnchor.constraint(equalTo: usernameLabel.leadingAnchor),
+            
+            tableView.topAnchor.constraint(equalTo: profileIcon.bottomAnchor, constant: 8),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     
@@ -71,5 +104,30 @@ class ProfileViewController: BaseViewController {
             print("Kullanıcı cekilemedi: \(error)")
         }
     }
-
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return menuItems[section].count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileViewCell", for:indexPath ) as? ProfileViewCell else{return UITableViewCell()}
+        
+        let item = menuItems[indexPath.section][indexPath.row]
+        
+        cell.configure(with: item)
+        
+        // ok ekleme
+        cell.accessoryType = .disclosureIndicator
+        
+        cell.backgroundColor = UIColor(red: 39/255, green: 63/255, blue: 79/255, alpha: 1)
+        cell.selectionStyle = .gray
+         
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        
+    }
 }
