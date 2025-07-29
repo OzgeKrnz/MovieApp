@@ -17,6 +17,21 @@ class FavoritesViewController: BaseViewController, UICollectionViewDataSource, U
     @IBOutlet weak var header: UILabel!
 
     let favoriteMoviesViewModel = FavoriteMoviesViewModel()
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print("prepare cagrıldı")
+
+        if segue.identifier == "movieDetail",
+            let indexPath = sender as? IndexPath,
+            let destinationVC = segue.destination as? MovieDetailViewController
+        {
+
+            let selectedMovie = favoriteMoviesViewModel.movie(at: indexPath.row)
+            let viewModel = MovieDetailViewModel(movie: selectedMovie)
+            destinationVC.viewModel = viewModel
+        }
+
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -63,7 +78,6 @@ class FavoritesViewController: BaseViewController, UICollectionViewDataSource, U
         return favoriteMoviesViewModel.numberOfMovies()
     }
     
-    
     func collectionView(
         _ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
@@ -82,7 +96,7 @@ class FavoritesViewController: BaseViewController, UICollectionViewDataSource, U
 
     }
 
-    // Get liked movies
+    //MARK: - Get liked movies
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -95,9 +109,24 @@ class FavoritesViewController: BaseViewController, UICollectionViewDataSource, U
         let itemWidth = (collectionView.frame.width - totalPadding) / itemsPerRow
         return CGSize(width: itemWidth, height: itemWidth * 1.5)
     }
+    
+    // MARK: - for movie detail page
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedMovie = favoriteMoviesViewModel.movie(at: indexPath.row)
+        let viewModel = MovieDetailViewModel(movie: selectedMovie)
+        
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        if let detailVC = sb.instantiateViewController(identifier: "movieDetailID") as? MovieDetailViewController{
+            detailVC.viewModel = viewModel
+            
+            if let navController = self.navigationController{
+                navController.pushViewController(detailVC, animated: true)
+            }else{
+                self.present(detailVC, animated: true, completion: nil)
 
-
-}
+            }
+        }
+    }}
 
 class FavoritesViewCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!

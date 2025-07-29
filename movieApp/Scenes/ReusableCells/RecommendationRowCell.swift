@@ -8,14 +8,14 @@
 import Foundation
 import UIKit
 
-import UIKit
-
 class RecommendationRowCell: UICollectionViewCell,UICollectionViewDelegateFlowLayout {
     
 
     @IBOutlet weak var collectionView: UICollectionView!
     var recommendedMovies: [Movie] = []
     
+
+
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -43,6 +43,8 @@ class RecommendationRowCell: UICollectionViewCell,UICollectionViewDelegateFlowLa
 
 extension RecommendationRowCell: UICollectionViewDelegate, UICollectionViewDataSource {
     
+
+
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         recommendedMovies.count

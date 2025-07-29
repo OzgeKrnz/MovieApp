@@ -40,7 +40,9 @@ class FavoriteMoviesViewModel {
                          overview: entity.overview ?? "",
                          genres: nil,
                          id: Int(entity.movieID),
-                         posterPath: entity.posterPath
+                         posterPath: entity.posterPath,
+                         backdropPath: entity.backdropPath,
+                         voteAverage: entity.voteAverage
                      )
                  }
             

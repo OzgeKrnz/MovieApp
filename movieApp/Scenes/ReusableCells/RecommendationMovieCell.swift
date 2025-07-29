@@ -11,8 +11,7 @@ class RecommendationMovieCell: UICollectionViewCell{
     
     @IBOutlet weak var posterImageView: UIImageView!
 
-    
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -38,6 +37,7 @@ class RecommendationMovieCell: UICollectionViewCell{
             posterImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
     }
+    
     
     
     override func prepareForReuse() {

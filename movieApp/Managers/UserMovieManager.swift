@@ -49,6 +49,8 @@ class UserMovieManager{
         entity.title = movie.title
         entity.posterPath = movie.posterPath
         entity.overview = movie.overview
+        entity.backdropPath = movie.backdropPath
+        entity.voteAverage = movie.voteAverage ?? 0.0
 
         if let status = status {
             switch status {
