@@ -93,7 +93,7 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
             }
             
             //rating
-            let vote = Int(ceil(viewModel.voteAverage ?? 0 * 10))
+            let vote = Int(ceil(viewModel.voteAverage! * 10))
             print("Movie vote: ", viewModel.voteAverage ?? 0.0)
             print("Yüzdelik:", Int(ceil((viewModel.voteAverage ?? 0.0) * 10)))
 

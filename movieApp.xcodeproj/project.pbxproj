@@ -13,6 +13,7 @@
 		B046304C2DEE32CD00EC0AEB /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = B046304B2DEE32CD00EC0AEB /* FirebaseCore */; };
 		B046304E2DEE32CD00EC0AEB /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B046304D2DEE32CD00EC0AEB /* FirebaseFirestore */; };
 		B0DCF9582E29CC2000AFB9EC /* movieEmbeddings.json in Resources */ = {isa = PBXBuildFile; fileRef = B0DCF9572E29CC2000AFB9EC /* movieEmbeddings.json */; };
+		B0F0DE7A2E395E6400A71E85 /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = B0F0DE792E395E6400A71E85 /* SkeletonView */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 				B046304E2DEE32CD00EC0AEB /* FirebaseFirestore in Frameworks */,
 				B046304C2DEE32CD00EC0AEB /* FirebaseCore in Frameworks */,
 				B046304A2DEE32CD00EC0AEB /* FirebaseAuth in Frameworks */,
+				B0F0DE7A2E395E6400A71E85 /* SkeletonView in Frameworks */,
 				8866A9C443445FDF8E86098F /* Pods_movieApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -147,6 +149,7 @@
 			packageReferences = (
 				B04630482DEE32CD00EC0AEB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				B0354F072E241C21006A82F7 /* XCRemoteSwiftPackageReference "Cosmos" */,
+				B0F0DE782E395E6400A71E85 /* XCRemoteSwiftPackageReference "SkeletonView" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B04AE9952DCA5BDE004DAA87 /* Products */;
@@ -422,6 +425,14 @@
 				minimumVersion = 11.13.0;
 			};
 		};
+		B0F0DE782E395E6400A71E85 /* XCRemoteSwiftPackageReference "SkeletonView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Juanpe/SkeletonView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.31.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -444,6 +455,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B04630482DEE32CD00EC0AEB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		B0F0DE792E395E6400A71E85 /* SkeletonView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B0F0DE782E395E6400A71E85 /* XCRemoteSwiftPackageReference "SkeletonView" */;
+			productName = SkeletonView;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

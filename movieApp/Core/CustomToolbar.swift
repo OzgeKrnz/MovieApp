@@ -51,7 +51,7 @@ final class CustomToolbar: UIToolbar {
             profileItem
         ]
         
-        self.tintColor = .orange
+        self.tintColor = .systemBlue
         self.barTintColor = UIColor(red: 39/255, green: 63/255, blue: 79/255, alpha: 1)
         self.isTranslucent = false
     }

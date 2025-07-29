@@ -2,7 +2,7 @@
 //  ProfileMenuItem.swift
 //  movieApp
 //
-//  Created by özge kurnaz on 28.07.2025.
+//  Created by özge kurnaz on 30.07.2025.
 //
 
 import Foundation

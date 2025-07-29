@@ -10,43 +10,42 @@ import Firebase
 import FirebaseAuth
 import CoreData
 
-class ProfileViewController: BaseViewController, UITableViewDataSource, UITableViewDelegate {
+class ProfileViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource {
 
     
-    
+
     @IBOutlet weak var profileIcon: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
-    var menuItems : [[ProfileMenuItem]] = []
-    
+    var viewModel = ProfileViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setupUI()
-        fetchUserInfo()
         tableView.delegate = self
         tableView.dataSource = self
         
-        
+
+        setupUI()
+        fetchUserInfo()
+
     }
     
     
-    private func setupData(){
-        let section = [
-            ProfileMenuItem(title: "Edit Profile", iconName: "pen"),
-            ProfileMenuItem(title: "Favorites", iconName: "heart"),
-            ProfileMenuItem(title: "Languages", iconName: "globe"),
-            ProfileMenuItem(title: "Sign Out", iconName: "arrow.left.square" )
-            
-            ]
-        
-        menuItems = [section]
-       
-    }
-    
+//    private func setupData(){
+//        let section = [
+//            ProfileMenuItem(title: "Edit Profile", iconName: "pen"),
+//            ProfileMenuItem(title: "Favorites", iconName: "heart"),
+//            ProfileMenuItem(title: "Languages", iconName: "globe"),
+//            ProfileMenuItem(title: "Sign Out", iconName: "arrow.left.square" )
+//            
+//            ]
+//        
+//        menuItems = [section]
+//       
+//    }
+//    
     
     private func setupUI(){
         profileIcon.translatesAutoresizingMaskIntoConstraints = false
@@ -56,6 +55,9 @@ class ProfileViewController: BaseViewController, UITableViewDataSource, UITableV
         
         usernameLabel.textColor = .white
         emailLabel.textColor = .white
+        
+        profileIcon.tintColor = UIColor.white.withAlphaComponent(0.9)
+
         
         tableView.backgroundColor = .clear
         tableView.separatorColor = .gray
@@ -106,28 +108,44 @@ class ProfileViewController: BaseViewController, UITableViewDataSource, UITableV
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return menuItems[section].count
+        return viewModel.numberOfItems()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileViewCell", for:indexPath ) as? ProfileViewCell else{return UITableViewCell()}
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileViewCell", for: indexPath) as? ProfileViewCell else {
+            return UITableViewCell()
+        }
+        cell.backgroundColor = .clear
+
         
-        let item = menuItems[indexPath.section][indexPath.row]
-        
-        cell.configure(with: item)
-        
-        // ok ekleme
+        let item = viewModel.item(at: indexPath.row)
+        cell.configure(title: item.title, iconName: item.iconName)
         cell.accessoryType = .disclosureIndicator
-        
-        cell.backgroundColor = UIColor(red: 39/255, green: 63/255, blue: 79/255, alpha: 1)
         cell.selectionStyle = .gray
-         
+        
+    
         return cell
     }
     
+        
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let selectedItem = viewModel.item(at: indexPath.row)
         
+        switch selectedItem {
+        case .editProfile:
+            print("Edit Profile Tıklandı")
+        case .watchlist:
+            print("Watchlist Tıklandı")
+        case .favoriteMovies:
+            print("Favorite Movies Tıklandı")
+        case .languages:
+            print("Languages Tıklandı")
+        case .signOut:
+            print("Sign Out Tıklandı")
+        }
+        
+        tableView.deselectRow(at: indexPath, animated: true)
         
     }
 }
