@@ -134,18 +134,116 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
         
         switch selectedItem {
         case .editProfile:
-            print("Edit Profile Tıklandı")
+            pushEditProfile()
         case .watchlist:
-            print("Watchlist Tıklandı")
+            pushWatchlist()
         case .favoriteMovies:
-            print("Favorite Movies Tıklandı")
+            pushFavoriteMovies()
         case .languages:
-            print("Languages Tıklandı")
+            presentLanguagePicker()
         case .signOut:
-            print("Sign Out Tıklandı")
+            confirmAndSignOut()
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
         
     }
+    
+    private func pushEditProfile() {
+        // 1) VM hazırla (Core Data context + servis)
+        guard let app = UIApplication.shared.delegate as? AppDelegate else { return }
+        let ctx = app.persistentContainer.viewContext
+        let vm = EditProfileViewModel(service: EditProfileService(context: ctx))
+
+        // 2) VC’yi programatik oluştur ve VM’yi enjekte et
+        let vc = EditProfileViewController()
+        vc.editProfileViewModel = vm
+        navigationController?.pushViewController(vc, animated: true)
+    }
+
+    private func pushWatchlist() {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "Planned") as? WatchlistViewController {
+            navigationController?.pushViewController(vc, animated: true)
+        } else {
+            navigationController?.pushViewController(WatchlistViewController(), animated: true)
+        }
+    }
+
+    private func pushFavoriteMovies() {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "Favorites") as? FavoritesViewController {
+            navigationController?.pushViewController(vc, animated: true)
+        } else {
+            navigationController?.pushViewController(FavoritesViewController(), animated: true)
+        }
+    }
+    
+    
+    private func presentLanguagePicker() {
+        let alert = UIAlertController(title: "Language", message: "Choose app language", preferredStyle: .actionSheet)
+
+        let apply: (String) -> Void = { code in
+            UserDefaults.standard.set(code, forKey: "app_language_code")
+
+            let ok = UIAlertAction(title: "OK", style: .default, handler: nil)
+            self.presentedViewController?.dismiss(animated: true)
+            let info = UIAlertController(title: "Restart Required", message: "Language will apply after restart.", preferredStyle: .alert)
+            info.addAction(ok)
+            self.present(info, animated: true)
+        }
+
+        alert.addAction(UIAlertAction(title: "English", style: .default, handler: { _ in apply("en") }))
+        alert.addAction(UIAlertAction(title: "Türkçe", style: .default, handler: { _ in apply("tr") }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
+        present(alert, animated: true)
+    }
+
+    private func confirmAndSignOut() {
+        let alert = UIAlertController(title: "Sign Out", message: "Are you sure you want to sign out?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Sign Out", style: .destructive, handler: { _ in
+            self.performSignOut()
+        }))
+        present(alert, animated: true)
+    }
+
+    private func performSignOut() {
+        // 1) Firebase SignOut
+        do {
+            try Auth.auth().signOut()
+        } catch {
+            print("Sign out failed: \(error)")
+            let errA = UIAlertController(title: "Error", message: "Could not sign out. Try again.", preferredStyle: .alert)
+            errA.addAction(UIAlertAction(title: "OK", style: .default))
+            present(errA, animated: true)
+            return
+        }
+
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let context = appDelegate.persistentContainer.viewContext
+        let fetch: NSFetchRequest<UserEntity> = UserEntity.fetchRequest()
+     
+        fetch.includesPropertyValues = false
+        do {
+            let all = try context.fetch(fetch)
+            for obj in all { context.delete(obj) }
+            try context.save()
+        } catch {
+            print("Core Data cleanup failed: \(error)")
+        }
+
+    
+        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let delegate = scene.delegate as? SceneDelegate,
+           let window = delegate.window {
+            let sb = UIStoryboard(name: "Main", bundle: nil)
+            let login = sb.instantiateViewController(withIdentifier: "LoginViewController")
+            window.rootViewController = UINavigationController(rootViewController: login)
+            window.makeKeyAndVisible()
+        } else {
+            navigationController?.popToRootViewController(animated: true)
+        }
+    }
+
+
 }
