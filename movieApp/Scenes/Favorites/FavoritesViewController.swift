@@ -38,6 +38,14 @@ class FavoritesViewController: BaseViewController, UICollectionViewDataSource, U
         loadFavoriteMovies()
         setupUI()
         
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout{
+            layout.estimatedItemSize = .zero
+            layout.scrollDirection = .vertical
+            layout.minimumInteritemSpacing = 10
+            layout.minimumLineSpacing = 10
+            layout.sectionInset = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10)
+        }
+        
         collectionView.delegate = self
         collectionView.dataSource = self
     }
@@ -97,18 +105,18 @@ class FavoritesViewController: BaseViewController, UICollectionViewDataSource, U
     }
 
     //MARK: - Get liked movies
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
-
-        let padding: CGFloat = 10
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         let itemsPerRow: CGFloat = 3
-        let totalPadding = padding * (itemsPerRow + 1)
-        let itemWidth = (collectionView.frame.width - totalPadding) / itemsPerRow
-        return CGSize(width: itemWidth, height: itemWidth * 1.5)
+        let spacing: CGFloat = 10
+        let insets = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10)
+
+        let total = insets.left + insets.right + spacing * (itemsPerRow - 1)
+        let w = floor((collectionView.bounds.width - total) / itemsPerRow)
+        return CGSize(width: w, height: w * 1.5)
     }
+
     
     // MARK: - for movie detail page
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -159,7 +167,6 @@ class FavoritesViewCell: UICollectionViewCell {
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imageView.widthAnchor.constraint(equalToConstant: 100),
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 3/2),
 
             movieTitleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 4),

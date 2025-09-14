@@ -67,7 +67,6 @@ class ViewController: BaseViewController, UITextFieldDelegate,
                 }
             }
         }
-
     }
 
     private func setupUI() {
@@ -232,7 +231,6 @@ class ViewController: BaseViewController, UITextFieldDelegate,
                 (collectionView.frame.width - totalPadding) / itemsPerRow
             return CGSize(width: itemWidth, height: itemWidth * 1.5)
         }
-
     }
 
     // MARK: - section for labels
