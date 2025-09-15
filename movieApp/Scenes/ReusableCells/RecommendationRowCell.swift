@@ -14,17 +14,12 @@ class RecommendationRowCell: UICollectionViewCell,UICollectionViewDelegateFlowLa
     @IBOutlet weak var collectionView: UICollectionView!
     var recommendedMovies: [Movie] = []
     
-
-
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.showsHorizontalScrollIndicator = false
-        
-        
         collectionView.backgroundColor = .clear
  
     }
@@ -42,9 +37,6 @@ class RecommendationRowCell: UICollectionViewCell,UICollectionViewDelegateFlowLa
 
 
 extension RecommendationRowCell: UICollectionViewDelegate, UICollectionViewDataSource {
-    
-
-
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         recommendedMovies.count

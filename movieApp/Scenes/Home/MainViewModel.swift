@@ -11,7 +11,7 @@ class MainViewModel {
     
     var movies: [Movie] = []
     
-    func fetchPopularMoies() async {
+    func fetchPopularMovies() async {
         do {
             let result = try await MovieService.shared.fetchPopulerMovies()
             self.movies = result

@@ -21,7 +21,6 @@ class MovieService{
                 fatalError("Dosya yok")
             }
             
-            
             // key-value saklanır.
             let plist = NSDictionary(contentsOfFile: filePath)
             
@@ -91,18 +90,29 @@ class MovieService{
         guard let url = URL(string: urlString) else{
             throw URLError(.badURL)
         }
-        
-        
         let (data, _) = try await URLSession.shared.data(from: url)
         
         //JSON DECODE
         let decoded = try JSONDecoder().decode(MovieSearchResponse.self, from: data)
         
         return decoded.results
-        
-        
     }
     
+    
+    // top rated movies
+    func fetchTopRatedMovies() async throws -> [Movie]{
+        let urlString = "https://api.themoviedb.org/3/movie/top_rated?api_key=\(apiKey)&language=en-US&page=1"
+        
+        guard let url = URL(string: urlString) else{
+            throw URLError(.badURL)
+        }
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let decoded = try JSONDecoder().decode(MovieSearchResponse.self, from: data)
+        
+        
+        return decoded.results
+    }
     
     
     func fetchMovieDetails(movieId: Int) async throws -> Movie {
@@ -115,7 +125,7 @@ class MovieService{
         let (data, response) = try await URLSession.shared.data(from: url)
         
         if let raw = String(data: data, encoding: .utf8) {
-            print("✅ Gelen JSON:\n", raw)
+            print("Gelen JSON:\n", raw)
         }
         
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
@@ -131,20 +141,14 @@ class MovieService{
         
         do {
             let movie = try decoder.decode(Movie.self, from: data)
-            print("🎬 Film: \(movie.title)")
-            print("🖼️ PosterPath: \(movie.posterPath ?? "nil")")
-            print("🌐 PosterURL: \(movie.posterUrl?.absoluteString ?? "nil")")
+            print("Film: \(movie.title)")
+            print("PosterPath: \(movie.posterPath ?? "nil")")
+            print("PosterURL: \(movie.posterUrl?.absoluteString ?? "nil")")
             return movie
         } catch {
             print("Decoding hatası: \(error)")
             print("JSON içeriği: \(String(data: data, encoding: .utf8) ?? "")")
             throw error
         }
-
-        let movie = try decoder.decode(Movie.self, from: data)
-        return movie
     }
-
-    
-    
 }

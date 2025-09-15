@@ -28,3 +28,5 @@ class RecommendedViewModel {
         return recommendedMovies.count
     }
 }
+
+

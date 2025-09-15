@@ -32,7 +32,7 @@ class MovieCell: UICollectionViewCell {
         contentView.backgroundColor = UIColor.systemBackground
         contentView.layer.cornerRadius = 10
         contentView.layer.masksToBounds = true
-        
+
         layer.shadowColor = UIColor.lightGray.cgColor
         layer.shadowOpacity = 0.5
         layer.shadowOffset = CGSize(width: 0, height: 3)

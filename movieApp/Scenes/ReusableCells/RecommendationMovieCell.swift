@@ -11,7 +11,6 @@ class RecommendationMovieCell: UICollectionViewCell{
     
     @IBOutlet weak var posterImageView: UIImageView!
 
-
     override func awakeFromNib() {
         super.awakeFromNib()
         

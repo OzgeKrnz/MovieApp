@@ -18,51 +18,38 @@ class RecommendationManager {
     func getRecommendations( for userId: String, top count: Int = 5
     ) async throws -> [Movie] {
         
-        guard let baseVector = try await getUserEmbedding(userId: userId) else {
-             print("Kullanıcının geçerli embedding verisi yok.")
-             return []
-         }
-        
-        // movieEmbedding.json'dan similarity hesabı
-        var results: [(id: Int, similarity: Double)] = []
-
-        
-        for (movieIdStr, vector) in EmbeddingCacheManager.shared.cache {
-            guard let movieId = Int(movieIdStr) else {continue}
-            let similarity = CosineSimilarity().cosineSimilarity(a: baseVector, b: vector)
-            results.append((id: movieId, similarity: similarity))
-        }
-        
-        // En benzer top X film id’lerini al
-        let topMovieIDs = results
-            .sorted(by: { $0.similarity > $1.similarity })
-            .prefix(count)
-            .map { $0.id }
-        
-        //print("EN YAKIN İDLER: \(topMovieIDs)")
-
-        // Bu ID'lere göre Movie objelerini async olarak API’den çek
-        var recommendedMovies: [Movie] = []
-        
-        for id in topMovieIDs {
-            print("Deniyorum: \(id)")
-            if let movie = try? await MovieService.shared.fetchMovieDetails(movieId: id) {
-                recommendedMovies.append(movie)
-
-                print("-------------------------")
-                print(movie.posterUrl)
-                print("-------------------------")
-                
-
-                
-            } else {
-                print("movie fetch başarısız: \(id)")
+        if let baseVector = try await getUserEmbedding(userId: userId) {
+            // movieEmbedding.json'dan similarity hesabı
+            var results: [(id: Int, similarity: Double)] = []
+            
+            for (movieIdStr, vector) in EmbeddingCacheManager.shared.cache {
+                guard let movieId = Int(movieIdStr) else {continue}
+                let similarity = CosineSimilarity().cosineSimilarity(a: baseVector, b: vector)
+                results.append((id: movieId, similarity: similarity))
+            }
+            
+            // En benzer top X film id’lerini al
+            let topMovieIDs = results
+                .sorted(by: { $0.similarity > $1.similarity })
+                .prefix(count)
+                .map { $0.id }
+            
+            // Bu ID'lere göre Movie objelerini async olarak API’den çek
+            var recommendedMovies: [Movie] = []
+            
+            for id in topMovieIDs {
+                if let movie = try? await MovieService.shared.fetchMovieDetails(movieId: id) {
+                    recommendedMovies.append(movie)
+                }
+            }
+            
+            if !recommendedMovies.isEmpty {
+                print("recommended dolu")
+                return recommendedMovies
             }
         }
-        //print("EmbeddingCache'teki film ID'leri: \(EmbeddingCacheManager.shared.cache.keys)")
-
-        return recommendedMovies
-    
+        let topRated = try await MovieService.shared.fetchTopRatedMovies()
+        return Array(topRated.prefix(count))
     }
 
     // ort embedding

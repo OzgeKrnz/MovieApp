@@ -48,7 +48,7 @@ class ViewController: BaseViewController, UITextFieldDelegate,
         setupNotifications()
 
         Task {
-            await mainViewModel.fetchPopularMoies()
+            await mainViewModel.fetchPopularMovies()
             DispatchQueue.main.async {
                 self.collectionView.reloadSections(IndexSet(integer: 1))
             }
