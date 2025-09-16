@@ -17,7 +17,7 @@ class ViewController: BaseViewController, UITextFieldDelegate,
     @IBOutlet weak var collectionView: UICollectionView!
 
     let mainViewModel = MainViewModel()
-    let recommendedViewModel = RecommendedViewModel()
+    let recommendedViewModel = RecommendedViewModel.shared
 
     var searchController: UISearchController!
 
@@ -52,21 +52,17 @@ class ViewController: BaseViewController, UITextFieldDelegate,
             DispatchQueue.main.async {
                 self.collectionView.reloadSections(IndexSet(integer: 1))
             }
-        }
-
-        // embedding ve öneriler arka planda
-        Task.detached {
+            
             try? EmbeddingCacheManager.shared.loadEmbeddings()
+            
             if let userId = Auth.auth().currentUser?.uid {
-                await self.recommendedViewModel.fetchRecommendedMovies(
-                    for: userId)
-                DispatchQueue.main.async {
-                    self.collectionView.reloadItems(at: [
-                        IndexPath(item: 0, section: 0)
-                    ])
+                await recommendedViewModel.loadIfNeeded(for: userId, count:5)
+                await MainActor.run{
+                    self.collectionView.reloadSections(IndexSet(integer: 0))
                 }
             }
         }
+        
     }
 
     private func setupUI() {

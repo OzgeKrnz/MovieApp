@@ -17,7 +17,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
       didFinishLaunchingWithOptions launchOptions:
                      [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
       FirebaseApp.configure()
+        do {
+            try EmbeddingCacheManager.shared.loadEmbeddings()
+        }catch{
+            print("Embedding yüklenmedi: \(error)")
+        }
       return true
     }
 

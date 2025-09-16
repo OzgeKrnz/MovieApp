@@ -24,8 +24,11 @@ class RecommendationRowCell: UICollectionViewCell,UICollectionViewDelegateFlowLa
  
     }
     func configure(with movies: [Movie]) {
-        self.recommendedMovies = movies
-        self.collectionView.reloadData()
+        if !movies.isEmpty{
+            self.recommendedMovies = movies
+            self.collectionView.reloadData()
+        }
+
     }
     
     override func layoutSubviews() {

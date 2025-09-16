@@ -9,6 +9,9 @@ import FirebaseAuth
 import CoreData
 import UIKit
 
+extension Notification.Name {
+    static let userMoviesDidChange = Notification.Name("userMoviesDidChange")
+}
 
 class UserMovieManager{
     static let shared = UserMovieManager()
@@ -73,6 +76,8 @@ class UserMovieManager{
         do {
             try context.save()
             print("Film kaydedildi/güncellendi.")
+            NotificationCenter.default.post(name: .userMoviesDidChange, object: nil)
+
         } catch {
             print("Core Data hatası:", error)
         }
@@ -120,14 +125,12 @@ class UserMovieManager{
            }
        }
     
-    
     // MARK: - Get rated movies for a user
     func getRatedMovies(for userId: String) -> [CDMovieEntity]{
         let context = PersistenceController.shared.context
         let fetchRequest: NSFetchRequest<CDMovieEntity> = CDMovieEntity.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "userUID == %@ AND isRated == YES AND isLiked == YES AND userRating > 3", userId)
+        fetchRequest.predicate = NSPredicate(format: "userUID == %@ AND ((isRated == YES AND userRating > 3) OR isLiked == YES)", userId)
         fetchRequest.returnsObjectsAsFaults = false
-
 
         do {
             let results = try context.fetch(fetchRequest)

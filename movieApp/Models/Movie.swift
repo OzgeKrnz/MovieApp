@@ -40,8 +40,6 @@ struct Movie: Codable, Identifiable{
         case backdropPath = "backdrop_path"
         case voteAverage = "vote_average"
     }
-    
-
 }
 
 struct MovieSearchResponse:Codable{

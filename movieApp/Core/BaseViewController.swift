@@ -10,6 +10,7 @@ import UIKit
 class BaseViewController: UIViewController{
     
     let customToolbar = CustomToolbar()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,24 +49,52 @@ class BaseViewController: UIViewController{
     
     private func setupToolbarActions() {
         customToolbar.onHomeTapped = { [weak self] in
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let homeVC = storyboard.instantiateViewController(identifier: "MainVC") as! ViewController
-            self?.navigationController?.setViewControllers([homeVC], animated: true)
+            self?.setRootIfNeeded(
+                targetType: ViewController.self,
+                storyboardID: "MainVC",
+                scrollToTop: { home in
+                    home.collectionView.setContentOffset(.zero, animated: true)
+                }
+            )
         }
-   
-        
+
         customToolbar.onFavoritesTapped = { [weak self] in
-            let storyboard = UIStoryboard(name:"Main", bundle:nil)
-            let favoritesVC = storyboard.instantiateViewController(identifier: "Favorites") as! FavoritesViewController
-            self?.navigationController?.setViewControllers([favoritesVC], animated: true)
+            self?.setRootIfNeeded(
+                targetType: FavoritesViewController.self,
+                storyboardID: "Favorites",
+                scrollToTop: { fav in
+                    fav.collectionView.setContentOffset(.zero, animated: true)
+                }
+            )
         }
-        
+
         customToolbar.onProfileTapped = { [weak self] in
-            
-            let storyboard = UIStoryboard(name:"Main", bundle:nil)
-            let profileVC = storyboard.instantiateViewController(identifier: "Profile") as! ProfileViewController
-            self?.navigationController?.setViewControllers([profileVC], animated: true)
+            self?.setRootIfNeeded(
+                targetType: ProfileViewController.self,
+                storyboardID: "Profile",
+                scrollToTop: { _ in  }
+            )
         }
+    }
+    
+    private func setRootIfNeeded<T: UIViewController>(
+        targetType: T.Type,
+        storyboardID: String,
+        scrollToTop: ((T) -> Void)? = nil
+    ) {
+        guard let nav = self.navigationController else { return }
+
+        if let root = nav.viewControllers.first as? T {
+            scrollToTop?(root)
+            return
+        }
+
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        guard let vc = sb.instantiateViewController(withIdentifier: storyboardID) as? T else {
+            assertionFailure("Storyboard ID '\(storyboardID)' \(T.self) ile eşleşmiyor.")
+            return
+        }
+        nav.setViewControllers([vc], animated: true)
     }
     
     @objc func didTapLogOutButton() {

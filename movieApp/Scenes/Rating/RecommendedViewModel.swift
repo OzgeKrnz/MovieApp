@@ -7,9 +7,30 @@
 
 import Foundation
 
+@MainActor
 class RecommendedViewModel {
+    static let shared = RecommendedViewModel()
+    private init() {}
     
-    var recommendedMovies: [Movie] = []
+    private var isLoaded = false
+    private var loadTask: Task<Void, Never>?
+    private(set) var recommendedMovies: [Movie] = []
+    
+    func loadIfNeeded(for userId: String, count: Int) async {
+        guard !isLoaded else { return }
+        isLoaded = true
+        await refresh(for: userId, count: count, keepStale: true)
+    }
+    
+    func refresh(for userId: String, count: Int, keepStale: Bool = true) async {
+        loadTask?.cancel()
+        loadTask = Task { [weak self] in
+            guard let self else { return }
+            let movies = (try? await RecommendationManager.shared
+                .getRecommendations(for: userId, top: count)) ?? []
+            await MainActor.run { self.recommendedMovies = movies }
+        }
+    }
     
     func fetchRecommendedMovies(for userId: String) async{
         do {

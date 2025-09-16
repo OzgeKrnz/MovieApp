@@ -29,24 +29,34 @@ class RecommendationManager {
             }
             
             // En benzer top X film id’lerini al
+            let eps = 1e-9
             let topMovieIDs = results
-                .sorted(by: { $0.similarity > $1.similarity })
+                .sorted {
+                    let d = $0.similarity - $1.similarity
+                    if abs(d) > eps { return d > 0 }
+                    return $0.id < $1.id
+                }
                 .prefix(count)
                 .map { $0.id }
             
-            // Bu ID'lere göre Movie objelerini async olarak API’den çek
-            var recommendedMovies: [Movie] = []
+
             
-            for id in topMovieIDs {
-                if let movie = try? await MovieService.shared.fetchMovieDetails(movieId: id) {
-                    recommendedMovies.append(movie)
+            let ids = topMovieIDs
+            let movies: [Movie] = try await withThrowingTaskGroup(of: (Int, Movie?).self) { group in
+                for id in ids {
+                    group.addTask {
+                        let m = try? await MovieService.shared.fetchMovieDetails(movieId: id)
+                        return (id, m)
+                    }
                 }
+                var tmp: [Int: Movie] = [:]
+                for try await (id, m) in group {
+                    if let m { tmp[id] = m }
+                }
+                return ids.compactMap { tmp[$0] } // orijinal skora göre sıralı
             }
-            
-            if !recommendedMovies.isEmpty {
-                print("recommended dolu")
-                return recommendedMovies
-            }
+            return Array(movies.prefix(count))
+
         }
         let topRated = try await MovieService.shared.fetchTopRatedMovies()
         return Array(topRated.prefix(count))
@@ -55,47 +65,32 @@ class RecommendationManager {
     // ort embedding
     private func getUserEmbedding(userId: String) async throws -> [Double]? {
         let ratedMovies = UserMovieManager.shared.getRatedMovies(for: userId)
-        if ratedMovies.isEmpty { return nil }
+        guard !ratedMovies.isEmpty else { return nil }
+        
+        
+        var accum: [Double]? = nil
+        var totalW: Double = 0
 
-        if ratedMovies.count == 1 {
-            let movie = ratedMovies[0]
-            let title = movie.title ?? ""
-            let overview = movie.overview ?? ""
-            let text = overview.isEmpty ? title : "Title: \(title)\nPlot: \(overview)"
-            return try await EmbeddingManager.shared.getEmbedding(for: text)
+        for m in ratedMovies {
+            let idStr = String(Int(m.movieID))
+            guard let vec = EmbeddingCacheManager.shared.getEmbedding(for: idStr) else {
+                continue // cache’te yoksa atla
             }
 
-            // 1'den fazla film varsa ortalama embedding
-            var embeddings: [[Double]] = []
-            
-            for movie in ratedMovies {
-                let title = movie.title ?? ""
-                let overview = movie.overview ?? ""
-                
-                let text = overview.isEmpty ? title : "Title: \(title)\nPlot: \(overview)"
-                print("Embeddiing icin alınan film: \(title)")
+            let norm = sqrt(vec.reduce(0.0) { $0 + $1*$1 })
+            let unit = norm > 0 ? vec.map { $0 / norm } : vec
 
-                if let vector = try? await EmbeddingManager.shared.getEmbedding(for: text) {
-                    embeddings.append(vector)
-                }
-            }
+            let rating = Double(m.userRating)
+            let w = 0.5 + (rating/5.0) * 1.0 + (m.isLiked ? 0.5 : 0.0)
 
-            guard !embeddings.isEmpty else { return nil }
+            if accum == nil { accum = Array(repeating: 0.0, count: unit.count) }
+            for i in 0..<unit.count { accum![i] += unit[i] * w }
+            totalW += w
+        }
 
-            let vectorLength = embeddings[0].count
-            var avgVector = Array(repeating: 0.0, count: vectorLength)
-
-            for vector in embeddings {
-                for i in 0..<vectorLength {
-                    avgVector[i] += vector[i]
-                }
-            }
-
-            for i in 0..<vectorLength {
-                avgVector[i] /= Double(embeddings.count)
-            }
-
-            return avgVector
-
+        guard var avg = accum, totalW > 0 else { return nil }
+        for i in 0..<avg.count { avg[i] /= totalW }
+        let norm = sqrt(avg.reduce(0.0) { $0 + $1*$1 })
+        return norm > 0 ? avg.map { $0 / norm } : avg
     }
 }

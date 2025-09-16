@@ -12,7 +12,7 @@ class EmbeddingManager{
     static let shared = EmbeddingManager()
     
     private let endpoint = "https://api.openai.com/v1/embeddings"
-    private let embeddingModel = "text-embedding-3-large"
+    private let embeddingModel = "text-embedding-ada-002"
     
 
     struct EmbeddingResponse:Decodable{
@@ -22,7 +22,6 @@ class EmbeddingManager{
     struct EmbeddingData:Decodable{
         let embedding: [Double]
     }
-    
     
     // api key yükleme
     private var apiKey:String{
