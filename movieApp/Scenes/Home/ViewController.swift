@@ -267,8 +267,8 @@ class ViewController: BaseViewController, UITextFieldDelegate,
     @objc private func handleMovieRated() {
         Task {
             if let userId = Auth.auth().currentUser?.uid {
-                await recommendedViewModel.fetchRecommendedMovies(for: userId)
-                collectionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
+                await recommendedViewModel.refresh(for: userId, count: 5)
+                self.collectionView.reloadSections(IndexSet(integer: 0))
             }
         }
     }

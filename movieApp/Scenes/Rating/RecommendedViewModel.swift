@@ -19,17 +19,13 @@ class RecommendedViewModel {
     func loadIfNeeded(for userId: String, count: Int) async {
         guard !isLoaded else { return }
         isLoaded = true
-        await refresh(for: userId, count: count, keepStale: true)
+        await refresh(for: userId, count: count)
     }
     
-    func refresh(for userId: String, count: Int, keepStale: Bool = true) async {
-        loadTask?.cancel()
-        loadTask = Task { [weak self] in
-            guard let self else { return }
-            let movies = (try? await RecommendationManager.shared
-                .getRecommendations(for: userId, top: count)) ?? []
-            await MainActor.run { self.recommendedMovies = movies }
-        }
+    func refresh(for userId: String, count: Int) async {
+        let movies = (try? await RecommendationManager.shared
+            .getRecommendations(for: userId, top: count)) ?? []
+        self.recommendedMovies = movies
     }
     
     func fetchRecommendedMovies(for userId: String) async{

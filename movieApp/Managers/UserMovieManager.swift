@@ -142,5 +142,21 @@ class UserMovieManager{
         }
     }
     
+    
+    // izlenen filmleri recommendatondan cıkarmak için:
+    func getWatchedMovieIDs(for userId: String) -> Set<Int> {
+        let context = PersistenceController.shared.context
+        let req: NSFetchRequest<CDMovieEntity> = CDMovieEntity.fetchRequest()
+        req.predicate = NSPredicate(format: "userUID == %@ AND isWatched == YES", userId)
+        req.returnsObjectsAsFaults = false
+        
+        do {
+            let results = try context.fetch(req)
+            return Set(results.map{ Int($0.movieID)})
+        }catch{
+            print("watched fetch error: \(error)")
+            return []
+        }
+    }
   
 }
