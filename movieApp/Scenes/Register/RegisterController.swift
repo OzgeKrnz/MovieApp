@@ -16,6 +16,9 @@ class RegisterController: UIViewController{
     private let emailAddressField = CustomTextField(fieldType: .email)
     private let passwordField = CustomTextField(fieldType: .password)
     
+    private var signUpGradient: CAGradientLayer?
+
+    
     private let signUpButton = CustomButton(title: "Sign Up", hasBackground: true, fontSize: .big)
     private let signInButton = CustomButton(title: "Already have an account? Sign In.", hasBackground: false, fontSize: .med)
     
@@ -61,6 +64,31 @@ class RegisterController: UIViewController{
         self.signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
 
         
+    }
+    
+    
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        if signUpGradient == nil {
+            let g = CAGradientLayer()
+            g.name = "signInGradient"
+            g.colors = [UIColor.systemGray5.cgColor, UIColor.systemIndigo.cgColor]
+            g.startPoint = CGPoint(x: 0, y: 0.5)
+            g.endPoint   = CGPoint(x: 1, y: 0.5)
+            g.cornerRadius = 12
+            signUpButton.layer.insertSublayer(g, at: 0)
+            signUpGradient = g
+        }
+        signUpGradient?.frame = signInButton.bounds
+
+        signUpButton.layer.cornerRadius = 12
+        signUpButton.layer.masksToBounds = false
+        signUpButton.layer.shadowColor = UIColor.black.cgColor
+        signUpButton.layer.shadowOpacity = 0.25
+        signUpButton.layer.shadowOffset = CGSize(width: 0, height: 6)
+        signUpButton.layer.shadowRadius = 8
     }
     
 

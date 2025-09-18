@@ -41,9 +41,9 @@ class BaseViewController: UIViewController{
         
         
         NSLayoutConstraint.activate([
-            customToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            customToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            customToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            customToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor,  constant: 10),
+            customToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor,  constant: -10),
+            customToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,  constant: -8),
             customToolbar.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
