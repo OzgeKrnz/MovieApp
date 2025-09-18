@@ -14,12 +14,15 @@ class LoginViewController: UIViewController {
     private let emailField = CustomTextField(fieldType: .email)
     private let passwordField = CustomTextField(fieldType: .password)
     
-    private let signInButton = CustomButton(title: "Sign In", hasBackground: true, fontSize: .big)
+    private let signInButton = CustomButton(title: "Sign In", hasBackground: false, fontSize: .big)
     private let newUserButton = CustomButton(title: "New User? Create Account.", fontSize: .med)
     private let forgotPasswordButton = CustomButton(title: "Forgot Password?", fontSize: .small)
     
     
     let imageView = UIImageView()
+    
+    private var signInGradient: CAGradientLayer?
+
    
 
     
@@ -29,17 +32,44 @@ class LoginViewController: UIViewController {
         self.setupImageView()
         self.setupUI()
         
+        signInButton.backgroundColor = .clear
+        signInButton.setTitleColor(.white, for: .normal)
+
+
         self.signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
         self.newUserButton.addTarget(self, action: #selector(didTapNewUser), for: .touchUpInside)
         self.forgotPasswordButton.addTarget(self, action: #selector(didTapForgotPassword), for: .touchUpInside)
 
-        
+
        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        if signInGradient == nil {
+            let g = CAGradientLayer()
+            g.name = "signInGradient"
+            g.colors = [UIColor.systemGray5.cgColor, UIColor.systemIndigo.cgColor]
+            g.startPoint = CGPoint(x: 0, y: 0.5)
+            g.endPoint   = CGPoint(x: 1, y: 0.5)
+            g.cornerRadius = 12
+            signInButton.layer.insertSublayer(g, at: 0)
+            signInGradient = g
+        }
+        signInGradient?.frame = signInButton.bounds
+
+        signInButton.layer.cornerRadius = 12
+        signInButton.layer.masksToBounds = false
+        signInButton.layer.shadowColor = UIColor.black.cgColor
+        signInButton.layer.shadowOpacity = 0.25
+        signInButton.layer.shadowOffset = CGSize(width: 0, height: 6)
+        signInButton.layer.shadowRadius = 8
     }
     
 
@@ -57,7 +87,28 @@ class LoginViewController: UIViewController {
             imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             imageView.bottomAnchor.constraint(equalTo:  view.bottomAnchor),
         ])
+        
+        let gradient = CAGradientLayer()
+        gradient.colors = [
+            UIColor.black.withAlphaComponent(0.15).cgColor,
+            UIColor.black.withAlphaComponent(0.55).cgColor
+        ]
+        gradient.locations = [0.0, 1.0]
+        gradient.frame = view.bounds
+        let gradientView = UIView(frame: view.bounds)
+        gradientView.layer.addSublayer(gradient)
+        gradientView.isUserInteractionEnabled = false
+        gradientView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(gradientView)
+
+        NSLayoutConstraint.activate([
+            gradientView.topAnchor.constraint(equalTo: view.topAnchor),
+            gradientView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            gradientView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            gradientView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
+    
     
     private func setupUI(){
         emailField.translatesAutoresizingMaskIntoConstraints = false
@@ -107,6 +158,8 @@ class LoginViewController: UIViewController {
             forgotPasswordButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.85),
             
         ])
+        
+ 
       
     }
     
@@ -151,16 +204,6 @@ class LoginViewController: UIViewController {
  
             
         }
-      /*  let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let VC = storyboard.instantiateViewController(withIdentifier: "MainVC") as! ViewController
-        let navController = UINavigationController(rootViewController: VC)
-        
-        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let sceneDelegate = scene.delegate as? SceneDelegate {
-            sceneDelegate.window?.rootViewController = navController
-        }*/
-        
-        
     }
     
     @objc private func didTapNewUser(){

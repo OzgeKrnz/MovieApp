@@ -112,7 +112,7 @@ class ViewController: BaseViewController, UITextFieldDelegate,
         searchController.searchBar.delegate = self
         searchController.searchBar.searchTextField.backgroundColor =
             UIColor.white
-        searchController.searchBar.placeholder = "Search Movie"
+        searchController.searchBar.placeholder = "Film ara..."
     }
 
     private func setupNotifications() {
@@ -255,9 +255,9 @@ class ViewController: BaseViewController, UITextFieldDelegate,
             ) as! MovieSectionHeader
 
         if indexPath.section == 0 {
-            header.titleLabel.text = "Recommended for You"
+            header.titleLabel.text = "Sana Özel"
         } else {
-            header.titleLabel.text = "Weekly Popular"
+            header.titleLabel.text = "Haftalık Popüler Filmler"
         }
 
         return header

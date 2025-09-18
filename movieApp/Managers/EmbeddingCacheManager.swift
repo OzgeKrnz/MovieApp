@@ -85,7 +85,7 @@ class EmbeddingCacheManager {
     func populateTop5000() async {
         for page in 1...250 {
             let urlString =
-                "https://api.themoviedb.org/3/movie/popular?api_key=\(tmdbApiKey)&page=\(page)"
+                "https://api.themoviedb.org/3/movie/popular?api_key=\(tmdbApiKey)&language=tr-TR&page=\(page)"
 
             guard let url = URL(string: urlString) else {
                 print("gecersiz url")

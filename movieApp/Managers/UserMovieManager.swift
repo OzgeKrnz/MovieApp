@@ -21,7 +21,6 @@ class UserMovieManager{
         case liked = "Liked"
         case rated = "Rated"
         
-        
         var iconName: String {
             switch self {
             case .watched: return "eye.fill"
@@ -158,5 +157,4 @@ class UserMovieManager{
             return []
         }
     }
-  
 }

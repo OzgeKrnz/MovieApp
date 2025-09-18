@@ -62,6 +62,10 @@ class FavoritesViewController: BaseViewController, UICollectionViewDataSource, U
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         header.translatesAutoresizingMaskIntoConstraints = false
+        
+        header.text = "Favoriler"
+        header.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+
 
         NSLayoutConstraint.activate([
             header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),

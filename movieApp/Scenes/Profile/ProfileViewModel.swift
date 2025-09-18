@@ -19,11 +19,11 @@ class ProfileViewModel{
         
         var title: String {
                    switch self {
-                   case .editProfile: return "Edit Profile"
-                   case .watchlist: return "Watchlist"
-                   case .favoriteMovies: return "Favorite Movies"
-                   case .languages: return "Languages"
-                   case .signOut: return "Sign Out"
+                   case .editProfile: return "Profil Düzenle"
+                   case .watchlist: return "İzleme Listesi"
+                   case .favoriteMovies: return "Favori Filmler"
+                   case .languages: return "Dil"
+                   case .signOut: return "Çıkış Yap"
                    }
                }
                

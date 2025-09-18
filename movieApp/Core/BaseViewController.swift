@@ -17,7 +17,7 @@ class BaseViewController: UIViewController{
         view.backgroundColor = UIColor(red: 39/255, green: 63/255, blue: 79/255, alpha: 1)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "Log out", style: .plain, target: self,
+            title: "Çıkış Yap", style: .plain, target: self,
             action: #selector(didTapLogOutButton))
 
         setupToolbar()
@@ -38,6 +38,7 @@ class BaseViewController: UIViewController{
     private func setupToolbar() {
         view.addSubview(customToolbar)
         customToolbar.translatesAutoresizingMaskIntoConstraints = false
+        
         
         NSLayoutConstraint.activate([
             customToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),

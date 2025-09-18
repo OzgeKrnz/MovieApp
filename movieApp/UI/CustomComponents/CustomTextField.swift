@@ -33,13 +33,13 @@ class CustomTextField: UITextField {
         
         switch fieldType{
         case .username:
-            self.placeholder = "Username"
+            self.placeholder = "Kullanıcı Adı"
         case .email:
-            self.placeholder = "Email Address"
+            self.placeholder = "Email"
             self.keyboardType = .emailAddress
             self.textContentType = .emailAddress
         case .password:
-            self.placeholder = "Password"
+            self.placeholder = "Şifre"
             self.textContentType = .oneTimeCode
             self.isSecureTextEntry = true
         }

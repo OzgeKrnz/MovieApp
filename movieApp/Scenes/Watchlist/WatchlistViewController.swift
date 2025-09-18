@@ -42,6 +42,7 @@ class WatchlistViewController: BaseViewController, UICollectionViewDataSource, U
         setupUI()
         
         
+        
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout{
             layout.estimatedItemSize = .zero
             layout.scrollDirection = .vertical
@@ -66,6 +67,8 @@ class WatchlistViewController: BaseViewController, UICollectionViewDataSource, U
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         header.translatesAutoresizingMaskIntoConstraints = false
+        header.text = "İzleme Listesi"
+        header.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         
 
         NSLayoutConstraint.activate([
@@ -155,6 +158,8 @@ class WatchlistViewCell: UICollectionViewCell {
         layer.shadowOffset = CGSize(width: 0, height: 3)
         layer.shadowRadius = 5
         layer.masksToBounds = false
+        
+        
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
         movieTitleLabel.translatesAutoresizingMaskIntoConstraints = false

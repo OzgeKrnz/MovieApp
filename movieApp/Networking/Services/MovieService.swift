@@ -39,7 +39,7 @@ class MovieService{
         //özel karakterler icin
         let encodedTitle = title.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? title
         
-        let urlString =  "https://api.themoviedb.org/3/search/movie?api_key=\(apiKey)&query=\(encodedTitle)"
+        let urlString =  "https://api.themoviedb.org/3/search/movie?api_key=\(apiKey)&language=tr-TR&query=\(encodedTitle)"
         
         guard let url = URL(string: urlString) else{
             throw URLError(.badURL)
@@ -85,7 +85,7 @@ class MovieService{
     
     //Popüler filmlere erişme
     func fetchPopulerMovies() async throws->[Movie]{
-        let urlString = "https://api.themoviedb.org/3/movie/popular?api_key=\(apiKey)&page=1"
+        let urlString = "https://api.themoviedb.org/3/movie/popular?api_key=\(apiKey)&language=tr-TR&page=1"
         
         guard let url = URL(string: urlString) else{
             throw URLError(.badURL)
@@ -101,7 +101,7 @@ class MovieService{
     
     // top rated movies
     func fetchTopRatedMovies() async throws -> [Movie]{
-        let urlString = "https://api.themoviedb.org/3/movie/top_rated?api_key=\(apiKey)&language=en-US&page=1"
+        let urlString = "https://api.themoviedb.org/3/movie/top_rated?api_key=\(apiKey)&language=tr-TR&page=1"
         
         guard let url = URL(string: urlString) else{
             throw URLError(.badURL)
@@ -116,7 +116,7 @@ class MovieService{
     
     
     func fetchMovieDetails(movieId: Int) async throws -> Movie {
-        let urlString = "https://api.themoviedb.org/3/movie/\(movieId)?api_key=\(apiKey)&language=en"
+        let urlString = "https://api.themoviedb.org/3/movie/\(movieId)?api_key=\(apiKey)&language=tr-TR"
         
         guard let url = URL(string: urlString) else {
             throw URLError(.badURL)

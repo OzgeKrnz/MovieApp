@@ -33,7 +33,7 @@ final class EditProfileViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Edit Profile"
+        title = "Profil Ayarları"
 
         
         view.backgroundColor = UIColor(red: 39/255, green: 63/255, blue: 79/255, alpha: 1)
@@ -92,12 +92,12 @@ final class EditProfileViewController: BaseViewController {
     // MARK: - Configure
     private func configureUI() {
         // Labels
-        usernameTitleLabel.text = "Username"
+        usernameTitleLabel.text = "Kullanıcı Adı"
         emailTitleLabel.text = "Email"
-        passwordTitleLabel.text = "Password"
+        passwordTitleLabel.text = "Şifre"
 
         [usernameTitleLabel, emailTitleLabel, passwordTitleLabel].enumerated().forEach { idx, label in
-            let txt = [ "Username", "Email", "Password" ][idx]
+            let txt = [ "Kullanıcı Adı", "Email", "Şifre" ][idx]
             let made = makeTitleLabel(txt)
             label.font = made.font
             label.textColor = made.textColor
@@ -109,7 +109,7 @@ final class EditProfileViewController: BaseViewController {
         passwordTextField.font = .systemFont(ofSize: 16)
         emailTextField.font = .systemFont(ofSize: 16)
 
-        let userTF = makeTextField("Enter username")
+        let userTF = makeTextField("Kullanıcı Adı")
         userTF.autocapitalizationType = .none
         userTF.autocorrectionType = .no
         usernameTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -134,7 +134,7 @@ final class EditProfileViewController: BaseViewController {
         emailTextField.isEnabled = false
         emailTextField.text = Auth.auth().currentUser?.email
 
-        let passTF = makeTextField("Enter password", secure: true)
+        let passTF = makeTextField("Şifre", secure: true)
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
         passwordTextField.layer.cornerRadius = passTF.layer.cornerRadius
         passwordTextField.layer.borderWidth = passTF.layer.borderWidth
@@ -148,7 +148,7 @@ final class EditProfileViewController: BaseViewController {
 
         // Save Button – modern filled görünüm
         var conf = UIButton.Configuration.filled()
-        conf.title = "Save Changes"
+        conf.title = "Kaydet"
         conf.cornerStyle = .large
         conf.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
         conf.baseBackgroundColor = UIColor(red: 255/255, green: 160/255, blue: 0, alpha: 1)

@@ -32,21 +32,7 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
 
     }
     
-    
-//    private func setupData(){
-//        let section = [
-//            ProfileMenuItem(title: "Edit Profile", iconName: "pen"),
-//            ProfileMenuItem(title: "Favorites", iconName: "heart"),
-//            ProfileMenuItem(title: "Languages", iconName: "globe"),
-//            ProfileMenuItem(title: "Sign Out", iconName: "arrow.left.square" )
-//            
-//            ]
-//        
-//        menuItems = [section]
-//       
-//    }
-//    
-    
+
     private func setupUI(){
         profileIcon.translatesAutoresizingMaskIntoConstraints = false
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -179,7 +165,7 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
     
     
     private func presentLanguagePicker() {
-        let alert = UIAlertController(title: "Language", message: "Choose app language", preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Dil", message: "", preferredStyle: .actionSheet)
 
         let apply: (String) -> Void = { code in
             UserDefaults.standard.set(code, forKey: "app_language_code")
