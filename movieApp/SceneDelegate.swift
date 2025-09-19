@@ -16,23 +16,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         self.setupWindow(with: scene)
         self.checkAuthentication()
-        
-
-        
-       /* let userRequest = RegisterUserRequest(
-            username: "ozg",
-            email: "ozg@gmail.com",
-            password: "sifre123"
-        )
-        
-        AuthService.shared.registerUser(with: userRequest){ wasRegistered, error
-            in
-            if let error = error{
-                print(error.localizedDescription)
-                return
-            }
-            print("wasRegistered", wasRegistered)
-        }*/
     }
     
     private func setupWindow(with scene: UIScene){
@@ -50,10 +33,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             self.goToController(with: loginVC)
           
         }else{
-            //go to home screen
-            let sb = UIStoryboard(name: "Main", bundle: nil)
-            let homeVC = sb.instantiateViewController(withIdentifier: "MainVC") as! ViewController
-            self.goToController(with: homeVC)
+            let tabs = RootTabBarController()
+            self.goToController(with: tabs)
+
             
         }
     }
@@ -63,10 +45,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             UIView.animate(withDuration: 0.25) {
                 self?.window?.layer.opacity = 0
             } completion: { [weak self] _ in
-                let nav = UINavigationController(rootViewController: viewController)
-                self?.window?.rootViewController = nav
-               
-                UIView.animate(withDuration: 0.25) {
+                if viewController is UITabBarController {
+                    self?.window?.rootViewController = viewController
+                }else{
+                    let nav = UINavigationController(rootViewController: viewController)
+                    self?.window?.rootViewController = nav
+                }
+                
+                UIView.animate(withDuration: 0.25){
                     self?.window?.layer.opacity = 1
                 }
             }

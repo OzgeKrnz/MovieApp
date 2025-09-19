@@ -1,77 +1,69 @@
-//
-//  CustomToolbar.swift
-//  movieApp
-//
-//  Created by özge kurnaz on 24.07.2025.
-//
-
 import UIKit
 
-final class FloatingGlassTabBar: UIToolbar {
+final class FloatingPlainTabBar: UITabBar {
 
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
+    private let capsule = UIView()
+
+    private let preferredBarHeight: CGFloat = 70
+
+    private let corner: CGFloat = 30
+    private let hInset: CGFloat = 8
+    private let vInset: CGFloat = 4
+    private let preferredCapsuleHeight: CGFloat = 60
     
-    var onHomeTapped: (()->Void)?
-    var onFavoritesTapped: (()->Void)?
-    var onProfileTapped: (()->Void)?
-    
-    
-    override init(frame: CGRect){
+
+    override init(frame: CGRect) {
         super.init(frame: frame)
-        setupToolbar()
+        setup()
     }
-    
-    
     required init?(coder: NSCoder) {
-        fatalError("init coder has not been implemented")
+        super.init(coder: coder)
+        setup()
     }
-    
-    
-    private func setupToolbar(){
-        let homeItem = UIBarButtonItem(image: UIImage(systemName: "house"), style: .plain, target: self, action: #selector(homeTapped))
-        
-        let favoritesItem = UIBarButtonItem(image: UIImage(systemName: "heart"), style: .plain, target: self, action: #selector(favoritesTapped))
-        
-        let profileItem = UIBarButtonItem(image: UIImage(systemName: "person.circle"), style: .plain, target: self, action: #selector(profileTapped))
-        
-        let space = UIBarButtonItem.flexibleSpace()
-        
-        // toolbar item sırası
-        self.items = [
-            homeItem,
-            space,
-            favoritesItem,
-            space,
-            profileItem
-        ]
-        
-        self.tintColor = .systemBlue
-        self.barTintColor = UIColor(red: 39/255, green: 63/255, blue: 79/255, alpha: 1)
-        self.isTranslucent = false
-      
-    }
-    
-    
-    //MARK: - Actions
-    
-    @objc func homeTapped(){
-        onHomeTapped?()
-    }
-    
-    @objc func favoritesTapped(){
-        onFavoritesTapped?()
-    }
-    
-    @objc func profileTapped(){
-        onProfileTapped?()
-    }
-    
-    
 
+    private func setup() {
+        isOpaque = false
+        isTranslucent = true
+        backgroundImage = UIImage()
+        shadowImage = UIImage()
+        backgroundColor = .clear
+        clipsToBounds = false
+        layer.masksToBounds = false
+
+        capsule.backgroundColor = UIColor { t in
+            t.userInterfaceStyle == .light
+            ? UIColor.white.withAlphaComponent(0.12)
+            : UIColor.black.withAlphaComponent(0.06)
+        }
+        capsule.layer.cornerCurve = .continuous
+        capsule.layer.shadowRadius = 14
+
+        insertSubview(capsule, at: 0)
+    }
+    
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        var s = super.sizeThatFits(size)
+        let minH = preferredBarHeight + safeAreaInsets.bottom
+        if s.height < minH { s.height = minH }
+        return s
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        let visibleH = bounds.height - safeAreaInsets.bottom
+        let capH = max(36, min(preferredCapsuleHeight, visibleH - vInset*2))
+        let capY = (visibleH - capH)/2
+        let capX = hInset
+        let capW = bounds.width - hInset*2
+
+        capsule.frame = CGRect(x: capX, y: capY, width: capW, height: capH)
+        capsule.layer.cornerRadius = min(corner, capH/2)
+
+        // performans için gölge path’i
+        capsule.layer.shadowPath = UIBezierPath(
+            roundedRect: capsule.bounds,
+            cornerRadius: capsule.layer.cornerRadius
+        ).cgPath
+    }
 }

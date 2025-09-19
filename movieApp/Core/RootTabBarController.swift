@@ -1,37 +1,51 @@
-import SwiftUI
+// RootTabBarController.swift
 import UIKit
 
-
-// RootTabBarController.swift (geçici test)
 final class RootTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewControllers = makeTabs()
 
-        setValue(FloatingGlassTabBar(), forKey: "tabBar")
+        setValue(FloatingPlainTabBar(), forKey: "tabBar")
 
         let ap = UITabBarAppearance()
         ap.configureWithTransparentBackground()
+        ap.backgroundEffect = nil
+        ap.backgroundColor = .clear
+        ap.shadowColor = .clear
+
         tabBar.standardAppearance = ap
         if #available(iOS 15.0, *) { tabBar.scrollEdgeAppearance = ap }
+        
+    }
 
-        // TEST TABS
-        func demoVC(_ title: String, _ sys: String) -> UIViewController {
-            let vc = UIViewController()
-            vc.view.backgroundColor = .systemBackground
-            vc.title = title
-            vc.tabBarItem = UITabBarItem(
-                title: title,
-                image: UIImage(systemName: sys),
-                selectedImage: UIImage(systemName: sys.contains(".") ? sys.replacingOccurrences(of: ".", with: ".") + "" : sys + ".fill")
-            )
-            return UINavigationController(rootViewController: vc)
-        }
 
-        let home = demoVC("Home", "house")                // seçili: "house.fill"
-        let fav  = demoVC("Favorites", "heart")           // "heart.fill"
-        let prof = demoVC("Profile", "person.circle")     // "person.circle.fill"
+    private func makeTabs() -> [UIViewController] {
+        let mainSB = UIStoryboard(name: "Main", bundle: nil)
+        let home = mainSB.instantiateViewController(withIdentifier: "MainVC") as! ViewController
+        let homeNav = UINavigationController(rootViewController: home)
+        homeNav.tabBarItem = UITabBarItem(
+            title: "Home",
+            image: UIImage(systemName: "house"),
+            selectedImage: UIImage(systemName: "house.fill")
+        )
 
-        viewControllers = [home, fav, prof]
-        print("✅ tabs:", viewControllers?.count ?? 0)
+        let fav = mainSB.instantiateViewController(withIdentifier: "Favorites") as! FavoritesViewController
+        let favNav = UINavigationController(rootViewController: fav)
+        favNav.tabBarItem = UITabBarItem(
+            title: "Favorites",
+            image: UIImage(systemName: "heart"),
+            selectedImage: UIImage(systemName: "heart.fill")
+        )
+
+        let prof = mainSB.instantiateViewController(withIdentifier: "Profile") as! ProfileViewController
+        let profNav = UINavigationController(rootViewController: prof)
+        profNav.tabBarItem = UITabBarItem(
+            title: "Profile",
+            image: UIImage(systemName: "person.circle"),
+            selectedImage: UIImage(systemName: "person.circle.fill")
+        )
+
+        return [homeNav, favNav, profNav]
     }
 }
