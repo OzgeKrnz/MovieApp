@@ -13,8 +13,21 @@ final class RootTabBarController: UITabBarController {
         ap.backgroundEffect = nil
         ap.backgroundColor = .clear
         ap.shadowColor = .clear
+                
+        // Item appearance (ikonlar + title renkleri)
+        let itemAppearance = UITabBarItemAppearance()
+        itemAppearance.normal.iconColor = .white
+        itemAppearance.selected.iconColor = .white
+        itemAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
+        itemAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+        // appearance’a uygula
+        ap.stackedLayoutAppearance = itemAppearance
+        ap.inlineLayoutAppearance = itemAppearance
+        ap.compactInlineLayoutAppearance = itemAppearance
 
         tabBar.standardAppearance = ap
+       
         if #available(iOS 15.0, *) { tabBar.scrollEdgeAppearance = ap }
         
     }

@@ -70,10 +70,12 @@ class AuthService{
         }
     }
     
+    @MainActor
     public func signOut(completion: @escaping (Error?)->Void){
         do{
             try Auth.auth().signOut()
             completion(nil)
+
         }catch let error {
             completion(error)
         }

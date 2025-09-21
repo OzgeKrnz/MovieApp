@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 class ProfileViewModel{
@@ -15,7 +16,6 @@ class ProfileViewModel{
         case watchlist
         case favoriteMovies
         case languages
-        case signOut
         
         var title: String {
                    switch self {
@@ -23,22 +23,28 @@ class ProfileViewModel{
                    case .watchlist: return "İzleme Listesi"
                    case .favoriteMovies: return "Favori Filmler"
                    case .languages: return "Dil"
-                   case .signOut: return "Çıkış Yap"
                    }
                }
                
         var iconName: String {
             switch self {
-            case .editProfile: return "person.crop.circle"
+            case .editProfile: return "pencil.line"
             case .watchlist: return "bookmark"
             case .favoriteMovies: return "heart"
             case .languages: return "globe"
-            case .signOut: return "arrow.left.square"
             }
         }
         
-        
+        var iconColor: UIColor{
+            switch self {
+            case .languages: return UIColor.green
+            case .favoriteMovies: return UIColor.red
+            default: return UIColor.systemBlue
+            }
+       
+        }    
     }
+
      
     func numberOfItems() -> Int {
         return MenuItems.allCases.count

@@ -38,7 +38,7 @@ class WatchlistViewController: BaseViewController, UICollectionViewDataSource, U
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        loadPlannedMovies()
+        loadWatchedMovies()
         setupUI()
         
         
@@ -55,8 +55,8 @@ class WatchlistViewController: BaseViewController, UICollectionViewDataSource, U
         collectionView.dataSource = self
     }
 
-    private func loadPlannedMovies() {
-        watchlistVM.fetchPlannedMovies()
+    private func loadWatchedMovies() {
+        watchlistVM.fetchWatchedMovies()
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }

@@ -10,12 +10,12 @@ import CoreData
 import FirebaseAuth
 
 class WatchlistViewModel{
-    private(set) var plannedMovies: [Movie] = []
+    private(set) var wathchedMovies: [Movie] = []
     
-    func fetchPlannedMovies() {
+    func fetchWatchedMovies() {
         guard let uid = Auth.auth().currentUser?.uid else {
             print("Lütfen giriş yapın")
-            plannedMovies = []
+            wathchedMovies = []
             return
         }
         
@@ -29,7 +29,7 @@ class WatchlistViewModel{
         do {
             let results = try context.fetch(request)
             
-            self.plannedMovies = results.map { entity in
+            self.wathchedMovies = results.map { entity in
                      Movie(
                          title: entity.title ?? "",
                          overview: entity.overview ?? "",
@@ -44,16 +44,16 @@ class WatchlistViewModel{
             print("added watchlist: \(results.count)")
         } catch {
             print("CoreData fetch hatası: \(error)")
-            plannedMovies = []
+            wathchedMovies = []
 
         }
     }
     
     func movie(at index: Int)-> Movie{
-        return plannedMovies[index]
+        return wathchedMovies[index]
     }
     
     func numberOfMovies()->Int{
-        return plannedMovies.count
+        return wathchedMovies.count
     }
 }

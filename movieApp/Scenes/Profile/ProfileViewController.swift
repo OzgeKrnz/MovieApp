@@ -41,30 +41,35 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
         
         usernameLabel.textColor = .white
         emailLabel.textColor = .white
-        
+
         profileIcon.tintColor = UIColor.white.withAlphaComponent(0.9)
 
-        
+      
         tableView.backgroundColor = .clear
-        tableView.separatorColor = .gray
+        tableView.separatorColor = .none
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.rowHeight = 72
+        
+   
         
         
         NSLayoutConstraint.activate([
             profileIcon.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            profileIcon.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            profileIcon.widthAnchor.constraint(equalToConstant: 80),
-            profileIcon.heightAnchor.constraint(equalToConstant: 80),
+            profileIcon.widthAnchor.constraint(equalToConstant: 100),
+            profileIcon.heightAnchor.constraint(equalToConstant: 100),
+            profileIcon.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            usernameLabel.topAnchor.constraint(equalTo: profileIcon.topAnchor, constant: 4),
-            usernameLabel.leadingAnchor.constraint(equalTo: profileIcon.trailingAnchor, constant: 20),
+            usernameLabel.topAnchor.constraint(equalTo: profileIcon.bottomAnchor, constant: 4),
+            usernameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            emailLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 4),
-            emailLabel.leadingAnchor.constraint(equalTo: usernameLabel.leadingAnchor),
+            emailLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 8),
+            emailLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            tableView.topAnchor.constraint(equalTo: profileIcon.bottomAnchor, constant: 8),
+            tableView.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 8),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            
         ])
     }
     
@@ -83,6 +88,7 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
             let users = try context.fetch(fetchRequest)
             if let currentUser = users.first{
                 usernameLabel.text = currentUser.username
+                usernameLabel.text = usernameLabel.text?.uppercased()
                 emailLabel.text = currentUser.email
             } else {
                 usernameLabel.text = "Kullanıcı yok"
@@ -102,11 +108,9 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
             return UITableViewCell()
         }
         cell.backgroundColor = .clear
-
         
         let item = viewModel.item(at: indexPath.row)
-        cell.configure(title: item.title, iconName: item.iconName)
-        cell.accessoryType = .disclosureIndicator
+        cell.configure(title: item.title, iconName: item.iconName, iconColor: item.iconColor)
         cell.selectionStyle = .gray
         
     
@@ -127,8 +131,6 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
             pushFavoriteMovies()
         case .languages:
             presentLanguagePicker()
-        case .signOut:
-            confirmAndSignOut()
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -136,12 +138,10 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
     }
     
     private func pushEditProfile() {
-        // 1) VM hazırla (Core Data context + servis)
         guard let app = UIApplication.shared.delegate as? AppDelegate else { return }
         let ctx = app.persistentContainer.viewContext
         let vm = EditProfileViewModel(service: EditProfileService(context: ctx))
 
-        // 2) VC’yi programatik oluştur ve VM’yi enjekte et
         let vc = EditProfileViewController()
         vc.editProfileViewModel = vm
         navigationController?.pushViewController(vc, animated: true)
@@ -220,15 +220,15 @@ class ProfileViewController: BaseViewController, UITableViewDelegate, UITableVie
 
     
         if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let delegate = scene.delegate as? SceneDelegate,
-           let window = delegate.window {
-            let sb = UIStoryboard(name: "Main", bundle: nil)
-            let login = sb.instantiateViewController(withIdentifier: "LoginViewController")
-            window.rootViewController = UINavigationController(rootViewController: login)
-            window.makeKeyAndVisible()
-        } else {
-            navigationController?.popToRootViewController(animated: true)
-        }
+            let delegate = scene.delegate as? SceneDelegate,
+            let window = delegate.window {
+             let sb = UIStoryboard(name: "Main", bundle: nil)
+             let login = sb.instantiateViewController(withIdentifier: "LoginVC")
+             window.rootViewController = UINavigationController(rootViewController: login)
+             window.makeKeyAndVisible()
+         } else {
+             navigationController?.popToRootViewController(animated: true)
+         }
     }
 
 
