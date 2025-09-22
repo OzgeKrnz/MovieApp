@@ -81,7 +81,7 @@ final class FloatingPlainTabBar: UITabBar {
         let capH = max(36, min(preferredCapsuleHeight, visibleH - vInset*2))
         let capW = bounds.width - hInset*2
         let capX = hInset
-        let capY = max(0, visibleH - capH - capsuleBottomGap) + 7 // ↓ biraz aşağı
+        let capY = max(0, visibleH - capH - capsuleBottomGap) + 12
 
         capsule.frame = CGRect(x: capX, y: capY, width: capW, height: capH)
         capsule.layer.cornerRadius = min(corner, capH/2)
