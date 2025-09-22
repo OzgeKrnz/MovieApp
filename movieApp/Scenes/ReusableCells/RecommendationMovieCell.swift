@@ -21,13 +21,15 @@ class RecommendationMovieCell: UICollectionViewCell{
         contentView.layer.masksToBounds = true
         
         layer.shadowColor = UIColor.lightGray.cgColor
-        layer.shadowOpacity = 0.5
+        layer.shadowOpacity = 0.15
         layer.shadowOffset = CGSize(width: 0, height: 3)
         layer.shadowRadius = 5
         layer.masksToBounds = false
         
         
         posterImageView.translatesAutoresizingMaskIntoConstraints = false
+        posterImageView.contentMode = .scaleAspectFill
+
         
         NSLayoutConstraint.activate([
             posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -36,8 +38,6 @@ class RecommendationMovieCell: UICollectionViewCell{
             posterImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
     }
-    
-    
     
     override func prepareForReuse() {
         super.prepareForReuse()

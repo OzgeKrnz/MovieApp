@@ -71,18 +71,7 @@ class RegisterController: UIViewController{
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        if signUpGradient == nil {
-            let g = CAGradientLayer()
-            g.name = "signInGradient"
-            g.colors = [UIColor.systemGray5.cgColor, UIColor.systemIndigo.cgColor]
-            g.startPoint = CGPoint(x: 0, y: 0.5)
-            g.endPoint   = CGPoint(x: 1, y: 0.5)
-            g.cornerRadius = 12
-            signUpButton.layer.insertSublayer(g, at: 0)
-            signUpGradient = g
-        }
-        signUpGradient?.frame = signInButton.bounds
-
+        signUpButton.backgroundColor = UIColor(red: 30/255, green: 50/255, blue: 65/255, alpha: 1)
         signUpButton.layer.cornerRadius = 12
         signUpButton.layer.masksToBounds = false
         signUpButton.layer.shadowColor = UIColor.black.cgColor

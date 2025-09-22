@@ -19,10 +19,10 @@ class MovieCell: UICollectionViewCell {
         posterImageView.translatesAutoresizingMaskIntoConstraints = false
         
         posterImageView.layer.cornerRadius = 4
+        
+        
 
         NSLayoutConstraint.activate([
-            
-            
             posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             posterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -34,7 +34,7 @@ class MovieCell: UICollectionViewCell {
         contentView.layer.masksToBounds = true
 
         layer.shadowColor = UIColor.lightGray.cgColor
-        layer.shadowOpacity = 0.5
+        layer.shadowOpacity = 0.25
         layer.shadowOffset = CGSize(width: 0, height: 3)
         layer.shadowRadius = 5
         layer.masksToBounds = false
@@ -47,5 +47,6 @@ class MovieCell: UICollectionViewCell {
         posterImageView.image = nil
    
     }
+
 }
 

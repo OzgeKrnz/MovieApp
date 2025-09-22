@@ -15,11 +15,10 @@ class BaseViewController: UIViewController{
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 39/255, green: 63/255, blue: 79/255, alpha: 1)
         
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: "Çıkış Yap", style: .plain, target: self,
             action: #selector(didTapLogOutButton))
-
-
     }
     
     func hiddenKeyboardWhenTappedAround(){
@@ -30,6 +29,20 @@ class BaseViewController: UIViewController{
     
     @objc func dismissKeyboard(){
         view.endEditing(true)
+    }
+    
+    func setupGradientBackground(){
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [
+            UIColor(red: 27/255, green: 42/255, blue: 54/255, alpha: 1).cgColor, // üst
+            UIColor(red: 39/255, green: 63/255, blue: 79/255, alpha: 1).cgColor  // alt
+        ]
+        gradientLayer.locations = [0.0, 1.0] // yukarıdan aşağıya
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+        gradientLayer.frame = view.bounds
+
+        view.layer.insertSublayer(gradientLayer, at: 0)
     }
     
 

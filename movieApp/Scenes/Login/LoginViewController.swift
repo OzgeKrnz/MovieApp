@@ -32,7 +32,7 @@ class LoginViewController: UIViewController {
         self.setupImageView()
         self.setupUI()
         
-        signInButton.backgroundColor = .clear
+ 
         signInButton.setTitleColor(.white, for: .normal)
 
 
@@ -52,17 +52,7 @@ class LoginViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        if signInGradient == nil {
-            let g = CAGradientLayer()
-            g.name = "signInGradient"
-            g.colors = [UIColor.systemGray5.cgColor, UIColor.systemIndigo.cgColor]
-            g.startPoint = CGPoint(x: 0, y: 0.5)
-            g.endPoint   = CGPoint(x: 1, y: 0.5)
-            g.cornerRadius = 12
-            signInButton.layer.insertSublayer(g, at: 0)
-            signInGradient = g
-        }
-        signInGradient?.frame = signInButton.bounds
+
 
         signInButton.layer.cornerRadius = 12
         signInButton.layer.masksToBounds = false
@@ -70,6 +60,7 @@ class LoginViewController: UIViewController {
         signInButton.layer.shadowOpacity = 0.25
         signInButton.layer.shadowOffset = CGSize(width: 0, height: 6)
         signInButton.layer.shadowRadius = 8
+        signInButton.backgroundColor = UIColor(red: 30/255, green: 50/255, blue: 65/255, alpha: 1)
     }
     
 

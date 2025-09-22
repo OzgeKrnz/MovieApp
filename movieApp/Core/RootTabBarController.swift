@@ -1,37 +1,38 @@
 // RootTabBarController.swift
+
+
 import UIKit
 
 final class RootTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewControllers = makeTabs()
-
+        
         setValue(FloatingPlainTabBar(), forKey: "tabBar")
 
         let ap = UITabBarAppearance()
-        ap.configureWithTransparentBackground()
+        ap.configureWithDefaultBackground()
+      
         ap.backgroundEffect = nil
-        ap.backgroundColor = .clear
         ap.shadowColor = .clear
+
                 
-        // Item appearance (ikonlar + title renkleri)
-        let itemAppearance = UITabBarItemAppearance()
-        itemAppearance.normal.iconColor = .white
-        itemAppearance.selected.iconColor = .white
-        itemAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
-        itemAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-        // appearance’a uygula
-        ap.stackedLayoutAppearance = itemAppearance
-        ap.inlineLayoutAppearance = itemAppearance
-        ap.compactInlineLayoutAppearance = itemAppearance
-
+        let item = UITabBarItemAppearance()
+        item.normal.iconColor = .white.withAlphaComponent(0.9)
+        item.selected.iconColor = .white.withAlphaComponent(0.9)
+        item.normal.titleTextAttributes    = [.foregroundColor: UIColor.white.withAlphaComponent(0.8)]
+        item.selected.titleTextAttributes  = [.foregroundColor: UIColor.white.withAlphaComponent(0.8)]
+        ap.stackedLayoutAppearance = item
+        ap.inlineLayoutAppearance = item
+        ap.compactInlineLayoutAppearance = item
+       
         tabBar.standardAppearance = ap
        
         if #available(iOS 15.0, *) { tabBar.scrollEdgeAppearance = ap }
         
+        tabBar.tintColor = .systemBlue
+        tabBar.unselectedItemTintColor = .secondaryLabel
     }
-
 
     private func makeTabs() -> [UIViewController] {
         let mainSB = UIStoryboard(name: "Main", bundle: nil)

@@ -23,6 +23,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }catch{
             print("Embedding yüklenmedi: \(error)")
         }
+        
+        let tmdbApiKey = ConfigManager.stringValue(for: "TMDB_API_KEY")
+        
+        GenreManager.shared.fetchGenres(apiKey: tmdbApiKey) {
+               DispatchQueue.main.async {
+                   NotificationCenter.default.post(name: .genresLoaded, object: nil)
+               }
+           }
       return true
     }
 
@@ -61,4 +69,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
+}
+
+extension Notification.Name {
+    static let genresLoaded = Notification.Name("genresLoaded")
 }

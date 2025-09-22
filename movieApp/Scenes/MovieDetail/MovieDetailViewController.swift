@@ -107,8 +107,9 @@ class MovieDetailViewController: BaseViewController, UITableViewDelegate,
             let cell = tableView.dequeueReusableCell(withIdentifier: "OverViewCell") as! OverViewCell
             cell.backgroundColor = .clear
             
-            cell.titleLable.text = viewModel.title
+            cell.titleLabel.text = viewModel.title
             cell.overviewTextLabel.text = viewModel.overview
+            cell.infoLabel.text = viewModel.infoLine
             
             return cell
 

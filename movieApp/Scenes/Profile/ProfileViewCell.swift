@@ -51,10 +51,10 @@ class ProfileViewCell: UITableViewCell {
     private let bgCard: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.backgroundColor = UIColor.systemGray6.withAlphaComponent(0.4)
+        v.backgroundColor = UIColor.systemGray4.withAlphaComponent(0.5)
         v.layer.cornerRadius = 12
         v.layer.masksToBounds = false
-        v.layer.shadowColor = UIColor.black.cgColor
+        v.layer.shadowColor = UIColor.white.cgColor
         v.layer.shadowOffset = CGSize(width: 0, height: 2)
         v.layer.shadowRadius = 4
 

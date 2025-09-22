@@ -345,7 +345,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="overviewTextLabel" destination="sjq-nc-Yxw" id="zG6-Xs-LEs"/>
-                                            <outlet property="titleLable" destination="Jts-IS-pLJ" id="jXk-yR-kc5"/>
+                                            <outlet property="titleLabel" destination="Jts-IS-pLJ" id="jXk-yR-kc5"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="StatusSelectorCell" id="Iyv-26-er5" customClass="StatusSelectorCell" customModule="movieApp">
