@@ -57,7 +57,8 @@ class RecommendedViewModel {
     }
     
     func movie(for userId: String, at index: Int) -> Movie? {
-        return cache[userId]?[index]
+        guard let list = cache[userId], index >= 0, index < list.count else { return nil }
+        return list[index]
     }
     
     func numberOfRecommendations(for userId: String) -> Int {

@@ -24,6 +24,7 @@ class ViewController: BaseViewController, UITextFieldDelegate,
     let movieService = MovieService()
 
     var selectedMovieForDetail: Movie?  // for prepare function
+    
 
     //MARK: - SEGUE for movie detail
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -147,6 +148,19 @@ class ViewController: BaseViewController, UITextFieldDelegate,
         }
     }
 
+    // MARK: - section insets
+    func collectionView(_ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int) -> UIEdgeInsets {
+
+        if section == 0 {
+            return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        } else {
+            return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        }
+    }
+    
+    
     // MARK: - Sections for popular & picked
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -217,14 +231,15 @@ class ViewController: BaseViewController, UITextFieldDelegate,
 
         // horizontal scroll görünüm RECOMMENDATİONS
         if indexPath.section == 0 {
-            return CGSize(width: collectionView.frame.width, height: 180)
+            return CGSize(width: collectionView.bounds.width, height: 190)
         } else {
             // Grid görünüm POPÜLER FİLMLER
             let padding: CGFloat = 10
             let itemsPerRow: CGFloat = 3
             let totalPadding = padding * (itemsPerRow + 1)
-            let itemWidth =
-                (collectionView.frame.width - totalPadding) / itemsPerRow
+            let rawItemWidth = (collectionView.bounds.width - totalPadding) / itemsPerRow
+            let itemWidth = rawItemWidth * 0.95
+
             return CGSize(width: itemWidth, height: itemWidth * 1.5)
         }
     }
@@ -256,6 +271,7 @@ class ViewController: BaseViewController, UITextFieldDelegate,
 
         if indexPath.section == 0 {
             header.titleLabel.text = "Sana Özel"
+            header.recommendationLabel.text = "Yapay Zeka Destekli Kişisel Öneriler"
         } else {
             header.titleLabel.text = "Haftalık Popüler Filmler"
         }

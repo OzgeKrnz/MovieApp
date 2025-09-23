@@ -23,16 +23,28 @@ class MovieSectionHeader: UICollectionReusableView{
         return label
     }()
     
+    var recommendationLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.italicSystemFont(ofSize: 17)
+        label.textColor = UIColor.lightGray
+        label.numberOfLines = 1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         
         addSubview(titleLabel)
+        addSubview(recommendationLabel)
         
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant:4),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 2),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant:10),
+            recommendationLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
+            recommendationLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             
         ])
     }
@@ -40,4 +52,6 @@ class MovieSectionHeader: UICollectionReusableView{
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented ")
     }
+    
+
 }

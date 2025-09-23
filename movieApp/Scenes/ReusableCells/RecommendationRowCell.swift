@@ -52,10 +52,6 @@ extension RecommendationRowCell: UICollectionViewDelegate, UICollectionViewDataS
         }
         
         let movie = recommendedMovies[indexPath.row]
-        
-   
-        print("RECOMMENDED MOVIE:", movie.title)
-        print("POSTER URL:", movie.posterUrl ?? "nil")
 
         if let url = movie.posterUrl {
             ImageLoader.load(from: url, into: cell.posterImageView)
@@ -66,12 +62,26 @@ extension RecommendationRowCell: UICollectionViewDelegate, UICollectionViewDataS
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int) -> UIEdgeInsets {
+
+        if section == 0 {
+            return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        } else {
+            return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        }
+    }
+    
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        return CGSize(width: 120, height: collectionView.bounds.height)
+        let h = collectionView.bounds.height * 0.9 
+        let w = h * 0.66
+        return CGSize(width: w, height: h)
+        
     }
 
     
