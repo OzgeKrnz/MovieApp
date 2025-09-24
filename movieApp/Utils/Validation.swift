@@ -16,13 +16,12 @@ class Validation{
         return emailPred.evaluate(with: email)
     }
     
-    static func isValidUsername(for username: String)->Bool{
-        let username = username.trimmingCharacters(in: .whitespacesAndNewlines)
-        let usernameRegex = "\\w{4,24}"
-        let usernamePred = NSPredicate(format: "SELF MATCHES %@", usernameRegex)
-        
-        return usernamePred.evaluate(with: username)
-        
+    static func isValidUsername(for username: String) -> Bool {        guard username.trimmingCharacters(in: .whitespacesAndNewlines) == username,
+              !username.contains("  ") else { return false }
+
+        // 4–24: Unicode harf + rakam + . _ + TEK boşluk
+        let regex = #"^(?=.{4,24}$)[\p{L}\p{M}0-9._]+(?: [\p{L}\p{M}0-9._]+)*$"#
+        return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: username)
     }
     
     static func isPasswordValid(for password: String)->Bool{

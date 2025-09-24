@@ -11,8 +11,6 @@ import UIKit
 class MovieSectionHeader: UICollectionReusableView{
     static let identifier = "SectionHedear"
     
-    
-    
     let titleLabel: UILabel = {
         
         let label = UILabel()
@@ -32,10 +30,8 @@ class MovieSectionHeader: UICollectionReusableView{
         return label
     }()
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         
         addSubview(titleLabel)
         addSubview(recommendationLabel)
@@ -45,7 +41,6 @@ class MovieSectionHeader: UICollectionReusableView{
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant:10),
             recommendationLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
             recommendationLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            
         ])
     }
     
