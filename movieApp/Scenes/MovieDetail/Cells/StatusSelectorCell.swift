@@ -68,7 +68,6 @@ class StatusSelectorCell: UITableViewCell {
     @objc func buttonTapped(_ sender: UIButton){
         let selectedStatus = statuses[sender.tag]
         delegate?.statusSelectorCell(self, didSelectStatus: selectedStatus)
-        updateButtonColors(selectedStatus:selectedStatus.rawValue)
     }
     
     func configure(isWatched: Bool, isLiked: Bool, isRated: Bool) {
@@ -76,12 +75,12 @@ class StatusSelectorCell: UITableViewCell {
             let status = statuses[index]
             switch status {
             case .watched:
-                button.tintColor = isWatched ? .orange : .systemGray
+                button.tintColor = isWatched ? .green : .systemGray
             case .liked:
-                button.tintColor = isLiked ? .orange : .systemGray
+                button.tintColor = isLiked ? .green : .systemGray
             
             case .rated:
-                button.tintColor = isRated ? .orange : .systemGray
+                button.tintColor = isRated ? .green : .systemGray
             }
         }
     }
@@ -89,9 +88,10 @@ class StatusSelectorCell: UITableViewCell {
     private func updateButtonColors(selectedStatus: String?) {
         for (index, button) in buttons.enumerated() {
             let status = statuses[index].rawValue
-            button.tintColor = (status == selectedStatus) ? .systemOrange : .systemGray
+            button.tintColor = (status == selectedStatus) ? .green : .systemGray
         }
     }
+    
     
 
   

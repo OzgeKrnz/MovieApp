@@ -116,9 +116,6 @@ class UserMovieManager{
 
            do {
                let movies = try context.fetch(fetchRequest)
-               for movie in movies {
-                   print("\(movie.title ?? "") | Rating: \(movie.userRating) | Watched: \(movie.isWatched) | Liked: \(movie.isLiked) | Rated: \(movie.isRated) | UID: \(movie.userUID ?? "")")
-               }
            } catch {
                print("Veriler alınamadı: \(error)")
            }

@@ -36,6 +36,7 @@ struct MovieDetailViewModel{
          return ""
      }
     
+    var id: Int {movie.id}
     var infoLine: String {
         switch (releaseDate?.isEmpty, genres?.isEmpty) {
         case (false, false): return "\(releaseDate ?? "") • \(genres ?? "")"
