@@ -23,9 +23,9 @@ class UserMovieManager{
         
         var iconName: String {
             switch self {
-            case .watched: return "eye.fill"
-            case .liked: return "heart.fill"
-            case .rated: return "star.fill"
+            case .watched: return "eye"
+            case .liked: return "heart"
+            case .rated: return "star"
                 
             }
         }

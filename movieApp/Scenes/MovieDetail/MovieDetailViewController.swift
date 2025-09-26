@@ -25,7 +25,7 @@ class MovieDetailViewController: BaseViewController,
     private var cachedUserRating: Double?
 
     private var ctx: NSManagedObjectContext {
-        (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        PersistenceController.shared.context
     }
 
     override func viewDidLoad()  {
@@ -82,7 +82,11 @@ class MovieDetailViewController: BaseViewController,
     // MARK: - Present Rate Sheet
     func showRateViewController(){
         let sb = UIStoryboard(name: "Main", bundle: nil)
-        let rateVC = sb.instantiateViewController(withIdentifier: "RateViewController") as! RateViewController
+        guard let rateVC = sb.instantiateViewController(withIdentifier: "RateViewController") as? RateViewController else {
+             assertionFailure("Storyboard ID veya sınıf yanlış (RateViewController)")
+             return
+         }
+
         rateVC.delegate = self
 
         let uid = Auth.auth().currentUser?.uid ?? ""
