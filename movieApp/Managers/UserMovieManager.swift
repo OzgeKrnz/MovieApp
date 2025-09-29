@@ -125,7 +125,8 @@ class UserMovieManager{
     func getRatedMovies(for userId: String) -> [CDMovieEntity]{
         let context = PersistenceController.shared.context
         let fetchRequest: NSFetchRequest<CDMovieEntity> = CDMovieEntity.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "userUID == %@ AND ((isRated == YES AND userRating > 3) OR isLiked == YES)", userId)
+        fetchRequest.predicate = NSPredicate(format: "userUID == %@ AND ((isRated == YES AND userRating >= 3) OR isLiked == YES)", userId)
+
         fetchRequest.returnsObjectsAsFaults = false
 
         do {

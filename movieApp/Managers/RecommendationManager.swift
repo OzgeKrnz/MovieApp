@@ -16,6 +16,8 @@ class RecommendationManager {
 
     // kullanıcının oyladıgı film embeddingleri
     func getRecommendations(for userId: String, top count: Int = 5) async throws -> [Movie] {
+        
+        
         if let baseVector = try await getUserEmbedding(userId: userId) {
             var results: [(id: Int, similarity: Double)] = []
             let cosine = CosineSimilarity()
@@ -65,7 +67,11 @@ class RecommendationManager {
             let unit = norm > 0 ? vec.map { $0 / norm } : vec
 
             let rating = Double(m.userRating)
-            let w = 0.5 + (rating/5.0) * 1.0 + (m.isLiked ? 0.5 : 0.0)
+            var w: Double
+            if rating >= 3.5 { w = 1.0 }
+            else if rating >= 3.0 { w = 0.5 }
+            else { w = 0.1 }
+            if m.isLiked { w += 0.2 }
 
             if accum == nil { accum = Array(repeating: 0.0, count: unit.count) }
             for i in 0..<unit.count { accum![i] += unit[i] * w }
